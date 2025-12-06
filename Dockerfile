@@ -63,8 +63,7 @@ RUN composer install \
 
 # Node dependencies with cleanup
 COPY package.json bun.lock ./
-RUN bun install \
-    && bun cache clean
+RUN bun install 
 
 # Copy project files strategically
 COPY . .
