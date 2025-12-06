@@ -1,59 +1,92 @@
 FROM php:8.2-cli AS base
 
-# Combine RUN commands for efficiency
-RUN apt-get update && apt-get install -y \
-    git unzip curl libpng-dev libonig-dev libxml2-dev \
-    libzip-dev libpq-dev libcurl4-openssl-dev libssl-dev \
-    zlib1g-dev libicu-dev g++ libevent-dev procps \
-    && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring zip exif pcntl bcmath sockets intl \
-    && curl -L -o swoole.tar.gz https://github.com/swoole/swoole-src/archive/refs/tags/v5.1.0.tar.gz \
-    && tar -xf swoole.tar.gz \
-    && cd swoole-src-5.1.0 \
-    && phpize \
-    && ./configure \
-    && make -j$(nproc) \
-    && make install \
-    && docker-php-ext-enable swoole \
-    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+# Combine and optimize RUN commands
+RUN set -xe \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        git \
+        unzip \
+        curl \
+        libpng-dev \
+        libonig-dev \
+        libxml2-dev \
+        libzip-dev \
+        libpq-dev \
+        libcurl4-openssl-dev \
+        libssl-dev \
+        zlib1g-dev \
+        libicu-dev \
+        g++ \
+        libevent-dev \
+        procps \
+    # Install PHP extensions
+    && docker-php-ext-install \
+        pdo \
+        pdo_mysql \
+        pdo_pgsql \
+        mbstring \
+        zip \
+        exif \
+        pcntl \
+        bcmath \
+        sockets \
+        intl \
+    # Clean up to reduce image size
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Node.js and Bun installation
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get update \
     && apt-get install -y nodejs \
     && npm install -g bun \
-    && rm -rf /var/lib/apt/lists/* swoole.tar.gz swoole-src-5.1.0
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Swoole installation - use PECL for faster, more reliable installation
+RUN pecl install swoole \
+    && docker-php-ext-enable swoole
 
 # Composer installation
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Strategic Copying
-# Copy only necessary files first for better caching
-COPY composer.json composer.lock artisan ./
+# Optimize dependency caching
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader
+
+# Node dependencies
 COPY package.json bun.lock ./
-
-# Create Laravel's basic directory structure
-RUN mkdir -p bootstrap/cache storage/app storage/framework/cache/data \
-    storage/framework/sessions storage/framework/views storage/logs
-
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
 RUN bun install
 
-# Copy project files (after dependency installation)
+# Copy project files
 COPY . .
 
-# Specific storage directory handling
-COPY storage/app/ /var/www/storage/app/
-
-# Post-installation steps
-RUN composer dump-autoload --optimize \
+# Optimize project
+RUN set -xe \
+    && composer dump-autoload --optimize \
     && bun run build \
     && php artisan storage:link \
     && php artisan config:clear \
     && php artisan route:clear \
     && php artisan view:clear
 
-# Permissions and ownership
+# Permissions
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+
+# Create .dockerignore file
+RUN echo "\
+.git\n\
+.env\n\
+vendor/\n\
+node_modules/\n\
+storage/*.log\n\
+storage/framework/cache/*\n\
+storage/framework/sessions/*\n\
+storage/framework/views/*\n\
+" > .dockerignore
 
 EXPOSE 9000
 
