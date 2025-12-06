@@ -32,3 +32,17 @@
 **/dist
 LICENSE
 README.md
+# File: .dockerignore
+.git
+.env
+vendor/
+node_modules/
+storage/*.log
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+
+# Explicitly include files you want to keep
+!storage/app/*
+!storage/app/public/*
+
