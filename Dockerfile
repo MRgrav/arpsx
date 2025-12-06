@@ -1,6 +1,6 @@
 FROM php:8.2-cli AS base
 
-# Combine and optimize RUN commands
+# Reduce unnecessary file operations
 RUN set -xe \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -19,7 +19,7 @@ RUN set -xe \
         g++ \
         libevent-dev \
         procps \
-    # Install PHP extensions
+    # Install PHP extensions in one layer
     && docker-php-ext-install \
         pdo \
         pdo_mysql \
@@ -31,11 +31,11 @@ RUN set -xe \
         bcmath \
         sockets \
         intl \
-    # Clean up to reduce image size
+    # Cleanup in the same layer
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Node.js and Bun installation
+# Node.js and Bun with minimal layers
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get update \
     && apt-get install -y nodejs \
@@ -43,7 +43,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Swoole installation - use PECL for faster, more reliable installation
+# Swoole installation
 RUN pecl install swoole \
     && docker-php-ext-enable swoole
 
@@ -52,43 +52,43 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Optimize dependency caching
+# Minimize file copying and operations
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader
+RUN composer install \
+    --no-dev \
+    --no-scripts \
+    --no-autoloader \
+    --prefer-dist \
+    && rm -rf /root/.composer/cache
 
-# Node dependencies
+# Node dependencies with cleanup
 COPY package.json bun.lock ./
-RUN bun install
+RUN bun install \
+    && bun cache clean
 
-# Copy project files
+# Copy project files strategically
 COPY . .
 
-# Optimize project
-RUN set -xe \
-    && composer dump-autoload --optimize \
+# Consolidated optimization steps
+RUN composer dump-autoload --optimize \
     && bun run build \
     && php artisan storage:link \
     && php artisan config:clear \
     && php artisan route:clear \
-    && php artisan view:clear
-
-# Permissions
-RUN chown -R www-data:www-data /var/www \
+    && php artisan view:clear \
+    && chown -R www-data:www-data /var/www \
     && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Create .dockerignore file
-RUN echo "\
+# Minimal .dockerignore
+RUN echo -e "\
 .git\n\
 .env\n\
 vendor/\n\
 node_modules/\n\
 storage/*.log\n\
-storage/framework/cache/*\n\
-storage/framework/sessions/*\n\
-storage/framework/views/*\n\
 " > .dockerignore
 
 EXPOSE 9000
 
-# Startup script with error handling
-CMD ["sh", "-c", "if [ -z \"$APP_KEY\" ]; then echo 'ERROR: APP_KEY is not set' && exit 1; fi && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan octane:start --server=swoole --host=0.0.0.0 --port=9000"]
+# Simplified startup
+CMD ["sh", "-c", "php artisan octane:start --server=swoole --host=0.0.0.0 --port=9000"]
