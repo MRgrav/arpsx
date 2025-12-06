@@ -1,4 +1,4 @@
-File: Dockerfile
+# File: Dockerfile
 FROM php:8.2-cli AS base
 
 # System packages and PHP extensions
