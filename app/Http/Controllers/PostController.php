@@ -72,7 +72,7 @@ class PostController extends Controller
         // 1. Handle Main Thumbnail Upload
         if ($request->hasFile('image')) {
             // Use 'posts' as the bucket name/ID
-            $upload = $this->storageService->upload($request->file('image'), 'posts');
+            $upload = $this->storageService->upload($request->file('image'), env('APPWRITE_BUCKET_ID'));
             $data['image'] = $upload['url']; // Store the Appwrite URL in DB
         }
 
@@ -80,7 +80,7 @@ class PostController extends Controller
         $storedImages = [];
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
-                $upload = $this->storageService->upload($file, 'gallery');
+                $upload = $this->storageService->upload($file, env('APPWRITE_BUCKET_ID'));
                 $storedImages[] = $upload['url'];
             }
         }
@@ -137,7 +137,7 @@ class PostController extends Controller
         // }
 
         if ($request->hasFile('image')) {
-            $upload = $this->storageService->upload($request->file('image'), 'posts');
+            $upload = $this->storageService->upload($request->file('image'), env('APPWRITE_BUCKET_ID'));
             $validated['image'] = $upload['url'];
         } else {
             // Keep existing URL if no new file is uploaded
@@ -171,7 +171,7 @@ class PostController extends Controller
         $newUploads = [];
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
-                $upload = $this->storageService->upload($file, 'gallery');
+                $upload = $this->storageService->upload($file, env('APPWRITE_BUCKET_ID'));
                 $newUploads[] = $upload['url'];
             }
         }
