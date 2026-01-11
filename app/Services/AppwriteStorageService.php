@@ -38,7 +38,8 @@ class AppwriteStorageService
         $result = $this->storage->createFile(
             $bucketId,
             ID::unique(),
-            InputFile::fromPath($file->getRealPath(), $file->getClientOriginalName())
+            // InputFile::fromPath($file->getRealPath(), $file->getClientOriginalName())
+            new InputFile($file->getRealPath(), $file->getClientOriginalName())
         );
 
         return [
