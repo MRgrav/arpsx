@@ -6,9 +6,16 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use App\Services\AppwriteStorageService;
 
 class PostController extends Controller
 {
+    protected $storageService;
+    // Inject the service via Constructor for cleaner access
+    public function __construct(AppwriteStorageService $storageService)
+    {
+        $this->storageService = $storageService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -35,31 +42,48 @@ class PostController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string',
-            'image' => "required|file|mimes:pdf,jpg,jpeg,png|max:2048",
+            'image' => "required|file|mimes:pdf,jpg,jpeg,png,webp,avif|max:2048",
             'images' => 'nullable|array',
-            'images.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'images.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,webp,avif|max:2048',
             'content' => 'nullable|string',
         ]);
 
+        // if ($request->hasFile('image')) {
+        //     // Generate UUID and keep original extension
+        //     $extension = $request->file('image')->getClientOriginalExtension();
+        //     $filename = Str::uuid()->toString() . '.' . $extension;
+
+        //     // Store in public/uploads
+        //     $request->file('image')->storeAs('uploads', $filename, 'public');
+
+        //     $data['image'] = $filename;
+        // }
+
+        // $storedImages = [];
+
+        // foreach ($request->file('images', []) as $file) {
+        //     $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+        //     $file->storeAs('uploads', $filename, 'public');
+        //     $storedImages[] = $filename;
+        // }
+
+        // $data['images'] = $storedImages;
+
+        // 1. Handle Main Thumbnail Upload
         if ($request->hasFile('image')) {
-            // Generate UUID and keep original extension
-            $extension = $request->file('image')->getClientOriginalExtension();
-            $filename = Str::uuid()->toString() . '.' . $extension;
-
-            // Store in public/uploads
-            $request->file('image')->storeAs('uploads', $filename, 'public');
-
-            $data['image'] = $filename;
+            // Use 'posts' as the bucket name/ID
+            $upload = $this->storageService->upload($request->file('image'), 'posts');
+            $data['image'] = $upload['url']; // Store the Appwrite URL in DB
         }
 
+        // 2. Handle Gallery Images Upload
         $storedImages = [];
-
-        foreach ($request->file('images', []) as $file) {
-            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('uploads', $filename, 'public');
-            $storedImages[] = $filename;
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                $upload = $this->storageService->upload($file, 'gallery');
+                $storedImages[] = $upload['url'];
+            }
         }
-
         $data['images'] = $storedImages;
 
         Post::create($data);
@@ -103,12 +127,20 @@ class PostController extends Controller
         /**
          * Update main thumbnail image
          */
+        // if ($request->hasFile('image')) {
+        //     $extension = $request->file('image')->getClientOriginalExtension();
+        //     $filename = Str::uuid() . '.' . $extension;
+        //     $request->file('image')->storeAs('uploads', $filename, 'public');
+        //     $validated['image'] = $filename;
+        // } else {
+        //     unset($validated['image']);
+        // }
+
         if ($request->hasFile('image')) {
-            $extension = $request->file('image')->getClientOriginalExtension();
-            $filename = Str::uuid() . '.' . $extension;
-            $request->file('image')->storeAs('uploads', $filename, 'public');
-            $validated['image'] = $filename;
+            $upload = $this->storageService->upload($request->file('image'), 'posts');
+            $validated['image'] = $upload['url'];
         } else {
+            // Keep existing URL if no new file is uploaded
             unset($validated['image']);
         }
 
@@ -126,14 +158,21 @@ class PostController extends Controller
         });
 
         // New uploaded images (Files)
+        // $newUploads = [];
+        // if ($request->hasFile('images')) {
+        //     foreach ($request->file('images') as $file) {
+        //         if ($file) {
+        //             $fname = Str::uuid() . '.' . $file->getClientOriginalExtension();
+        //             $file->storeAs('uploads', $fname, 'public');
+        //             $newUploads[] = $fname;
+        //         }
+        //     }
+        // }
         $newUploads = [];
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
-                if ($file) {
-                    $fname = Str::uuid() . '.' . $file->getClientOriginalExtension();
-                    $file->storeAs('uploads', $fname, 'public');
-                    $newUploads[] = $fname;
-                }
+                $upload = $this->storageService->upload($file, 'gallery');
+                $newUploads[] = $upload['url'];
             }
         }
 

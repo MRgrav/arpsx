@@ -6,7 +6,7 @@ import defaultProfileIcon from '@/../../resources/images/defaults/profile.png';
 import { ArrowLeftIcon } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import ImageGallery from '@/components/kisxo/ImageGallery.vue';
-import { computed } from 'vue';
+// import { computed } from 'vue';
 
 /**
  * Props definition
@@ -18,9 +18,28 @@ interface Props {
 const props = defineProps<Props>() // Make props reactive and type-safe.
 
 console.log(props.post);
-const handleImageError = (event: Event) => {
-    (event.target as HTMLImageElement).src = defaultProfileIcon;
-};
+// const handleImageError = (event: Event) => {
+//     (event.target as HTMLImageElement).src = defaultProfileIcon;
+// };
+/**
+ * Helper to determine the correct image source.
+ * If the string starts with http/https, use it as is.
+ * Otherwise, prepend the local storage path.
+ */
+ const getImageUrl = (imagePath: string) => {
+  if (!imagePath) return defaultProfileIcon; // Fallback if image is missing
+  
+  try {
+    // Check if it's a full URL (Appwrite)
+    new URL(imagePath);
+    const imageUrl = imagePath.replace('/view', '/preview&width=600&quality=70');
+    return imageUrl;
+  } catch (e: any) {
+    console.error(e);
+    // It's a filename (Old Local Storage)
+    return `/storage/uploads/${imagePath}`;
+  }
+}
 </script>
 <template>
     <AppLayout>
@@ -41,7 +60,7 @@ const handleImageError = (event: Event) => {
 
             <div>
                 <template v-if="props.post.image">
-                    <img :src="`/storage/uploads/${props.post.image}`" alt="Profile Image"
+                    <img :src="`${getImageUrl(props.post.image)}`" alt="Profile Image"
                         class="w-full h-[250px] md:h-[600px] object-cover aspect-video" />
                 </template>
             </div>

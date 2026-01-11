@@ -2,6 +2,7 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Link } from '@inertiajs/vue3';
 import { Post } from '@/types';
+import defaultProfileIcon from '@/../../resources/images/defaults/profile.png';
 
 /**
  * Props definition
@@ -18,6 +19,26 @@ const formatDate = (dateStr: string) =>
     month: 'short', // "Aug"
     day: '2-digit',
   })
+
+/**
+ * Helper to determine the correct image source.
+ * If the string starts with http/https, use it as is.
+ * Otherwise, prepend the local storage path.
+ */
+ const getImageUrl = (imagePath: string) => {
+  if (!imagePath) return defaultProfileIcon; // Fallback if image is missing
+  
+  try {
+    // Check if it's a full URL (Appwrite)
+    new URL(imagePath);
+    const imageUrl = imagePath.replace('/view', '/preview&width=600&quality=70');
+    return imageUrl;
+  } catch (e: any) {
+    console.error(e);
+    // It's a filename (Old Local Storage)
+    return `/storage/uploads/${imagePath}`;
+  }
+}
 </script>
 <template>
 <AppLayout>
@@ -32,14 +53,14 @@ const formatDate = (dateStr: string) =>
         >
           <!-- Post Image -->
           <img
-            :src="`/storage/uploads/${post.image}`"
+            :src="`${getImageUrl(post.image)}`"
             alt="Post Image"
             class="w-full h-48 object-cover"
           />
 
           <div class="p-5">
             <h2 class="text-xl font-semibold mb-2">
-              <Link :href="`/posts/${post.id}`" class="hover:underline">
+              <Link :href="`/news-events/${post.id}`" class="hover:underline">
                 {{ post.title }}
               </Link>
             </h2>
