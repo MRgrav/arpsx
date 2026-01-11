@@ -22,8 +22,8 @@ const props = defineProps<Props>() // Make props reactive and type-safe.
   try {
     // Check if it's a full URL (Appwrite)
     new URL(imagePath);
-    const imageUrl = imagePath.replace('/view', '/preview&width=600&quality=70');
-    return imageUrl;
+    // const imageUrl = imagePath.replace('/view', '/preview&width=600&quality=70');
+    return imagePath;
   } catch (e: any) {
     console.error(e);
     // It's a filename (Old Local Storage)
@@ -41,7 +41,7 @@ const props = defineProps<Props>() // Make props reactive and type-safe.
         <Link :href="`/news-events/${post.id}`" v-for="(post, index) in props.posts" :key="post.id"
           class="h-64 border border-blue-200 bg-cover bg-center bg-no-repeat border-r-4 border-b-4 transform transition duration-300 hover:scale-101 relative"
           data-aos="fade-up" data-aos-duration="400" data-aos-easing="ease-in-out" :data-aos-delay="100 * index"
-          :style="{ backgroundImage: `url('${getImageUrl(post.image)}')` }">
+          :style="{ backgroundImage: `url(${getImageUrl(post.image)})` }">
         <div
           class=" bg-[#022CB84F] hover:bg-[#012DB8B5] flex flex-col justify-end transition-colors duration-300 h-full">
           <div

@@ -32,8 +32,8 @@ console.log(props.post);
   try {
     // Check if it's a full URL (Appwrite)
     new URL(imagePath);
-    const imageUrl = imagePath.replace('/view', '/preview&width=600&quality=70');
-    return imageUrl;
+    // const imageUrl = imagePath.replace('/view', '/preview&width=600&quality=70');
+    return imagePath;
   } catch (e: any) {
     console.error(e);
     // It's a filename (Old Local Storage)
