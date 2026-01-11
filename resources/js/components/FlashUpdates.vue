@@ -24,7 +24,7 @@
             
             <!-- Image -->
             <img 
-              src="@/../../resources/images/admission_flash.jpg" 
+              src="@/../../resources/images/admission_flash.webp" 
               class="w-full h-auto rounded-lg shadow-2xl"
               alt="Admission flash banner"
             />
