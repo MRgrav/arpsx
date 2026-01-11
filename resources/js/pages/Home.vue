@@ -9,6 +9,7 @@ import Stats from '@/components/Home/Stats.vue';
 import Activities from '@/components/Home/Activities.vue';
 import { Post, Profile } from '@/types';
 import OurSchoolFamily from '@/components/Home/OurSchoolFamily.vue';
+import FlashUpdates from '@/components/FlashUpdates.vue';
 
 /**
  * Props definition
@@ -31,6 +32,7 @@ const props = defineProps<Props>() // Make props reactive and type-safe.
         <meta property="og:description" content="Assam Rifles Public School, Jorhat, Jorhat. KNOWLEDGE IS WORSHIP">
     </Head>
     <AppLayout class="overflow-hidden">
+        <FlashUpdates />
         <Hero />
         <AboutAndNotification :notifications="props.notifications"/>
         <MessageCard :profiles="props.profiles"/>
