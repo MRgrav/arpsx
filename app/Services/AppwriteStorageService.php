@@ -33,13 +33,33 @@ class AppwriteStorageService
     /**
      * Upload a file and return the permanent view URL.
      */
+    // public function upload(UploadedFile $file, string $bucketId = 'default'): array
+    // {
+    //     $result = $this->storage->createFile(
+    //         $bucketId,
+    //         ID::unique(),
+    //         // InputFile::fromPath($file->getRealPath(), $file->getClientOriginalName())
+    //         new InputFile($file->getRealPath(), $file->getClientOriginalName())
+    //     );
+
+    //     return [
+    //         'file_id' => $result['$id'],
+    //         'url' => $this->getRawUrl($bucketId, $result['$id'])
+    //     ];
+    // }
     public function upload(UploadedFile $file, string $bucketId = 'default'): array
     {
+        // The correct PHP SDK helper for files from a path
+        $inputFile = InputFile::withPath(
+            $file->getRealPath(), 
+            $file->getClientMimeType(), 
+            $file->getClientOriginalName()
+        );
+
         $result = $this->storage->createFile(
             $bucketId,
-            ID::unique(),
-            // InputFile::fromPath($file->getRealPath(), $file->getClientOriginalName())
-            new InputFile($file->getRealPath(), $file->getClientOriginalName())
+            \Appwrite\ID::unique(),
+            $inputFile
         );
 
         return [
