@@ -15,7 +15,7 @@ AOS.init({
     easing: 'ease-in-out',
 })
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'ARPS Jorhat';
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
