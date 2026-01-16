@@ -13,74 +13,8 @@ import {
   SelectValue,
 } from '../ui/select';
 import Loader from './Loader.vue';
-// import { Checkbox } from '../ui/checkbox';
-
-// interface RegistrationForm {
-//   // Student information
-//   admission_for: string;
-//   applicant_name: string;
-//   dob: string;
-//   gender: string;
-//   blood_group: string;
-//   only_child: string;
-//   social_category: string;
-//   nationality: string;
-//   bpl: string;
-//   cwsn: string;
-//   aadhaar_no: string;
-//   udise_no: string;
-//   pen_no: string;
-//   email: string;
-//   present_class: string;
-//   present_school_name: string;
-//   present_school_address: string;
-//   admission_sought_for_class: string;
-
-//   // Academic results
-//   total_subjects: string;
-//   total_marks_obtained: string;
-//   full_marks: string;
-
-//   // Parents information
-//   parents_category: string;
-//   father_name: string;
-//   father_occupation: string;
-//   father_phone: string;
-//   mother_name: string;
-//   mother_occupation: string;
-//   mother_phone: string;
-//   annual_income: string;
-
-//   // Current address
-//   c_street_area_locality: string;
-//   c_village_town: string;
-//   c_post_office: string;
-//   c_pin_code: string;
-//   c_house_no: string;
-//   c_state: string;
-//   c_district: string;
-
-//   // Permanent address
-//   p_street_area_locality: string;
-//   p_village_town: string;
-//   p_post_office: string;
-//   p_pin_code: string;
-//   p_house_no: string;
-//   p_state: string;
-//   p_district: string;
-
-//   // Files
-//   payment_screenshot: File | null;
-//   // passport_photo?: File | null;
-//   // marksheet?: File | null;
-//   // tc_certificate?: File | null;
-//   [key: string]: string | File | null ;
-// }
 
 // Online Registration Form Object
-// const form = useForm<RegistrationForm>({
-
-// })
 const form = useForm({
   //student information
   admission_for: '',
@@ -547,19 +481,19 @@ const toggleSameAddress = () => {
       <h3 class="text-lg font-semibold text-white bg-sky-400 p-2">ACADEMIC INFORMATION</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="space-y-1">
-          <Label for="total_subjects">Total Subjects: </Label>
+          <Label for="total_subjects">Total Subjects <small>(optional)</small>: </Label>
           <Input type="number" id="total_subjects" v-model="form.total_subjects" placeholder="NUMBER OF SUBJECTS" />
           <div class="text-sm text-red-500" v-if="form.errors.total_subjects">{{ form.errors.total_subjects }}</div>
         </div>
 
         <div class="space-y-1">
-          <Label for="total_marks_obtained">Total Marks Obtained: </Label>
+          <Label for="total_marks_obtained">Total Marks Obtained <small>(optional)</small>: </Label>
           <Input type="number" id="total_marks_obtained" v-model="form.total_marks_obtained" placeholder="TOTAL MARKS OBTAINED" />
           <div class="text-sm text-red-500" v-if="form.errors.total_marks_obtained">{{ form.errors.total_marks_obtained
           }}</div>
         </div>
         <div class="space-y-1">
-          <Label for="full_marks">Full Marks: </Label>
+          <Label for="full_marks">Full Marks <small>(optional)</small>: </Label>
           <Input type="number" id="full_marks" v-model="form.full_marks" placeholder="FULL MARKS" />
           <div class="text-sm text-red-500" v-if="form.errors.full_marks">{{ form.errors.full_marks }}</div>
         </div>
