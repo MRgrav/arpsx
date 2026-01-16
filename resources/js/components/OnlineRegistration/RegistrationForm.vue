@@ -547,22 +547,20 @@ const toggleSameAddress = () => {
       <h3 class="text-lg font-semibold text-white bg-sky-400 p-2">ACADEMIC INFORMATION</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="space-y-1">
-          <Label for="total_subjects">Total Subjects: *</Label>
-          <Input type="number" id="total_subjects" v-model="form.total_subjects" placeholder="NUMBER OF SUBJECTS"
-            required />
+          <Label for="total_subjects">Total Subjects: </Label>
+          <Input type="number" id="total_subjects" v-model="form.total_subjects" placeholder="NUMBER OF SUBJECTS" />
           <div class="text-sm text-red-500" v-if="form.errors.total_subjects">{{ form.errors.total_subjects }}</div>
         </div>
 
         <div class="space-y-1">
-          <Label for="total_marks_obtained">Total Marks Obtained: *</Label>
-          <Input type="number" id="total_marks_obtained" v-model="form.total_marks_obtained"
-            placeholder="TOTAL MARKS OBTAINED" required />
+          <Label for="total_marks_obtained">Total Marks Obtained: </Label>
+          <Input type="number" id="total_marks_obtained" v-model="form.total_marks_obtained" placeholder="TOTAL MARKS OBTAINED" />
           <div class="text-sm text-red-500" v-if="form.errors.total_marks_obtained">{{ form.errors.total_marks_obtained
           }}</div>
         </div>
         <div class="space-y-1">
-          <Label for="full_marks">Full Marks: *</Label>
-          <Input type="number" id="full_marks" v-model="form.full_marks" placeholder="FULL MARKS" required />
+          <Label for="full_marks">Full Marks: </Label>
+          <Input type="number" id="full_marks" v-model="form.full_marks" placeholder="FULL MARKS" />
           <div class="text-sm text-red-500" v-if="form.errors.full_marks">{{ form.errors.full_marks }}</div>
         </div>
       </div>

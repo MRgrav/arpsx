@@ -59,9 +59,9 @@ class OnlineRegistrationController extends Controller
             "admission_sought_for_class" => "required|in:Nursery,LKG,UKG,CLASS I,CLASS II,CLASS III,CLASS IV,CLASS V,CLASS VI,CLASS VII,CLASS VIII,CLASS IX,CLASS X,CLASS XI,CLASS XII",
 
             // ACADEMIC INFORMATION
-            "total_subjects" => "required|integer|min:0|max:20",
-            "total_marks_obtained" => "required|integer|min:0|max:1000",
-            "full_marks" => "required|integer|min:0|max:1000",
+            "total_subjects" => "sometimes|integer|min:0|max:20",
+            "total_marks_obtained" => "sometimes|integer|min:0|max:1000",
+            "full_marks" => "sometimes|integer|min:0|max:1000",
 
             // PARENT’S INFORMATION
             "parents_category" => "required|in:CIVILIAN,DEFENCE,RETIRED DEFENCE",
