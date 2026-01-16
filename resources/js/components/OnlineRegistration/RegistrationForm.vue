@@ -13,8 +13,74 @@ import {
   SelectValue,
 } from '../ui/select';
 import Loader from './Loader.vue';
+// import { Checkbox } from '../ui/checkbox';
+
+// interface RegistrationForm {
+//   // Student information
+//   admission_for: string;
+//   applicant_name: string;
+//   dob: string;
+//   gender: string;
+//   blood_group: string;
+//   only_child: string;
+//   social_category: string;
+//   nationality: string;
+//   bpl: string;
+//   cwsn: string;
+//   aadhaar_no: string;
+//   udise_no: string;
+//   pen_no: string;
+//   email: string;
+//   present_class: string;
+//   present_school_name: string;
+//   present_school_address: string;
+//   admission_sought_for_class: string;
+
+//   // Academic results
+//   total_subjects: string;
+//   total_marks_obtained: string;
+//   full_marks: string;
+
+//   // Parents information
+//   parents_category: string;
+//   father_name: string;
+//   father_occupation: string;
+//   father_phone: string;
+//   mother_name: string;
+//   mother_occupation: string;
+//   mother_phone: string;
+//   annual_income: string;
+
+//   // Current address
+//   c_street_area_locality: string;
+//   c_village_town: string;
+//   c_post_office: string;
+//   c_pin_code: string;
+//   c_house_no: string;
+//   c_state: string;
+//   c_district: string;
+
+//   // Permanent address
+//   p_street_area_locality: string;
+//   p_village_town: string;
+//   p_post_office: string;
+//   p_pin_code: string;
+//   p_house_no: string;
+//   p_state: string;
+//   p_district: string;
+
+//   // Files
+//   payment_screenshot: File | null;
+//   // passport_photo?: File | null;
+//   // marksheet?: File | null;
+//   // tc_certificate?: File | null;
+//   [key: string]: string | File | null ;
+// }
 
 // Online Registration Form Object
+// const form = useForm<RegistrationForm>({
+
+// })
 const form = useForm({
   //student information
   admission_for: '',
@@ -88,15 +154,22 @@ const errorModel = ref({});
 const submitForm = () => {
 
   const maxSize = 1024 * 1024; // 1MB
-  const files = [
-    // { name: 'Passport Photo', file: form.passport_photo },
-    // { name: 'Marksheet', file: form.marksheet },
-    // { name: 'TC Certificate', file: form.tc_certificate },
+  // const files = [
+  //   // { name: 'Passport Photo', file: form.passport_photo },
+  //   // { name: 'Marksheet', file: form.marksheet },
+  //   // { name: 'TC Certificate', file: form.tc_certificate },
+  //   { name: 'Payment Screenshot', file: form.payment_screenshot }
+  // ];
+
+    
+  // FIX: Explicitly type the array
+  const files: Array<{ name: string; file: File | null }> = [
     { name: 'Payment Screenshot', file: form.payment_screenshot }
   ];
 
+
   for (const { name, file } of files) {
-    if (file?.size > maxSize) {
+    if (file && file?.size > maxSize) {
       alert(`${name} is too big (> 1MB)`);
       return;
     }
@@ -125,6 +198,25 @@ const submitForm = () => {
 const clearErrors = () => {
   errorModel.value = {};
 }
+
+const sameAddressRef = ref(false);
+
+const toggleSameAddress = () => {
+  
+  sameAddressRef.value = !sameAddressRef.value;
+  
+  if (sameAddressRef.value) {
+    // Copy current to permanent
+    form.p_district = form.c_district;
+    form.p_house_no = form.c_house_no;
+    form.p_pin_code = form.c_pin_code;
+    form.p_post_office = form.c_post_office;
+    form.p_state = form.c_state;
+    form.p_street_area_locality = form.c_street_area_locality;
+    form.p_village_town = form.c_village_town;
+  }
+
+}
 </script>
 <template>
   <Loader :open="submitting" />
@@ -138,6 +230,7 @@ const clearErrors = () => {
       <li>Passport-size photo</li>
       <li>Marksheet</li>
       <li>TC certificate</li>
+      <li>Payment Slip</li>
     </ul>
 
     <div class="space-y-4">
@@ -489,7 +582,11 @@ const clearErrors = () => {
             <SelectContent>
               <SelectGroup>
                 <SelectItem value="CIVILIAN">Civilian</SelectItem>
-                <SelectItem value="DEFENCE">Defence</SelectItem>
+                <SelectItem value="DEFENCE AR">Defence - AR</SelectItem>
+                <SelectItem value="DEFENCE CRPS">Defence - CRPS</SelectItem>
+                <SelectItem value="DEFENCE AFS">Defence - AFS</SelectItem>
+                <SelectItem value="DEFENCE ARMY">Defence - ARMY</SelectItem>
+                <SelectItem value="DEFENCE OTHERS">Defence - Others</SelectItem>
                 <SelectItem value="RETIRED DEFENCE">Retired Defence</SelectItem>
               </SelectGroup>
             </SelectContent>
@@ -582,7 +679,14 @@ const clearErrors = () => {
 
     <!--PERMANENT ADDRESS -->
     <div class="space-y-4">
-      <h3 class="text-base font-medium text-white bg-slate-400 p-1">PERMANENT ADDRESS DETAILS</h3>
+      <div class="flex">
+        <h3 class="text-base font-medium text-white bg-slate-400 p-1">PERMANENT ADDRESS DETAILS</h3>
+        <div class="flex gap-2 items-center">
+          <!-- <input type="checkbox" @click="getSameAddress()" id="sameAddress"/> -->
+          <input type="checkbox" :checked="sameAddressRef" @change="toggleSameAddress" id="sameAddress" />
+          <label for="sameAddress">Same as above</label>
+        </div>
+      </div>  
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="space-y-1">
           <Label for="p_street_area_locality">Street/Area/Locality: *</Label>
