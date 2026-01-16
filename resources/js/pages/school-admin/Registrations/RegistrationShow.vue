@@ -109,6 +109,26 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKeydown)
 })
+
+/**
+ * Helper to determine the correct image source.
+ * If the string starts with http/https, use it as is.
+ * Otherwise, prepend the local storage path.
+ */
+ const getImageUrl = (imagePath: string) => {
+  // if (!imagePath) return defaultProfileIcon; // Fallback if image is missing
+  
+  try {
+    // Check if it's a full URL (Appwrite)
+    new URL(imagePath);
+    // const imageUrl = imagePath.replace('/view', '/preview&width=600&quality=70');
+    return imagePath;
+  } catch (e: any) {
+    console.error(e);
+    // It's a filename (Old Local Storage)
+    return `/storage/online-registration/uploads/${imagePath}`;
+  }
+}
 </script>
 
 <template>
@@ -143,7 +163,7 @@ onBeforeUnmount(() => {
                   <template v-if="props.registration[field]">
                     <template v-if="props.registration[field].toLowerCase().endsWith('.pdf')">
                       <a
-                        :href="`/storage/online-registration/uploads/${props.registration[field]}`"
+                        :href="`${getImageUrl(props.registration[field])}`"
                         target="_blank"
                         class="text-blue-600 underline"
                       >
@@ -152,10 +172,10 @@ onBeforeUnmount(() => {
                     </template>
                     <template v-else>
                       <img
-                        :src="`/storage/online-registration/uploads/${props.registration[field]}`"
+                        :src="`${getImageUrl(props.registration[field])}`"
                         class="h-24 rounded border cursor-pointer hover:opacity-80"
                         :alt="getLabel(field)"
-                        @click="openImage(`/storage/online-registration/uploads/${props.registration[field]}`)"
+                        @click="openImage(`${getImageUrl(props.registration[field])}`)"
                       />
                     </template>
                   </template>

@@ -109,18 +109,20 @@ class OnlineRegistrationController extends Controller
         $uuidFilenames = [];
 
         foreach ($fileFields as $field) {
-            if ($request->hasFile($field)) {
-                $file = $request->file($field);
-                $ext = $file->getClientOriginalExtension();
-                $uuid = Str::uuid()->toString();
-                $filename = $uuid . '.' . $ext;
+            // if ($request->hasFile($field)) {
+            //     $file = $request->file($field);
+            //     $ext = $file->getClientOriginalExtension();
+            //     $uuid = Str::uuid()->toString();
+            //     $filename = $uuid . '.' . $ext;
 
-                // Store file in storage/app/public/online-registration/uploads/
-                $file->storeAs('online-registration/uploads', $filename, 'public');
+            //     // Store file in storage/app/public/online-registration/uploads/
+            //     $file->storeAs('online-registration/uploads', $filename, 'public');
 
-                // Save only the filename in DB
-                $uuidFilenames[$field] = $filename;
-            }
+            //     // Save only the filename in DB
+            //     $uuidFilenames[$field] = $filename;
+            // }
+            $upload = $this->storageService->upload($request->file($field), env('APPWRITE_BUCKET_ID'));
+            $uuidFilenames[$field] = $upload['url'];
         }
 
         // Merge file names into the validated data

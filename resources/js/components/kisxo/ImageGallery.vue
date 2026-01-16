@@ -8,7 +8,7 @@
         @click="openLightbox(index)"
       >
         <img
-          :src="typeof img === 'string' ? `/storage/uploads/${img}` : URL.createObjectURL(img)"
+          :src="typeof img === 'string' ? `${getImageUrl(img)}` : URL.createObjectURL(img)"
           class="w-full h-[250px] object-cover transition duration-200 group-hover:scale-105"
         />
       </div>
@@ -21,9 +21,7 @@
       @click.self="closeLightbox"
     >
       <img
-        :src="typeof props.images[lightbox.index] === 'string'
-              ? `/storage/uploads/${props.images[lightbox.index]}`
-              : URL.createObjectURL(props.images[lightbox.index])"
+        :src="getLightboxImageUrl(lightbox.index)"
         class="max-w-[90vw] max-h-[90vh] object-contain rounded shadow-lg"
       />
 
@@ -70,5 +68,35 @@ const openLightbox = (i: number) => {
 
 const closeLightbox = () => {
   lightbox.open = false
+}
+
+const getLightboxImageUrl = (index: number): string => {
+  const img = props.images[index];
+  if (!img) return '/images/placeholder.jpg';
+  
+  return typeof img === 'string' 
+    ? getImageUrl(img) 
+    : URL.createObjectURL(img);
+};
+
+
+/**
+ * Helper to determine the correct image source.
+ * If the string starts with http/https, use it as is.
+ * Otherwise, prepend the local storage path.
+ */
+ const getImageUrl = (imagePath: string) => {
+  if (!imagePath) return '/images/placeholder.jpg'; // Fallback if image is missing
+  
+  try {
+    // Check if it's a full URL (Appwrite)
+    new URL(imagePath);
+    // const imageUrl = imagePath.replace('/view', '/preview&width=600&quality=70');
+    return imagePath;
+  } catch (e: any) {
+    console.error(e);
+    // It's a filename (Old Local Storage)
+    return `/storage/uploads/${imagePath}`;
+  }
 }
 </script>

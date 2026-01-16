@@ -26,6 +26,26 @@ const breadcrumbs: BreadcrumbItem[] = [
 const handleImageError = (event: Event) => {
   (event.target as HTMLImageElement).src = defaultProfileIcon;
 };
+
+/**
+ * Helper to determine the correct image source.
+ * If the string starts with http/https, use it as is.
+ * Otherwise, prepend the local storage path.
+ */
+ const getImageUrl = (imagePath: string) => {
+  if (!imagePath) return defaultProfileIcon; // Fallback if image is missing
+  
+  try {
+    // Check if it's a full URL (Appwrite)
+    new URL(imagePath);
+    // const imageUrl = imagePath.replace('/view', '/preview&width=600&quality=70');
+    return imagePath;
+  } catch (e: any) {
+    console.error(e);
+    // It's a filename (Old Local Storage)
+    return `/storage/uploads/${imagePath}`;
+  }
+}
 </script>
 
 <template>
@@ -42,7 +62,7 @@ const handleImageError = (event: Event) => {
         </Link>
       </div>
       <div>
-        <img :src="`/storage/uploads/${props.post.image}`" alt="Profile Image" class="max-h-[400px]" @error="handleImageError($event)" />
+        <img :src="`${getImageUrl(props.post.image)}`" alt="Profile Image" class="max-h-[400px]" @error="handleImageError($event)" />
       </div>
       <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
           {{ props.post.title }}
