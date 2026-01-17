@@ -63,8 +63,9 @@ class OnlineRegistrationController extends Controller
             "total_marks_obtained" => "sometimes",
             "full_marks" => "sometimes",
 
-            // PARENT’S INFORMATION
-            "parents_category" => "required|in:CIVILIAN,DEFENCE,RETIRED DEFENCE",
+            // PARENT’S INFORMATION in:CIVILIAN,DEFENCE,RETIRED DEFENCE
+            "parents_category_b" => "required|string",
+            // "parents_category" => "sometimes|string",     // jugad
             "father_name" => "required|string|max:255",
             "father_occupation" => "required|string|max:255",
             "father_phone" => "required|integer|digits:10",
@@ -108,6 +109,10 @@ class OnlineRegistrationController extends Controller
         if (!$validated['full_marks']) {
             $validated['full_marks'] = 0;
         }
+
+        // if ($validated['parents_category']) {
+        //     $validated['parents_category_b'] = $validated['parents_category'];
+        // }
 
         if ($validated['total_marks_obtained'] > 0 && $validated['full_marks'] > 0) {
             $validated["last_exam_percentage"] = round(

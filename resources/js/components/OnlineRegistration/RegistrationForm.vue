@@ -43,7 +43,7 @@ const form = useForm({
   full_marks: '',
 
   // parents infromation
-  parents_category: '',
+  parents_category_b: '',
   father_name: '',
   father_occupation: '',
   father_phone: '',
@@ -507,7 +507,7 @@ const toggleSameAddress = () => {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="space-y-1">
           <Label for="category">Category: *</Label>
-          <Select id="category" v-model="form.parents_category" required>
+          <Select id="category" v-model="form.parents_category_b" required>
             <SelectTrigger class="form-select w-full">
               <SelectValue placeholder="-- Select --" />
             </SelectTrigger>
@@ -524,7 +524,7 @@ const toggleSameAddress = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <div class="text-sm text-red-500" v-if="form.errors.parents_category">{{ form.errors.parents_category }}</div>
+          <div class="text-sm text-red-500" v-if="form.errors.parents_category_b">{{ form.errors.parents_category_b }}</div>
         </div>
         <div class="space-y-1">
           <Label for="father_name">Father's Name: *</Label>
