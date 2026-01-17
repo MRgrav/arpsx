@@ -39,7 +39,7 @@ const categories: Record<string, string[]> = {
 
   ],
   "Parent’s Information": [
-    'parents_category', 'father_name', 'father_occupation', 'father_phone',
+    'parents_category_b', 'father_name', 'father_occupation', 'father_phone',
     'mother_name', 'mother_occupation', 'mother_phone', 'annual_income'
   ],
   "Current Address": [
@@ -155,7 +155,7 @@ onBeforeUnmount(() => {
           <tbody>
             <tr v-for="field in fields" :key="field">
               <td class="border px-4 py-2 font-medium w-1/3">
-                {{ getLabel(field) }}
+                {{ getLabel(field==='parents_category_b'?'parents_category':field) }}
               </td>
               <td class="border px-4 py-2">
                 <!-- File fields -->
