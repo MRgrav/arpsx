@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('ragistrations', function (Blueprint $table) {
+        Schema::table('registrations', function (Blueprint $table) {
             //
             $table->string('parents_category_b')->nullable();
         });
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('ragistrations', function (Blueprint $table) {
+        Schema::table('registrations', function (Blueprint $table) {
             //
             $table->dropColumn('parents_category_b');
         });
