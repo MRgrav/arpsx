@@ -16,6 +16,13 @@ use App\Services\AppwriteStorageService;
 
 class OnlineRegistrationController extends Controller
 {
+    private AppwriteStorageService $storageService;
+
+    public function __construct(AppwriteStorageService $storageService)
+    {
+        $this->storageService = $storageService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -35,7 +42,7 @@ class OnlineRegistrationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, AppwriteStorageService $storageService)
     {
         $validated = $request->validate([
 
@@ -138,7 +145,8 @@ class OnlineRegistrationController extends Controller
             //     // Save only the filename in DB
             //     $uuidFilenames[$field] = $filename;
             // }
-            $upload = $this->storageService->upload($request->file($field), env('APPWRITE_BUCKET_ID'));
+            $storageService = app(AppwriteStorageService::class);
+            $upload = $storageService->upload($request->file($field), env('APPWRITE_BUCKET_ID'));
             $uuidFilenames[$field] = $upload['url'];
         }
 
