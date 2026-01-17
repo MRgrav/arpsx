@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 use Spatie\Browsershot\Browsershot;
+use App\Services\AppwriteStorageService;
 
 class OnlineRegistrationController extends Controller
 {
