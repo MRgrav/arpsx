@@ -513,12 +513,13 @@ const toggleSameAddress = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="CIVILIAN">Civilian</SelectItem>
-                <SelectItem value="DEFENCE AR">Defence - AR</SelectItem>
+                <!-- <SelectItem value="CIVILIAN">Civilian</SelectItem> -->
+                <SelectItem value="DEFENCE">Defence</SelectItem>
+                <!-- <SelectItem value="DEFENCE AR">Defence - AR</SelectItem>
                 <SelectItem value="DEFENCE CRPS">Defence - CRPS</SelectItem>
                 <SelectItem value="DEFENCE AFS">Defence - AFS</SelectItem>
                 <SelectItem value="DEFENCE ARMY">Defence - ARMY</SelectItem>
-                <SelectItem value="DEFENCE OTHERS">Defence - Others</SelectItem>
+                <SelectItem value="DEFENCE OTHERS">Defence - Others</SelectItem> -->
                 <SelectItem value="RETIRED DEFENCE">Retired Defence</SelectItem>
               </SelectGroup>
             </SelectContent>

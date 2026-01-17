@@ -59,9 +59,9 @@ class OnlineRegistrationController extends Controller
             "admission_sought_for_class" => "required|in:Nursery,LKG,UKG,CLASS I,CLASS II,CLASS III,CLASS IV,CLASS V,CLASS VI,CLASS VII,CLASS VIII,CLASS IX,CLASS X,CLASS XI,CLASS XII",
 
             // ACADEMIC INFORMATION
-            "total_subjects" => "sometimes|integer|min:0|max:20",
-            "total_marks_obtained" => "sometimes|integer|min:0|max:1000",
-            "full_marks" => "sometimes|integer|min:0|max:1000",
+            "total_subjects" => "sometimes",
+            "total_marks_obtained" => "sometimes",
+            "full_marks" => "sometimes",
 
             // PARENT’S INFORMATION
             "parents_category" => "required|in:CIVILIAN,DEFENCE,RETIRED DEFENCE",
@@ -97,6 +97,17 @@ class OnlineRegistrationController extends Controller
 
         // Calculate percentage
         $validated["last_exam_percentage"] = 0;
+        if (!$validated['total_subjects']) {
+            $validated['total_subjects'] = 0;
+        }
+
+        if (!$validated['total_marks_obtained']) {
+            $validated['total_marks_obtained'] = 0;
+        }
+
+        if (!$validated['full_marks']) {
+            $validated['full_marks'] = 0;
+        }
 
         if ($validated['total_marks_obtained'] > 0 && $validated['full_marks'] > 0) {
             $validated["last_exam_percentage"] = round(
