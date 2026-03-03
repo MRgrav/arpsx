@@ -2,37 +2,37 @@ import type { LucideIcon } from 'lucide-vue-next';
 import type { Config } from 'ziggy-js';
 
 export interface Auth {
-    user: User;
+  user: User;
 }
 
 export interface BreadcrumbItem {
-    title: string;
-    href: string;
+  title: string;
+  href: string;
 }
 
 export interface NavItem {
-    title: string;
-    href: string;
-    icon?: LucideIcon;
-    isActive?: boolean;
+  title: string;
+  href: string;
+  icon?: LucideIcon;
+  isActive?: boolean;
 }
 
 export type AppPageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
-    name: string;
-    quote: { message: string; author: string };
-    auth: Auth;
-    ziggy: Config & { location: string };
-    sidebarOpen: boolean;
+  name: string;
+  quote: { message: string; author: string };
+  auth: Auth;
+  ziggy: Config & { location: string };
+  sidebarOpen: boolean;
 };
 
 export interface User {
-    id: number;
-    name: string;
-    email: string;
-    avatar?: string;
-    email_verified_at: string | null;
-    created_at: string;
-    updated_at: string;
+  id: number;
+  name: string;
+  email: string;
+  avatar?: string;
+  email_verified_at: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 /**
@@ -40,23 +40,28 @@ export interface User {
  * Only few keys are here
  */
 export interface Registration {
-    id: number;
-    applicant_name: string;
-    admission_sought_for_class: string;
-    father_phone: string;
-    created_at: Date;
-    gender: string;
+  id: number;
+  applicant_name: string;
+  admission_sought_for_class: string;
+  father_phone: string;
+  created_at: Date;
+  gender: string;
+}
+
+export interface NotificationAttachment {
+  url: string;
+  type: 'pdf' | 'image';
 }
 
 /**
- * Registraion interface
- * Only few keys are here
+ * Notification interface
  */
 export interface Notification {
-    id: number;
-    title: string;
-    message: string;
-    created_at: Date;
+  id: number;
+  title: string;
+  message: string;
+  links?: NotificationAttachment[] | null;
+  created_at: Date;
 }
 
 export interface Role {

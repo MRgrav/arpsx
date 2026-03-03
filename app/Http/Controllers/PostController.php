@@ -72,7 +72,7 @@ class PostController extends Controller
         // 1. Handle Main Thumbnail Upload
         if ($request->hasFile('image')) {
             // Use 'posts' as the bucket name/ID
-            $upload = $this->storageService->upload($request->file('image'), env('APPWRITE_BUCKET_ID'));
+            $upload = $this->storageService->upload($request->file('image'), config('services.appwrite.bucket_id'));
             $data['image'] = $upload['url']; // Store the Appwrite URL in DB
         }
 
@@ -80,7 +80,7 @@ class PostController extends Controller
         $storedImages = [];
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
-                $upload = $this->storageService->upload($file, env('APPWRITE_BUCKET_ID'));
+                $upload = $this->storageService->upload($file, config('services.appwrite.bucket_id'));
                 $storedImages[] = $upload['url'];
             }
         }
@@ -117,9 +117,9 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         $validated = $request->validate([
-            'title'   => 'required|string',
-            'image'   => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'images'  => 'nullable|array',
+            'title' => 'required|string',
+            'image' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'images' => 'nullable|array',
             'images.*' => 'nullable',
             'content' => 'nullable|string',
         ]);
@@ -137,7 +137,7 @@ class PostController extends Controller
         // }
 
         if ($request->hasFile('image')) {
-            $upload = $this->storageService->upload($request->file('image'), env('APPWRITE_BUCKET_ID'));
+            $upload = $this->storageService->upload($request->file('image'), config('services.appwrite.bucket_id'));
             $validated['image'] = $upload['url'];
         } else {
             // Keep existing URL if no new file is uploaded
@@ -171,7 +171,7 @@ class PostController extends Controller
         $newUploads = [];
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
-                $upload = $this->storageService->upload($file, env('APPWRITE_BUCKET_ID'));
+                $upload = $this->storageService->upload($file, config('services.appwrite.bucket_id'));
                 $newUploads[] = $upload['url'];
             }
         }

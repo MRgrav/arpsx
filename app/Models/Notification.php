@@ -14,6 +14,11 @@ class Notification extends Model
         'title',
         'message',
         'user_id',
+        'links',
+    ];
+
+    protected $casts = [
+        'links' => 'array',
     ];
 
     // Relationship to user

@@ -47,12 +47,14 @@ class AppwriteStorageService
     //         'url' => $this->getRawUrl($bucketId, $result['$id'])
     //     ];
     // }
-    public function upload(UploadedFile $file, string $bucketId = 'default'): array
+    public function upload(UploadedFile $file, string $bucketId = null): array
     {
+        $bucketId = $bucketId ?? config('services.appwrite.bucket_id');
+
         // The correct PHP SDK helper for files from a path
         $inputFile = InputFile::withPath(
-            $file->getRealPath(), 
-            $file->getClientMimeType(), 
+            $file->getRealPath(),
+            $file->getClientMimeType(),
             $file->getClientOriginalName()
         );
 

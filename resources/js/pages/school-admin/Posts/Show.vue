@@ -32,7 +32,7 @@ const handleImageError = (event: Event) => {
  * If the string starts with http/https, use it as is.
  * Otherwise, prepend the local storage path.
  */
- const getImageUrl = (imagePath: string) => {
+const getImageUrl = (imagePath: string) => {
   if (!imagePath) return defaultProfileIcon; // Fallback if image is missing
   
   try {

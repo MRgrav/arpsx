@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import SchoolAdminLayout from '@/layouts/SchoolAdminLayout.vue';
 import { type BreadcrumbItem, Post } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import defaultProfileIcon from '@/../../resources/images/defaults/profile.png';
 
 // Receive post from controller
 const props = defineProps<{ post: Post }>();
@@ -39,8 +40,23 @@ const removeImage = (index: number) => {
 
 function loadImg(img: any) {
   if (!img) return null;
-  if (typeof img === 'string') return `/storage/uploads/${img}`; // existing
+  if (typeof img === 'string') return getImageUrl(img); // existing
   return URL.createObjectURL(img); // new uploaded preview
+}
+
+const getImageUrl = (imagePath: string) => {
+  if (!imagePath) return defaultProfileIcon; // Fallback if image is missing
+  
+  try {
+    // Check if it's a full URL (Appwrite)
+    new URL(imagePath);
+    // const imageUrl = imagePath.replace('/view', '/preview&width=600&quality=70');
+    return imagePath;
+  } catch (e: any) {
+    console.error(e);
+    // It's a filename (Old Local Storage)
+    return `/storage/uploads/${imagePath}`;
+  }
 }
 
 // Submit
@@ -73,7 +89,7 @@ const submit = () => {
             <div class="rounded-md overflow-hidden border">
               <!-- Image Preview -->
               <div class="h-[300px] w-full border-b" v-if="props.post.image">
-                <img :src="form.image ? loadImg(form.image) : loadImg(props.post.image)" class="h-full w-full rounded-t-md border-t object-cover" />
+                <img :src="form.image ? loadImg(form.image) as string : loadImg(props.post.image) as string" class="h-full w-full rounded-t-md border-t object-cover" />
                 <!-- <template v-else>
                   <div
                     class="flex h-full w-full items-center justify-center rounded-t-md border-t border-x bg-white text-xs text-gray-400">
@@ -105,7 +121,7 @@ const submit = () => {
             <div v-for="(image, index) in form.images" :key="index" class="rounded-md overflow-hidden border">
               <!-- Image Preview -->
               <div class="h-[300px] w-full border-b" v-if="image">
-                <img :src="loadImg(image)" class="h-full w-full rounded-t-md border-t object-cover" />
+                <img :src="loadImg(image) as string" class="h-full w-full rounded-t-md border-t object-cover" />
                 <!-- <template v-else>
                   <div
                     class="flex h-full w-full items-center justify-center rounded-t-md border-t border-x bg-white text-xs text-gray-400">

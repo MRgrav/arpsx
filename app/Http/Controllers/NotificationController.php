@@ -3,18 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
+use App\Services\AppwriteStorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class NotificationController extends Controller
 {
+    protected $storageService;
+    // Inject the service via Constructor for cleaner access
+    public function __construct(AppwriteStorageService $storageService)
+    {
+        $this->storageService = $storageService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -33,12 +40,23 @@ class NotificationController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'message' => 'nullable|string',
+            'files.*' => "nullable|file|mimes:pdf,jpg,jpeg,png|max:2048"
         ]);
+
+        $links = [];
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $upload = $this->storageService->upload($file, config('services.appwrite.bucket_id'));
+                $fileType = $file->getMimeType() === 'application/pdf' ? 'pdf' : 'image';
+                $links[] = ['url' => $upload['url'], 'type' => $fileType];
+            }
+        }
 
         Notification::create([
             'title' => $validated['title'],
             'message' => $validated['message'] ?? null,
-            'user_id' => Auth::id(), // or any other user ID
+            'user_id' => Auth::id(),
+            'links' => $links,
         ]);
 
         return redirect()->route('school-admin.notifications.schoolAdminIndex')
@@ -63,26 +81,46 @@ class NotificationController extends Controller
     {
         $notification = Notification::findOrFail($id);
         return Inertia::render('school-admin/Notifications/Edit', [
-                'notification' => $notification,
+            'notification' => $notification,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, String $id)
+    public function update(Request $request, string $id)
     {
-        // Validate the form data
+        $notification = Notification::findOrFail($id);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'message' => 'nullable|string',
+            'links' => 'nullable|array', // Existing links the user wants to keep
+            'files.*' => "nullable|file|mimes:pdf,jpg,jpeg,png|max:2048"
         ]);
 
-        // Update the notification
-        $notification = Notification::findOrFail($id);
-        $notification->update($validated);
+        // 1. New uploads
+        $newUploads = [];
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $upload = $this->storageService->upload($file, config('services.appwrite.bucket_id'));
+                $fileType = $file->getMimeType() === 'application/pdf' ? 'pdf' : 'image';
+                $newUploads[] = ['url' => $upload['url'], 'type' => $fileType];
+            }
+        }
 
-        // Redirect back to index with success message
+        // 2. Kept links (filter to ensure they are valid {url, type} objects)
+        $keptLinks = array_filter($request->input('links', []), function ($value) {
+            return is_array($value) && !empty($value['url']) && !empty($value['type']);
+        });
+
+        // 3. Merge and update
+        $notification->update([
+            'title' => $validated['title'],
+            'message' => $validated['message'],
+            'links' => array_values(array_merge($keptLinks, $newUploads)),
+        ]);
+
         return redirect()
             ->route('school-admin.notifications.schoolAdminIndex')
             ->with('success', 'Notification updated successfully.');
@@ -110,7 +148,7 @@ class NotificationController extends Controller
     {
 
         $notifications = Notification::latest('created_at')->get();
-        
+
         return Inertia::render('school-admin/Notifications/Index', [
             'notifications' => $notifications,
         ]);
