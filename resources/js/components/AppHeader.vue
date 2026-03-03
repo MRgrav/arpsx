@@ -80,6 +80,10 @@ const AdmissionItems: NavItem[] = [
         href: '/online-registration',
     },
     {
+        title: 'HS Registration',
+        href: '/hs-registration',
+    },
+    {
         title: 'Admission Procedure',
         href: '/admission-procedure',
     },

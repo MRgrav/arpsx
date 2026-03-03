@@ -107,4 +107,22 @@ export interface Post {
   updated_at?: string;
 }
 
+export interface HSRegistration {
+  id: number;
+  name: string;
+  email: string;
+  contact_number: string;
+  percentage: string;
+  dob: Date;
+  gender: string;
+  last_school_name: string;
+  pre_board_percentage: number;
+  stream: string;
+  father_name: string;
+  mother_name: string;
+  address: string;
+  reason_of_interest: string;
+  created_at: Date;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;

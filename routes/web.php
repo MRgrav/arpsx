@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\HSRegistrationController;
 use App\Models\Department;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
@@ -34,9 +35,9 @@ Route::get('/', function () {
     $roles = Role::whereIn('name', ['principal', 'vice_principal', 'coordinator'])->pluck('id', 'name');
 
     $profiles = [
-        'principal'       => Profile::where('role_id', $roles['principal'])->first(),
-        'vice_principal'  => Profile::where('role_id', $roles['vice_principal'])->first(),
-        'coordinator'     => Profile::where('role_id', $roles['coordinator'])->first(),
+        'principal' => Profile::where('role_id', $roles['principal'])->first(),
+        'vice_principal' => Profile::where('role_id', $roles['vice_principal'])->first(),
+        'coordinator' => Profile::where('role_id', $roles['coordinator'])->first(),
     ];
 
     // Safely load role relation if profile exists
@@ -336,8 +337,8 @@ Route::get('/staff', function () {
         'vice_principal',
         'coordinator'
     ])
-    ->withCount('profiles')
-    ->get();
+        ->withCount('profiles')
+        ->get();
 
     $profiles = Profile::all();
 
@@ -396,6 +397,13 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
         // Show a single registration detail page
         Route::get('/registrations/{id}', [OnlineRegistrationController::class, 'show'])
             ->name('school-admin.registration.detail')
+            ->whereNumber('id'); // Only allow numeric IDs
+
+        Route::get('/hs-registrations', [HSRegistrationController::class, 'schoolAdminIndex'])
+            ->name('school-admin.hs-registration');
+
+        Route::get('/hs-registrations/{id}', [HSRegistrationController::class, 'schoolAdminShow'])
+            ->name('school-admin.hs-registration.show')
             ->whereNumber('id'); // Only allow numeric IDs
 
         // // Notifications page
@@ -488,6 +496,12 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
             ->name('school-admin.posts.show');
     });
 });
+
+Route::get('/hs-registration', [HSRegistrationController::class, 'index'])
+    ->name('hs-registration.index');
+
+Route::post('/hs-registration', [HSRegistrationController::class, 'store'])
+    ->name('hs-registration.store');
 
 /*
 |--------------------------------------------------------------------------
