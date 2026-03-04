@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PdfFile from '@/pages/FeesStructure/FeesStructure.pdf';
+import PdfFile from '@/pages/FeesStructure/newFees.pdf';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { VuePDF, usePDF } from '@tato30/vue-pdf'
 
