@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
+import AppLayout from '../AppLayout.vue';
 
 const sidebarNavItems: NavItem[] = [
     {

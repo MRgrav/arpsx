@@ -74,12 +74,28 @@ const breadcrumbs: BreadcrumbItem[] = [
                             <p>{{ hsRegistration.stream }}</p>
                         </div>
                         <div class="space-y-1">
+                            <Label for="pen_number">PEN Number:</Label>
+                            <p>{{ hsRegistration.pen_number }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <Label for="apaar_id">APAAR ID:</Label>
+                            <p>{{ hsRegistration.apaar_id }}</p>
+                        </div>
+                        <div class="space-y-1">
                             <Label for="father_name">Father's Name: </Label>
                             <p>{{ hsRegistration.father_name }}</p>
                         </div>
                         <div class="space-y-1">
                             <Label for="mother_name">Mother's Name: </Label>
                             <p>{{ hsRegistration.mother_name }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <Label for="parents_contact_number">Parent's Contact Number:</Label>
+                            <p>{{ hsRegistration.parents_contact_number }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <Label for="whatsapp">WhatsApp:</Label>
+                            <p>{{ hsRegistration.whatsapp }}</p>
                         </div>
                         <div class="space-y-1">
                             <Label for="address">Address: </Label>

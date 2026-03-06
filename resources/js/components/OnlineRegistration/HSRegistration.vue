@@ -27,11 +27,15 @@ const form = useForm({
   last_school_name: '',
   pre_board_percentage: '',
   stream: '',
+  pen_number: '',
+  apaar_id: '',
 
 
   // parents infromation
   father_name: '',
   mother_name: '',
+  parents_contact_number: '',
+  whatsapp: '',
 
   // Current address
   address: '',
@@ -81,7 +85,15 @@ const clearErrors = () => {
 
   <form @submit.prevent="submitForm" class="space-y-8 p-8">
     <h1 class="font-bold text-gray-800 uppercase">REGISTRATION FOR ADmission</h1>
-    <p class="text-gray-600 text-center text-lg font-semibold">Class - XI</p>
+    <p class="text-gray-600 text-lg font-semibold">Class - XI</p>
+    <p class="text-red-600 font-semibold">Note: Document required at the time of admission, please bring the following:</p>
+    <ul class="list-disc list-inside text-red-600">
+      <li>Admission form</li>
+      <li>Xerox copy of Class X Marksheet & Admit Card</li>
+      <li>Passport-size photo (2 copies)</li>
+      <li>Original TC certificate</li>
+      <li>Original Migration Certificate (other than CBSE)</li>
+    </ul>
 
     <div class="space-y-4">
       <!-- STUDENT’S INFORMATION -->
@@ -160,6 +172,16 @@ const clearErrors = () => {
           </Select>
           <div class="text-sm text-red-500" v-if="form.errors.stream">{{ form.errors.stream }}</div>
         </div>
+        <div class="space-y-1">
+          <Label for="pen_number">PEN Number: </Label>
+          <Input id="pen_number" v-model="form.pen_number" placeholder="PEN NUMBER" />
+          <div class="text-sm text-red-500" v-if="form.errors.pen_number">{{ form.errors.pen_number }}</div>
+        </div>
+        <div class="space-y-1">
+          <Label for="apaar_id">APAAR ID: </Label>
+          <Input id="apaar_id" v-model="form.apaar_id" placeholder="APAAR ID" />
+          <div class="text-sm text-red-500" v-if="form.errors.apaar_id">{{ form.errors.apaar_id }}</div>
+        </div>
       </div>
     </div>
 
@@ -177,6 +199,16 @@ const clearErrors = () => {
           <Label for="mother_name">Mother's Name: </Label>
           <Input id="mother_name" v-model="form.mother_name" placeholder="MOTHER'S NAME" required />
           <div class="text-sm text-red-500" v-if="form.errors.mother_name">{{ form.errors.mother_name }}</div>
+        </div>
+        <div class="space-y-1">
+          <Label for="parents_contact_number">Parent's Contact Number: </Label>
+          <Input type="number" id="parents_contact_number" v-model="form.parents_contact_number" placeholder="PARENT'S CONTACT NUMBER" required />
+          <div class="text-sm text-red-500" v-if="form.errors.parents_contact_number">{{ form.errors.parents_contact_number }}</div>
+        </div>
+        <div class="space-y-1">
+          <Label for="whatsapp">Whatsapp: </Label>
+          <Input type="number" id="whatsapp" v-model="form.whatsapp" placeholder="WHATSAPP" />
+          <div class="text-sm text-red-500" v-if="form.errors.whatsapp">{{ form.errors.whatsapp }}</div>
         </div>
       </div>
     </div>

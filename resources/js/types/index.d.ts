@@ -118,8 +118,12 @@ export interface HSRegistration {
   last_school_name: string;
   pre_board_percentage: number;
   stream: string;
+  pen_number: string;
+  apaar_id: string;
   father_name: string;
   mother_name: string;
+  parents_contact_number: number;
+  whatsapp: number;
   address: string;
   reason_of_interest: string;
   created_at: Date;

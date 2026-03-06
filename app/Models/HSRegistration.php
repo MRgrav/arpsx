@@ -19,6 +19,10 @@ class HSRegistration extends Model
         'email',
         'address',
         'reason_of_interest',
+        'pen_number',
+        'apaar_id',
+        'parents_contact_number',
+        'whatsapp',
     ];
 
     protected $casts = [

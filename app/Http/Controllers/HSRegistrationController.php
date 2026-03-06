@@ -19,15 +19,19 @@ class HSRegistrationController extends Controller
             'name' => 'required|string|max:255',
             'dob' => 'required|date',
             'gender' => 'required|string|max:255',
-            'contact_number' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'contact_number' => 'required|integer|digits:10',
+            'email' => 'nullable|email|max:255',
             'last_school_name' => 'required|string|max:255',
-            'pre_board_percentage' => 'required|string|max:255',
+            'pre_board_percentage' => 'nullable|integer',
             'stream' => 'required|string|max:255',
+            'pen_number' => 'nullable|string',
+            'apaar_id' => 'nullable|string',
             'father_name' => 'required|string|max:255',
             'mother_name' => 'required|string|max:255',
+            'parents_contact_number' => 'required|',
+            'whatsapp' => 'nullable|integer|digits:10',
             'address' => 'required|string|max:255',
-            'reason_of_interest' => 'required|string|max:255',
+            'reason_of_interest' => 'nullable|string|max:255',
         ]);
 
         $hsRegistration = HSRegistration::create($validated);
