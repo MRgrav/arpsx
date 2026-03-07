@@ -39,6 +39,16 @@ const breadcrumbs: BreadcrumbItem[] = [
                     <p>Registration for Admission in Class XI (2026-27)</p>
                 </CardHeader>
                 <CardContent>
+                    <div class="flex justify-end">
+                        <a
+                            :href="`/hs-registration/${props.hsRegistration.id}/pdf`"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="h-min w-min"
+                        >
+                            <Button class="w-min ms-auto cursor-pointer">Download Application</Button>
+                        </a>
+                    </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         <div class="space-y-1">
                             <Label for="name">Name: </Label>
