@@ -83,13 +83,13 @@ class HSRegistrationController extends Controller
     {
         $registration = HSRegistration::findOrFail($id);
 
-        // Generate the PDF (if not already)
-        $this->generatePdf($registration);
-
-        // Define the filename
         $filename = 'ARPS-HS-' . $registration->id . '.pdf';
-        // Define the file path
         $file = storage_path('app/private/hs-registrations/' . $filename);
+
+        // Generate the PDF (if not already)
+        if (!file_exists($file)) {
+            $this->generatePdf($registration);
+        }
 
         return response()->download($file);
     }
@@ -102,6 +102,11 @@ class HSRegistrationController extends Controller
      */
     public function generatePdf(HSRegistration $registration)
     {
+        $directory = storage_path('app/private/hs-registrations');
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
         $pdf = Pdf::loadView('pdfs.hs_registrations.registration-form', ['registration' => $registration]);
         $pdf->save(storage_path('app/private/hs-registrations/ARPS-HS-' . $registration->id . '.pdf'));
 
