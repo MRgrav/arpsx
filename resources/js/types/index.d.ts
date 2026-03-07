@@ -125,6 +125,8 @@ export interface HSRegistration {
   parents_contact_number: number;
   whatsapp: number;
   address: string;
+  reference_number: string;
+  payment_screenshot: File | string | null;
   reason_of_interest: string;
   created_at: Date;
 }

@@ -497,12 +497,28 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     });
 });
 
-Route::get('/hs-registration', [HSRegistrationController::class, 'index'])
-    ->name('hs-registration.index');
+// Route::get('/hs-registration', [HSRegistrationController::class, 'index'])
+//     ->name('hs-registration.index');
 
-Route::post('/hs-registration', [HSRegistrationController::class, 'store'])
-    ->name('hs-registration.store');
+// Route::post('/hs-registration', [HSRegistrationController::class, 'store'])
+//     ->name('hs-registration.store');
 
+// Route::get('/hs-registration/{id}/pdf', [HSRegistrationController::class, 'downloadPdf'])
+//     ->name('hs-registration.pdf')
+//     ->whereNumber('id');
+
+Route::controller(HSRegistrationController::class)->group(function () {
+
+    Route::get('/hs-registration', 'index')
+        ->name('hs-registration.index');
+
+    Route::post('/hs-registration', 'store')
+        ->name('hs-registration.store');
+
+    Route::get('/hs-registration/{id}/pdf', 'downloadPdf')
+        ->name('hs-registration.pdf')
+        ->whereNumber('id');
+});
 /*
 |--------------------------------------------------------------------------
 | Additional Route Files

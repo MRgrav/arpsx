@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\HSRegistration;
+use App\Services\AppwriteStorageService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -21,7 +23,7 @@ class HSRegistrationController extends Controller
             'gender' => 'required|string|max:255',
             'contact_number' => 'required|integer|digits:10',
             'email' => 'nullable|email|max:255',
-            'last_school_name' => 'required|string|max:255',
+            'last_school' => 'required|string|max:255',
             'pre_board_percentage' => 'nullable|integer',
             'stream' => 'required|string|max:255',
             'pen_number' => 'nullable|string',
@@ -32,7 +34,16 @@ class HSRegistrationController extends Controller
             'whatsapp' => 'nullable|integer|digits:10',
             'address' => 'required|string|max:255',
             'reason_of_interest' => 'nullable|string|max:255',
+            'reference_number' => 'required|string',
+            // below 1mb
+            'payment_screenshot' => "required|file|mimes:pdf,jpg,jpeg,png|max:1024",
         ]);
+
+        $field = 'payment_screenshot';
+        $storageService = app(AppwriteStorageService::class);
+        $upload = $storageService->upload($request->file($field), env('APPWRITE_BUCKET_ID'));
+        // change: file -> file path
+        $validated[$field] = $upload['url'];
 
         $hsRegistration = HSRegistration::create($validated);
 
@@ -61,5 +72,38 @@ class HSRegistrationController extends Controller
         return inertia::render('school-admin/HSRegistration/Show', [
             'hsRegistration' => $hsRegistration,
         ]);
+    }
+
+    /**
+     * Download or preview registration PDF using Browsershot.
+     * 
+     * @param string $id
+     */
+    public function downloadPdf(string $id)
+    {
+        $registration = HSRegistration::findOrFail($id);
+
+        // Generate the PDF (if not already)
+        $this->generatePdf($registration);
+
+        // Define the filename
+        $filename = 'ARPS-HS-' . $registration->id . '.pdf';
+        // Define the file path
+        $file = storage_path('app/private/hs-registrations/' . $filename);
+
+        return response()->download($file);
+    }
+
+    /**
+     * Generate PDF using Spatie Browsershot.
+     * Uses Blade views: pdfs.registrations.registration-form, _header, _footer
+     *
+     * @param HSRegistration $registration
+     */
+    public function generatePdf(HSRegistration $registration)
+    {
+        $pdf = Pdf::loadView('pdfs.hs_registrations.registration-form', ['registration' => $registration]);
+        $pdf->save(storage_path('app/private/hs-registrations/ARPS-HS-' . $registration->id . '.pdf'));
+
     }
 }

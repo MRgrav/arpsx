@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from '../ui/select';
 import Loader from './Loader.vue';
+import { Textarea } from '../ui/textarea';
 
 // Online Registration Form Object
 const form = useForm({
@@ -24,7 +25,7 @@ const form = useForm({
   email: '',
 
   // academic
-  last_school_name: '',
+  last_school: '',
   pre_board_percentage: '',
   stream: '',
   pen_number: '',
@@ -40,6 +41,9 @@ const form = useForm({
   // Current address
   address: '',
 
+  reference_number: '',
+  payment_screenshot: null,
+
   reason_of_interest: '',
 })
 
@@ -53,6 +57,14 @@ const errorModel = ref({});
 
 // Submit the form using Inertia js Form helper
 const submitForm = () => {
+  const maxSize = 1024 * 1024; // 1MB
+
+  const file = form.payment_screenshot as unknown as File;
+
+  if (file && file.size > maxSize) {
+    alert(`Payment Screenshot is too big (> 1MB)`);
+    return;
+  }
 
   submitting.value = true;
   form.post(route('hs-registration.store'), {
@@ -67,6 +79,7 @@ const submitForm = () => {
       submitting.value = false;
       // Set the submitted ID from the flash data
       submittedId.value = (data.props.flash && (data.props.flash as any).data.id) ?? null;
+      // window.location.href = route('hs-registration.pdf', { id: submittedId.value as number });
     },
     onFinish: () => {
       submitting.value = false;
@@ -144,9 +157,9 @@ const clearErrors = () => {
       <h3 class="text-lg font-semibold text-white bg-sky-400 p-2">ACADEMIC INFORMATION</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="space-y-1">
-          <Label for="last_school_name">Last School Name: </Label>
-          <Input id="last_school_name" v-model="form.last_school_name" placeholder="LAST SCHOOL NAME" required />
-          <div class="text-sm text-red-500" v-if="form.errors.last_school_name">{{ form.errors.last_school_name }}
+          <Label for="last_school">Last School Name: </Label>
+          <Input id="last_school" v-model="form.last_school" placeholder="LAST SCHOOL NAME" required />
+          <div class="text-sm text-red-500" v-if="form.errors.last_school">{{ form.errors.last_school }}
           </div>
         </div>
 
@@ -216,7 +229,7 @@ const clearErrors = () => {
     <!--CURRENT ADDRESS -->
     <div class="space-y-4">
       <h3 class="text-base font-medium text-white bg-sky-400 p-1">CURRENT ADDRESS DETAILS</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div class="space-y-1">
           <Label for="address">Address: </Label>
           <Input id="address" v-model="form.address" placeholder="ADDRESS" required />
@@ -227,15 +240,41 @@ const clearErrors = () => {
 
     <div class="space-y-4">
       <h3 class="text-base font-medium text-white bg-slate-400 p-1">REASON FOR CHOOSING ARPS</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div class="space-y-1">
           <Label for="reason">Why ARPS, Jorhat?</Label>
-          <Input id="reason" v-model="form.reason_of_interest" placeholder="REASON FOR CHOOSING ARPS, JORHAT" required />
+          <Textarea id="reason" v-model="form.reason_of_interest" placeholder="REASON FOR CHOOSING ARPS, JORHAT" required />
           <div class="text-sm text-red-500" v-if="form.errors.reason_of_interest">{{ form.errors.reason_of_interest }}</div>
         </div>
       </div>
     </div>
     
+    <!-- PAYMENT -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold text-white bg-sky-400 p-2">PAYMENT DETAILS</h3>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="grid gap-4">
+          <h4 class="text-base font-medium italic">Please pay Rs 200 by Scanning the QR code using any UPI Payments app</h4>
+          <div class="space-y-1">
+            <Label for="payment_screenshot" class="grid">
+              <span>Upload Screenshot: </span>
+              <small class="text-red-500">(Format - jpg,png,jpeg,pdf | Size - max 1 mb)</small>
+            </Label>
+            <Input id="payment_screenshot" type="file" @input="form.payment_screenshot = $event.target.files[0]" required />
+            <div class="text-sm text-red-500" v-if="form.errors.payment_screenshot">{{ form.errors.payment_screenshot }}
+            </div>
+          </div>
+          <div class="space-y-1">
+            <Label for="reference_number">Reference Number: </Label>
+            <Input id="reference_number" v-model="form.reference_number" placeholder="REFERENCE NUMBER" required />
+            <div class="text-sm text-red-500" v-if="form.errors.reference_number">{{ form.errors.reference_number }}</div>
+          </div>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <img src="storage/uploads/arps-upi-qr.jpg" alt="QR Code" class="w-56 h-56">
+        </div>
+      </div>
+    </div>
 
     <!-- SUBMIT BUTTON -->
     <div class="flex justify-end mt-6">
@@ -245,6 +284,10 @@ const clearErrors = () => {
       </button>
     </div>
   </form>
+
+  <div class="text-center p-4">
+    <span>For technical support, contact: <a href="tell:9435672774" class="text-blue-600">Mr. Abinash Borah (call: +91 94356 72774)</a></span>
+  </div>
 
   <!-- Show Success messsage after form submit with PDF download link -->
   <FormSuccess :show="success" @close="success = false" :id="submittedId ?? undefined" />

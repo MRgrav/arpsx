@@ -41,7 +41,7 @@ defineProps({
 
     <!-- PDF download link -->
     <a 
-      :href="`/online-registration/${id}/pdf`" 
+      :href="`/hs-registration/${id}/pdf`" 
       target="_blank" 
       rel="noopener noreferrer" 
       class="text-blue-500 hover:underline block mt-2"

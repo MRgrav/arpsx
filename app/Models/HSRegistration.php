@@ -23,6 +23,8 @@ class HSRegistration extends Model
         'apaar_id',
         'parents_contact_number',
         'whatsapp',
+        'reference_number',
+        'payment_screenshot',
     ];
 
     protected $casts = [
