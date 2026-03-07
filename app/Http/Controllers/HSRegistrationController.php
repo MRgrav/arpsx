@@ -24,7 +24,7 @@ class HSRegistrationController extends Controller
             'contact_number' => 'required|integer|digits:10',
             'email' => 'nullable|email|max:255',
             'last_school' => 'required|string|max:255',
-            'pre_board_percentage' => 'nullable|integer',
+            'pre_borad_percentage' => 'nullable|integer',
             'stream' => 'required|string|max:255',
             'pen_number' => 'nullable|string',
             'apaar_id' => 'nullable|string',

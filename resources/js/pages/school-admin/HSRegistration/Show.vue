@@ -63,7 +63,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                         <hr class="col-span-full" />
                         <div class="space-y-1">
                             <Label for="percentage">Pre-Board Percentage: </Label>
-                            <p>{{ hsRegistration.pre_board_percentage ?? 0 }}%</p>
+                            <p>{{ hsRegistration.pre_borad_percentage ?? 0 }}%</p>
                         </div>
                         <div class="space-y-1">
                             <Label for="last_school_name">Last School Name: </Label>

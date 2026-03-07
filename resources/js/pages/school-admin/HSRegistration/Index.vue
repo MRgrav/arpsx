@@ -46,7 +46,7 @@ const props = defineProps<Props>();
                                 <TableCell class="capitalize">{{ hsRegistration.name }}</TableCell>
                                 <TableCell>{{ hsRegistration.email }}</TableCell>
                                 <TableCell>{{ hsRegistration.contact_number }}</TableCell>
-                                <TableCell class="font-bold">{{ hsRegistration.pre_board_percentage ?? 0 }}%</TableCell>
+                                <TableCell class="font-bold">{{ hsRegistration.pre_borad_percentage ?? 0 }}%</TableCell>
                                 <TableCell class="text-right space-x-2">
                                     <Link :href="`/school-admin/hs-registrations/${hsRegistration.id}`">
                                         <Button>View</Button>

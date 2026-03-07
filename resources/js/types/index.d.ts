@@ -116,7 +116,7 @@ export interface HSRegistration {
   dob: Date;
   gender: string;
   last_school_name: string;
-  pre_board_percentage: number;
+  pre_borad_percentage: number;
   stream: string;
   pen_number: string;
   apaar_id: string;
