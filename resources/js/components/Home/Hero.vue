@@ -37,7 +37,7 @@ const carouselConfig = {
                 <ArrowUpRight class="inline ml-1 stroke-[2.5] w-4 h-4 text-current" />
             </Link>
 
-            <Link  :href="`hs-registration`" class="bg-[#ff5334]/50 backdrop-blur-sm ml-4 hover:bg-[#ff6655] hover:scale-102 rounded-xs py-2 px-4 flex items-center ease-in-out duration-300">
+            <Link  :href="`hs-registration`" class="bg-[#ff5334]/80 backdrop-blur-sm ml-4 hover:bg-[#ff6655] hover:scale-102 rounded-xs py-2 px-4 flex items-center ease-in-out duration-300">
                 <span>HS Registration</span>
                 <ArrowUpRight class="inline ml-1 stroke-[2.5] w-4 h-4 text-current" />
             </Link>
