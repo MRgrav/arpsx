@@ -33,7 +33,7 @@ const carouselConfig = {
         <span>This is where we teach students skills they need to transform themselves, others, and our global communities.</span>
         <div class="flex justify-center mt-5" data-aos="fade-right">
             <Link  :href="`online-registration`" class="bg-[#ff5544] hover:bg-[#ff6655] hover:scale-102 rounded-xs py-2 px-4 flex items-center ease-in-out duration-300">
-                <span>Addmission Now</span>
+                <span>Admission Now</span>
                 <ArrowUpRight class="inline ml-1 stroke-[2.5] w-4 h-4 text-current" />
             </Link>
 

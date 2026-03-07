@@ -108,7 +108,7 @@
         <table>
             <tr>
                 <th>Registration ID</th>
-                <td>{{ $registration->id ?? '' }}</td>
+                <td>HS-{{ $registration->id ?? '' }}</td>
             </tr>
             @foreach ([
                     'Admission For' => 'Class XI',
