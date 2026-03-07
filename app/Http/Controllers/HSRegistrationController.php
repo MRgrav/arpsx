@@ -59,7 +59,7 @@ class HSRegistrationController extends Controller
 
     public function schoolAdminIndex()
     {
-        $hsRegistrations = HSRegistration::all();
+        $hsRegistrations = HSRegistration::orderBy('id', 'desc')->get();
 
         return inertia::render('school-admin/HSRegistration/Index', [
             'hsRegistrations' => $hsRegistrations,
