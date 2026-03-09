@@ -26,7 +26,7 @@ const form = useForm({
 
   // academic
   last_school: '',
-  pre_board_percentage: '',
+  pre_borad_percentage: '',
   stream: '',
   pen_number: '',
   apaar_id: '',
@@ -165,8 +165,8 @@ const clearErrors = () => {
 
         <div class="space-y-1">
           <Label for="pre_board_percentage">Pre-Board Percentage: </Label>
-          <Input type="number" id="pre_board_percentage" v-model="form.pre_board_percentage" placeholder="PRE-BOARD PERCENTAGE" />
-          <div class="text-sm text-red-500" v-if="form.errors.pre_board_percentage">{{ form.errors.pre_board_percentage
+          <Input type="number" id="pre_board_percentage" v-model="form.pre_borad_percentage" placeholder="PRE-BOARD PERCENTAGE" />
+          <div class="text-sm text-red-500" v-if="form.errors.pre_borad_percentage">{{ form.errors.pre_borad_percentage
           }}</div>
         </div>
         <div class="space-y-1">
