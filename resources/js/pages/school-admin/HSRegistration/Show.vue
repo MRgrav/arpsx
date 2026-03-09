@@ -77,7 +77,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                         </div>
                         <div class="space-y-1">
                             <Label for="last_school_name">Last School Name: </Label>
-                            <p>{{ hsRegistration.last_school_name }}</p>
+                            <p>{{ hsRegistration.last_school }}</p>
                         </div>
                         <div class="space-y-1">
                             <Label for="stream">Stream: </Label>
@@ -111,8 +111,16 @@ const breadcrumbs: BreadcrumbItem[] = [
                             <Label for="address">Address: </Label>
                             <p>{{ hsRegistration.address }}</p>
                         </div>
-                        <hr class="col-span-full" />
                         <div class="space-y-1">
+                            <Label for="reference_number">Reference Number: </Label>
+                            <p>{{ hsRegistration.reference_number }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <Label for="payment_screenshot">Payment Screenshot: </Label>
+                            <img :src="hsRegistration.payment_screenshot as string" alt="Payment Screenshot" />
+                        </div>
+                        <hr class="col-span-full" />
+                        <div class="col-span-full space-y-1">
                             <Label for="reason_of_interest">Reason of Interest: </Label>
                             <p>{{ hsRegistration.reason_of_interest }}</p>
                         </div>

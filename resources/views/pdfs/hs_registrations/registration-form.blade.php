@@ -120,7 +120,7 @@
                     'APAAR ID' => $registration->apaar_id,
                     'Email' => $registration->email,
                     'Contaact Number' => $registration->contact_number,
-                    'Payment Reference Number' => $registration->payment_reference_number,
+                    'Payment Reference Number' => $registration->reference_number,
                 ] as $label => $value)
                     <tr>
                         <th>{{ $label }}</th>
