@@ -157,7 +157,7 @@ const clearErrors = () => {
       <h3 class="text-lg font-semibold text-white bg-sky-400 p-2">ACADEMIC INFORMATION</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="space-y-1">
-          <Label for="last_school">Last School Name: </Label>
+          <Label for="last_school"><span>Last School Name: </span><small class="italic"></small></Label>
           <Input id="last_school" v-model="form.last_school" placeholder="LAST SCHOOL NAME" required />
           <div class="text-sm text-red-500" v-if="form.errors.last_school">{{ form.errors.last_school }}
           </div>
@@ -171,7 +171,7 @@ const clearErrors = () => {
         </div>
         <div class="space-y-1">
           <Label for="stream">Stream Applied: </Label>
-          <Select id="stream" v-model="form.stream" required>
+          <Select id="stream" v-model="form.stream" >
             <SelectTrigger class="form-select w-full">
               <SelectValue placeholder="-- Select --" />
             </SelectTrigger>
@@ -186,12 +186,12 @@ const clearErrors = () => {
           <div class="text-sm text-red-500" v-if="form.errors.stream">{{ form.errors.stream }}</div>
         </div>
         <div class="space-y-1">
-          <Label for="pen_number">PEN Number: </Label>
+          <Label for="pen_number"><span>PEN Number: </span><small class="italic">(optional)</small></Label>
           <Input id="pen_number" v-model="form.pen_number" placeholder="PEN NUMBER" />
           <div class="text-sm text-red-500" v-if="form.errors.pen_number">{{ form.errors.pen_number }}</div>
         </div>
         <div class="space-y-1">
-          <Label for="apaar_id">APAAR ID: </Label>
+          <Label for="apaar_id"><span>APAAR ID: </span><small class="italic">(optional)</small></Label>
           <Input id="apaar_id" v-model="form.apaar_id" placeholder="APAAR ID" />
           <div class="text-sm text-red-500" v-if="form.errors.apaar_id">{{ form.errors.apaar_id }}</div>
         </div>
