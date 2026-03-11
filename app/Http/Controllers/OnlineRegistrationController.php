@@ -28,7 +28,7 @@ class OnlineRegistrationController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -101,7 +101,8 @@ class OnlineRegistrationController extends Controller
             "p_district" => "required|string|max:255",
 
             // Files (PDFs/Images under 2MB)
-            "payment_screenshot" => "required|file|mimes:pdf,jpg,jpeg,png|max:2048"
+            "payment_screenshot" => "required|file|mimes:pdf,jpg,jpeg,png|max:2048",
+            "reference_number" => "required|string|max:200",
         ]);
 
         // Calculate percentage
@@ -164,7 +165,7 @@ class OnlineRegistrationController extends Controller
         // Reload the page with success flash data
         return redirect()
             ->back()
-            ->with('data',  [
+            ->with('data', [
                 'message' => 'Registration successful!',
                 'id' => $registration->id,
             ]);
@@ -261,8 +262,8 @@ class OnlineRegistrationController extends Controller
      */
     public function sendRegistrationMail($registration)
     {
-        Mail::to( strtolower($registration->email) )
-        ->send(new OnlineRegistrationMail($registration));
+        Mail::to(strtolower($registration->email))
+            ->send(new OnlineRegistrationMail($registration));
     }
 
     /**

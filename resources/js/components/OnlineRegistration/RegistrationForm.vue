@@ -74,6 +74,7 @@ const form = useForm({
   // marksheet: null,
   // tc_certificate: null,
   payment_screenshot: null,
+  reference_number: '',
 })
 
 // initial value of form submit
@@ -692,8 +693,12 @@ const toggleSameAddress = () => {
       <div class="space-y-1">
         <Label for="payment_screenshot">Upload Screenshot: (Format - jpg,png,jpeg,pdf | Size - max 1 mb)*</Label>
         <Input id="payment_screenshot" type="file" @input="form.payment_screenshot = $event.target.files[0]" required />
-        <div class="text-sm text-red-500" v-if="form.errors.payment_screenshot">{{ form.errors.payment_screenshot }}
-        </div>
+        <div class="text-sm text-red-500" v-if="form.errors.payment_screenshot">{{ form.errors.payment_screenshot }}</div>
+      </div>
+      <div class="space-y-1">
+        <Label for="reference_number">Reference Number: </Label>
+        <Input id="reference_number" v-model="form.reference_number" placeholder="REFERENCE NUMBER" required />
+        <div class="text-sm text-red-500" v-if="form.errors.reference_number">{{ form.errors.reference_number }}</div>
       </div>
     </div>
 

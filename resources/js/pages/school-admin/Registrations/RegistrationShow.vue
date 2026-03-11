@@ -50,7 +50,7 @@ const categories: Record<string, string[]> = {
     'p_street_area_locality', 'p_village_town', 'p_post_office', 'p_pin_code',
     'p_house_no', 'p_state', 'p_district'
   ],
-  "Uploaded Files": ['payment_screenshot'],
+  "Payment Information": ['payment_screenshot', 'reference_number'],
   "System": ['created_at']
 }
 

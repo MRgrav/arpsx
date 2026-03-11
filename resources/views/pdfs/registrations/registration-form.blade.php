@@ -51,14 +51,14 @@
             break-after: page;
         }
 
-        header{
+        header {
             position: fixed;
             top: 0px;
             left: 0px;
             right: 0px;
         }
 
-        .page-no{
+        .page-no {
             position: fixed;
             bottom: 0px;
         }
@@ -66,7 +66,7 @@
 </head>
 
 <body>
-    
+
     <header style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
@@ -78,7 +78,8 @@
                     <div style="margin: 0; padding: 0;">Phone No: +91 93956 42231 (O)</div>
                 </td>
                 <td style="text-align: right; width: 120px; border: none; padding: 0;">
-                    <img src="{{ public_path('storage/logos/site-logo.png') }}" alt="Logo" style="width: 100px; height: 100px; margin: 0; padding: 0;">
+                    <img src="{{ public_path('storage/logos/site-logo.png') }}" alt="Logo"
+                        style="width: 100px; height: 100px; margin: 0; padding: 0;">
                 </td>
             </tr>
         </table>
@@ -89,7 +90,7 @@
     </footer>
 
     <main>
-       <table style="width: 100%; border-collapse: collapse; margin: 0; vertical-align: middle;">
+        <table style="width: 100%; border-collapse: collapse; margin: 0; vertical-align: middle;">
             <tr>
                 <td style="text-align: left; border: none; padding: 0;">
                     <h2 style="margin: 0;">Online Registration Form</h2>
@@ -113,29 +114,29 @@
                 <td>{{ $registration->id ?? '' }}</td>
             </tr>
             @foreach ([
-            'Admission For' => $registration->admission_for,
-            'Applicant Name' => $registration->applicant_name,
-            'Date of Birth' => $registration->dob,
-            'Gender' => $registration->gender,
-            'Blood Group' => $registration->blood_group,
-            'Only Child' => $registration->only_child,
-            'Social Category' => $registration->social_category,
-            'Nationality' => $registration->nationality,
-            'BPL Beneficiary' => $registration->bpl,
-            'CWSN' => $registration->cwsn,
-            'Aadhaar Number' => $registration->aadhaar_no,
-            'UDISE No' => $registration->udise_no,
-            'PEN No' => $registration->pen_no,
-            'Email' => $registration->email,
-            'Present Class' => $registration->present_class,
-            'Present School Name' => $registration->present_school_name,
-            'Present School Address' => $registration->present_school_address,
-            'Admission Sought For Class' => $registration->admission_sought_for_class,
-            ] as $label => $value)
-            <tr>
-                <th>{{ $label }}</th>
-                <td>{{ $value ?: '-' }}</td>
-            </tr>
+                    'Admission For' => $registration->admission_for,
+                    'Applicant Name' => $registration->applicant_name,
+                    'Date of Birth' => $registration->dob,
+                    'Gender' => $registration->gender,
+                    'Blood Group' => $registration->blood_group,
+                    'Only Child' => $registration->only_child,
+                    'Social Category' => $registration->social_category,
+                    'Nationality' => $registration->nationality,
+                    'BPL Beneficiary' => $registration->bpl,
+                    'CWSN' => $registration->cwsn,
+                    'Aadhaar Number' => $registration->aadhaar_no,
+                    'UDISE No' => $registration->udise_no,
+                    'PEN No' => $registration->pen_no,
+                    'Email' => $registration->email,
+                    'Present Class' => $registration->present_class,
+                    'Present School Name' => $registration->present_school_name,
+                    'Present School Address' => $registration->present_school_address,
+                    'Admission Sought For Class' => $registration->admission_sought_for_class,
+                ] as $label => $value)
+                <tr>
+                    <th>{{ $label }}</th>
+                    <td>{{ $value ?: '-' }}</td>
+                </tr>
             @endforeach
         </table>
 
@@ -146,14 +147,14 @@
         <h3 class="section-title">Academic Information</h3>
         <table>
             @foreach ([
-            'Total Subjects' => $registration->total_subjects,
-            'Total Marks Obtained' => $registration->total_marks_obtained,
-            'Full Marks' => $registration->full_marks,
-            ] as $label => $value)
-            <tr>
-                <th>{{ $label }}</th>
-                <td>{{ $value ?: '-' }}</td>
-            </tr>
+                    'Total Subjects' => $registration->total_subjects,
+                    'Total Marks Obtained' => $registration->total_marks_obtained,
+                    'Full Marks' => $registration->full_marks,
+                ] as $label => $value)
+                <tr>
+                    <th>{{ $label }}</th>
+                    <td>{{ $value ?: '-' }}</td>
+                </tr>
             @endforeach
             <tr>
                 <th>Last Exam %</th>
@@ -165,19 +166,32 @@
         <h3 class="section-title">Parent’s Information</h3>
         <table>
             @foreach ([
-            'Parent\'s Category ' => $registration->parents_category_b,
-            'Father\'s Name' => $registration->father_name,
-            'Father\'s Occupation' => $registration->father_occupation,
-            'Father\'s Phone' => $registration->father_phone,
-            'Mother\'s Name' => $registration->mother_name,
-            'Mother\'s Occupation' => $registration->mother_occupation,
-            'Mother\'s Phone' => $registration->mother_phone,
-            'Annual Income' => 'Rs. ' . number_format($registration->annual_income),
-            ] as $label => $value)
-            <tr>
-                <th>{{ $label }}</th>
-                <td>{{ $value ?: '-' }}</td>
-            </tr>
+                    'Parent\'s Category ' => $registration->parents_category_b,
+                    'Father\'s Name' => $registration->father_name,
+                    'Father\'s Occupation' => $registration->father_occupation,
+                    'Father\'s Phone' => $registration->father_phone,
+                    'Mother\'s Name' => $registration->mother_name,
+                    'Mother\'s Occupation' => $registration->mother_occupation,
+                    'Mother\'s Phone' => $registration->mother_phone,
+                    'Annual Income' => 'Rs. ' . number_format($registration->annual_income),
+                ] as $label => $value)
+                <tr>
+                    <th>{{ $label }}</th>
+                    <td>{{ $value ?: '-' }}</td>
+                </tr>
+            @endforeach
+        </table>
+
+        {{-- Payment Info --}}
+        <h3 class="section-title">Payment Information</h3>
+        <table>
+            @foreach ([
+                    'Reference Number' => 'Rs. ' . number_format($registration->reference_number),
+                ] as $label => $value)
+                <tr>
+                    <th>{{ $label }}</th>
+                    <td>{{ $value ?: '-' }}</td>
+                </tr>
             @endforeach
         </table>
 
@@ -188,18 +202,18 @@
         <h3 class="section-title">Current Address</h3>
         <table>
             @foreach ([
-            'Street / Area / Locality' => $registration->c_street_area_locality,
-            'Village / Town' => $registration->c_village_town,
-            'House No' => $registration->c_house_no,
-            'Post Office' => $registration->c_post_office,
-            'Pin Code' => $registration->c_pin_code,
-            'District' => $registration->c_district,
-            'State' => $registration->c_state,
-            ] as $label => $value)
-            <tr>
-                <th>{{ $label }}</th>
-                <td>{{ $value ?: '-' }}</td>
-            </tr>
+                    'Street / Area / Locality' => $registration->c_street_area_locality,
+                    'Village / Town' => $registration->c_village_town,
+                    'House No' => $registration->c_house_no,
+                    'Post Office' => $registration->c_post_office,
+                    'Pin Code' => $registration->c_pin_code,
+                    'District' => $registration->c_district,
+                    'State' => $registration->c_state,
+                ] as $label => $value)
+                <tr>
+                    <th>{{ $label }}</th>
+                    <td>{{ $value ?: '-' }}</td>
+                </tr>
             @endforeach
         </table>
 
@@ -207,18 +221,18 @@
         <h3 class="section-title">Permanent Address</h3>
         <table>
             @foreach ([
-            'Street / Area / Locality' => $registration->p_street_area_locality,
-            'Village / Town' => $registration->p_village_town,
-            'House No' => $registration->p_house_no,
-            'Post Office' => $registration->p_post_office,
-            'Pin Code' => $registration->p_pin_code,
-            'District' => $registration->p_district,
-            'State' => $registration->p_state,
-            ] as $label => $value)
-            <tr>
-                <th>{{ $label }}</th>
-                <td>{{ $value ?: '-' }}</td>
-            </tr>
+                    'Street / Area / Locality' => $registration->p_street_area_locality,
+                    'Village / Town' => $registration->p_village_town,
+                    'House No' => $registration->p_house_no,
+                    'Post Office' => $registration->p_post_office,
+                    'Pin Code' => $registration->p_pin_code,
+                    'District' => $registration->p_district,
+                    'State' => $registration->p_state,
+                ] as $label => $value)
+                <tr>
+                    <th>{{ $label }}</th>
+                    <td>{{ $value ?: '-' }}</td>
+                </tr>
             @endforeach
         </table>
         <p style="margin-top: 40px;">
