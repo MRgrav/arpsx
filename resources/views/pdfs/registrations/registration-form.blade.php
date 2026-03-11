@@ -186,7 +186,7 @@
         <h3 class="section-title">Payment Information</h3>
         <table>
             @foreach ([
-                    'Reference Number' => 'Rs. ' . number_format($registration->reference_number),
+                    'Reference Number' => $registration->reference_number,
                 ] as $label => $value)
                 <tr>
                     <th>{{ $label }}</th>
