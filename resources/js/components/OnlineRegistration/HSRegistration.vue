@@ -265,7 +265,7 @@ const clearErrors = () => {
             </div>
           </div>
           <div class="space-y-1">
-            <Label for="reference_number">Reference Number: </Label>
+            <Label for="reference_number">Payment Reference No./Transaction ID: </Label>
             <Input id="reference_number" v-model="form.reference_number" placeholder="REFERENCE NUMBER" required />
             <div class="text-sm text-red-500" v-if="form.errors.reference_number">{{ form.errors.reference_number }}</div>
           </div>
