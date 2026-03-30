@@ -34,7 +34,7 @@ class HSRegistrationController extends Controller
             'whatsapp' => 'nullable|integer|digits:10',
             'address' => 'required|string|max:255',
             'reason_of_interest' => 'nullable|string|max:255',
-            'reference_number' => 'required|string|max:200|exists:h_s_registrations,reference_number',
+            'reference_number' => 'required|string|max:200|unique:h_s_registrations,reference_number',
             // below 1mb
             'payment_screenshot' => "required|file|mimes:pdf,jpg,jpeg,png|max:1024",
         ]);
