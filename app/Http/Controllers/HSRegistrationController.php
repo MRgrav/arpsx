@@ -45,14 +45,23 @@ class HSRegistrationController extends Controller
         // change: file -> file path
         $validated[$field] = $upload['url'];
 
-        $hsRegistration = HSRegistration::create($validated);
+        try {
+            $hsRegistration = HSRegistration::create($validated);
 
-        return redirect()
-            ->back()
-            ->with('data', [
-                'message' => 'Registration for admission successful!',
-                'id' => $hsRegistration->id,
-            ]);
+            return redirect()
+                ->back()
+                ->with('data', [
+                    'message' => 'Registration for admission successful!',
+                    'id' => $hsRegistration->id,
+                ]);
+        } catch (\Throwable $e) {
+            \Log::error($e->getMessage());
+            return redirect()
+                ->back()
+                ->with('data', [
+                    'message' => 'Registration for admission failed!',
+                ]);
+        }
 
         // return redirect()->route('school-admin.hs-registration.show', $hsRegistration->id);
     }
