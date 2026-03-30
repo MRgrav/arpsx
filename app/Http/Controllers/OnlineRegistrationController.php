@@ -261,7 +261,7 @@ class OnlineRegistrationController extends Controller
             "p_state" => "required|string|max:255",
             "p_district" => "required|string|max:255",
 
-            "reference_number" => "required|string|max:200",
+            "reference_number" => "required|string|max:200|exists:registrations,reference_number",
         ]);
 
         // Calculate percentage
