@@ -168,6 +168,53 @@ class HSRegistrationController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $registration = HSRegistration::findOrFail($id);
+        return inertia::render('school-admin/HSRegistration/Edit', [
+            'registration' => $registration,
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        $registration = HSRegistration::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'dob' => 'required|date',
+            'gender' => 'required|string|max:255',
+            'contact_number' => 'required|integer|digits:10',
+            'email' => 'nullable|email|max:255',
+            'last_school' => 'required|string|max:255',
+            'pre_borad_percentage' => 'nullable|integer',
+            'stream' => 'nullable|string|max:255',
+            'pen_number' => 'nullable|string',
+            'apaar_id' => 'nullable|string',
+            'father_name' => 'required|string|max:255',
+            'mother_name' => 'required|string|max:255',
+            'parents_contact_number' => 'required|integer|digits:10',
+            'whatsapp' => 'nullable|integer|digits:10',
+            'address' => 'required|string|max:255',
+            'reason_of_interest' => 'nullable|string|max:255',
+            'reference_number' => 'required|string|max:200',
+        ]);
+
+        $registration->update($validated);
+
+        return redirect()
+            ->route('school-admin.hs-registration.show', $id)
+            ->with('data', [
+                'message' => 'Registration updated successfully!',
+            ]);
+    }
+
+    /**
      * Generate PDF using Spatie Browsershot.
      * Uses Blade views: pdfs.registrations.registration-form, _header, _footer
      *

@@ -56,6 +56,9 @@ const props = defineProps<Props>();
                                     <Link :href="`/school-admin/hs-registrations/${hsRegistration.id}`">
                                         <Button>View</Button>
                                     </Link>
+                                    <Link :href="`/school-admin/hs-registrations/${hsRegistration.id}/edit`">
+                                        <Button>Edit</Button>
+                                    </Link>
                                 </TableCell>
                             </TableRow>
                         </TableBody>

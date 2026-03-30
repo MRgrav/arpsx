@@ -39,7 +39,10 @@ const breadcrumbs: BreadcrumbItem[] = [
                     <p>Registration for Admission in Class XI (2026-27)</p>
                 </CardHeader>
                 <CardContent>
-                    <div class="flex justify-end mb-6">
+                    <div class="flex justify-end mb-6 space-x-2">
+                        <Link :href="`/school-admin/hs-registrations/${props.hsRegistration.id}/edit`">
+                            <Button variant="outline">Edit Registration</Button>
+                        </Link>
                         <a
                             :href="`/hs-registration/${props.hsRegistration.id}/pdf`"
                             target="_blank"

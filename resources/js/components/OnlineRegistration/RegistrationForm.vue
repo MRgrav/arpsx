@@ -699,6 +699,7 @@ const toggleSameAddress = () => {
         <Label for="reference_number">Payment Reference No./Transaction ID: </Label>
         <Input id="reference_number" v-model="form.reference_number" placeholder="REFERENCE NUMBER" required />
         <div class="text-sm text-red-500" v-if="form.errors.reference_number">{{ form.errors.reference_number }}</div>
+        <span class="bg-red-100 text-red-500 font-semibold mt-2">Same Payment Reference Numbers are not acceptable!</span>
       </div>
     </div>
 

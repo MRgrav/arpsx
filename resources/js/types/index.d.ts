@@ -44,7 +44,7 @@ export interface Registration {
   applicant_name: string;
   admission_sought_for_class: string;
   father_phone: string;
-  created_at: Date;
+  created_at: string;
   gender: string;
 }
 
@@ -112,23 +112,22 @@ export interface HSRegistration {
   name: string;
   email: string;
   contact_number: string;
-  percentage: string;
-  dob: Date;
+  dob: string;
   gender: string;
   last_school: string;
-  pre_borad_percentage: number;
+  pre_borad_percentage: number | string;
   stream: string;
   pen_number: string;
   apaar_id: string;
   father_name: string;
   mother_name: string;
-  parents_contact_number: number;
-  whatsapp: number;
+  parents_contact_number: number | string;
+  whatsapp: number | string;
   address: string;
   reference_number: string;
   payment_screenshot: File | string | null;
   reason_of_interest: string;
-  created_at: Date;
+  created_at: string;
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;

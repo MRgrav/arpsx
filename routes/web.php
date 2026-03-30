@@ -428,6 +428,14 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
             ->name('school-admin.hs-registration.show')
             ->whereNumber('id'); // Only allow numeric IDs
 
+        Route::get('/hs-registrations/{id}/edit', [HSRegistrationController::class, 'edit'])
+            ->name('school-admin.hs-registration.edit')
+            ->whereNumber('id');
+
+        Route::put('/hs-registrations/{id}', [HSRegistrationController::class, 'update'])
+            ->name('school-admin.hs-registration.update')
+            ->whereNumber('id');
+
         // // Notifications page
         Route::get('/notifications', [NotificationController::class, 'schoolAdminIndex'])
             ->name('school-admin.notifications.schoolAdminIndex');
