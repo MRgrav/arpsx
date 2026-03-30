@@ -193,7 +193,11 @@ class OnlineRegistrationController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $registration = Registration::findOrFail($id);
+
+        return Inertia::render('school-admin/Registrations/Edit', [
+            'registration' => $registration,
+        ]);
     }
 
     /**
@@ -201,7 +205,81 @@ class OnlineRegistrationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $registration = Registration::findOrFail($id);
+
+        $validated = $request->validate([
+            // Student’s Info
+            "admission_for" => "required|in:Day Scholar,Boarding",
+            "applicant_name" => "required|string|max:255",
+            "dob" => "required|date",
+            "gender" => "required|in:Male,Female,Others",
+            "blood_group" => "nullable|in:A+,A-,B+,B-,AB+,AB-,O+,O-,",
+            "only_child" => "required|in:Yes,No",
+            "social_category" => "required|in:GENERAL,SC,ST,OBC-A,OBC-B",
+            "nationality" => "required|in:INDIAN,OTHER",
+            "bpl" => "required|in:Yes,No",
+            "cwsn" => "required|in:Yes,No",
+            "aadhaar_no" => "required|integer|digits:12",
+            "udise_no" => "nullable|string",
+            "pen_no" => "nullable|string",
+            "email" => "required|email|max:255",
+            "present_class" => "required|string|max:20",
+            "present_school_name" => "required|string|max:255",
+            "present_school_address" => "required|string|max:255",
+            "admission_sought_for_class" => "required|in:Nursery,LKG,UKG,CLASS I,CLASS II,CLASS III,CLASS IV,CLASS V,CLASS VI,CLASS VII,CLASS VIII,CLASS IX,CLASS X,CLASS XI,CLASS XII",
+
+            // ACADEMIC INFORMATION
+            "total_subjects" => "nullable|integer",
+            "total_marks_obtained" => "nullable|integer",
+            "full_marks" => "nullable|integer",
+
+            // PARENT’S INFORMATION
+            "parents_category_b" => "required|string",
+            "father_name" => "required|string|max:255",
+            "father_occupation" => "required|string|max:255",
+            "father_phone" => "required|integer|digits:10",
+            "mother_name" => "required|string|max:255",
+            "mother_occupation" => "required|string|max:255",
+            "mother_phone" => "required|integer|digits:10",
+            "annual_income" => "required|integer|min:1",
+
+            // CURRENT ADDRESS DETAILS
+            "c_street_area_locality" => "required|string|max:255",
+            "c_village_town" => "required|string|max:255",
+            "c_post_office" => "required|string|max:255",
+            "c_pin_code" => "required|integer|digits:6",
+            "c_house_no" => "nullable|string|max:255",
+            "c_state" => "required|string|max:255",
+            "c_district" => "required|string|max:255",
+
+            // PERMANENT ADDRESS DETAILS
+            "p_street_area_locality" => "required|string|max:255",
+            "p_village_town" => "required|string|max:255",
+            "p_post_office" => "required|string|max:255",
+            "p_pin_code" => "required|integer|digits:6",
+            "p_house_no" => "nullable|string|max:255",
+            "p_state" => "required|string|max:255",
+            "p_district" => "required|string|max:255",
+
+            "reference_number" => "required|string|max:200",
+        ]);
+
+        // Calculate percentage
+        $validated["last_exam_percentage"] = 0;
+        if (($validated['total_marks_obtained'] ?? 0) > 0 && ($validated['full_marks'] ?? 0) > 0) {
+            $validated["last_exam_percentage"] = round(
+                ($validated['total_marks_obtained'] / $validated['full_marks']) * 100,
+                2
+            );
+        }
+
+        $registration->update($validated);
+
+        return redirect()
+            ->route('school-admin.registration.detail', $registration->id)
+            ->with('data', [
+                'message' => 'Registration updated successfully!',
+            ]);
     }
 
     /**
@@ -210,6 +288,11 @@ class OnlineRegistrationController extends Controller
     public function destroy(string $id)
     {
         //
+        $registration = Registration::findOrFail($id);
+        $registration->delete();
+        return redirect()->back()->with('data', [
+            'message' => 'Registration deleted successfully!',
+        ]);
     }
 
     /**

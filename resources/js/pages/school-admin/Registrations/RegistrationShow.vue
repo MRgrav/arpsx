@@ -3,6 +3,8 @@ import Button from '@/components/ui/button/Button.vue'
 import SchoolAdminLayout from '@/layouts/SchoolAdminLayout.vue'
 import { Head } from '@inertiajs/vue3'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { router } from '@inertiajs/vue3'
+import { FilePen, Trash } from 'lucide-vue-next'
 
 /**
  * Props definition: Expects a registration object with arbitrary keys/values.
@@ -129,23 +131,45 @@ onBeforeUnmount(() => {
     return `/storage/online-registration/uploads/${imagePath}`;
   }
 }
+
+/**
+ * Delete registration function
+ */
+const deleteRegistration = () => {
+  if (confirm('Are you sure you want to delete this registration?')) {
+    router.delete(`/school-admin/registrations/${props.registration.id}`)
+  }
+}
 </script>
 
 <template>
   <Head title="Registration Details" />
   <SchoolAdminLayout :breadcrumbs="breadcrumbs">
     <div class="p-4">
-      <!-- Header with title and download button -->
-      <div class="flex justify-between">
-        <h2 class="text-2xl font-bold mb-6">Registration Details</h2>
-        <a
-          :href="`/online-registration/${props.registration.id}/pdf`"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="h-min w-min"
-        >
-          <Button class="w-min ms-auto cursor-pointer">Download Application</Button>
-        </a>
+      <!-- Header with title and actions -->
+      <div class="flex justify-between items-center mb-6 border-b pb-4">
+        <h2 class="text-2xl font-bold">Registration Details</h2>
+        <div class="flex space-x-2">
+          <a
+            :href="`/school-admin/registrations/${props.registration.id}/edit`"
+          >
+            <Button variant="outline" class="flex items-center">
+              <FilePen class="w-4 h-4 mr-2" />
+              Edit
+            </Button>
+          </a>
+          <Button variant="destructive" class="flex items-center" @click="deleteRegistration">
+            <Trash class="w-4 h-4 mr-2" />
+            Delete
+          </Button>
+          <a
+            :href="`/online-registration/${props.registration.id}/pdf`"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button class="cursor-pointer">Download Application</Button>
+          </a>
+        </div>
       </div>
 
       <!-- Category Sections -->

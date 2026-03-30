@@ -4,7 +4,8 @@ import {
   Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow
 } from '@/components/ui/table';
 import { Registration } from '@/types';// Type definition for a registration object in types folder.
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
+import { FilePen, Info, Trash } from 'lucide-vue-next';
 
 /**
  * Props definition
@@ -14,6 +15,19 @@ interface Props {
   registrations: Registration[]
 }
 const props = defineProps<Props>() // Make props reactive and type-safe.
+/**
+ * Delete registration function
+ */
+const deleteRegistration = (id: number) => {
+  if (confirm('Are you sure you want to delete this registration?')) {
+    router.delete(`/school-admin/registrations/${id}`, {
+      onSuccess: () => {
+        // Optional: show toast message
+        
+      }
+    })
+  }
+}
 
 </script>
 
@@ -72,8 +86,21 @@ const props = defineProps<Props>() // Make props reactive and type-safe.
         <TableCell class="text-right space-x-2">
           <!-- Link to registration detail page -->
           <Link :href="`/school-admin/registrations/${registration.id}`">
-            <Button>Details</Button>
+            <Button class="group">
+              <Info class="group-hover:hidden w-3 h-3" />
+              <span class="group-hover:block hidden">View</span>
+            </Button>
           </Link>
+          <Link :href="`/school-admin/registrations/${registration.id}/edit`">
+            <Button class="group">
+              <FilePen class="group-hover:hidden w-3 h-3" />
+              <span class="group-hover:block hidden">Edit</span>
+            </Button>
+          </Link>
+          <Button variant="destructive" class="group" @click="deleteRegistration(registration.id)">
+            <Trash class="group-hover:hidden w-3 h-3" />
+            <span class="group-hover:block hidden">Delete</span>
+          </Button>
         </TableCell>
       </TableRow>
     </TableBody>

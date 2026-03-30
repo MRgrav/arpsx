@@ -390,6 +390,10 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
             ]);
         })->name('dashboard');
 
+        Route::delete('/registrations/{id}', [OnlineRegistrationController::class, 'destroy'])
+            ->name('school-admin.registration.destroy')
+            ->whereNumber('id');
+
         // List all registrations
         Route::get('/registrations', [OnlineRegistrationController::class, 'schoolAdminIndex'])
             ->name('school-admin.registration');
@@ -398,6 +402,18 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
         Route::get('/registrations/{id}', [OnlineRegistrationController::class, 'show'])
             ->name('school-admin.registration.detail')
             ->whereNumber('id'); // Only allow numeric IDs
+
+        Route::get('/registrations/{id}/edit', [OnlineRegistrationController::class, 'edit'])
+            ->name('school-admin.registration.edit')
+            ->whereNumber('id');
+
+        Route::put('/registrations/{id}', [OnlineRegistrationController::class, 'update'])
+            ->name('school-admin.registration.update')
+            ->whereNumber('id');
+
+        Route::delete('/registrations/{id}', [OnlineRegistrationController::class, 'destroy'])
+            ->name('school-admin.registration.delete')
+            ->whereNumber('id');
 
         Route::get('/hs-registrations', [HSRegistrationController::class, 'schoolAdminIndex'])
             ->name('school-admin.hs-registration');
