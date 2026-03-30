@@ -268,7 +268,7 @@ const clearErrors = () => {
             <Label for="reference_number">Payment Reference No./Transaction ID: </Label>
             <Input id="reference_number" v-model="form.reference_number" placeholder="REFERENCE NUMBER" required />
             <div class="text-sm text-red-500" v-if="form.errors.reference_number">{{ form.errors.reference_number }}</div>
-            <span class="bg-red-100 text-red-500 font-semibold mt-2">Same Payment Reference Numbers are not acceptable!</span>
+            <span class="bg-indigo-100 text-blue-500 text-sm mt-4 px-2 py-1">N.B: Same Payment Reference Numbers are not acceptable!</span>
           </div>
         </div>
         <div class="flex flex-col items-center gap-2">
