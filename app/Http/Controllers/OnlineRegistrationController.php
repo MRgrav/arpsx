@@ -102,7 +102,7 @@ class OnlineRegistrationController extends Controller
 
             // Files (PDFs/Images under 2MB)
             "payment_screenshot" => "required|file|mimes:pdf,jpg,jpeg,png|max:2048",
-            "reference_number" => "required|string|max:200",
+            "reference_number" => "required|string|max:200|unique:registrations,reference_number|unique:h_s_registrations,reference_number",
         ]);
 
         // Calculate percentage
@@ -261,7 +261,7 @@ class OnlineRegistrationController extends Controller
             "p_state" => "required|string|max:255",
             "p_district" => "required|string|max:255",
 
-            "reference_number" => "required|string|max:200|unique:registrations,reference_number",
+            "reference_number" => "required|string|max:200|unique:registrations,reference_number," . $id . "|unique:h_s_registrations,reference_number",
         ]);
 
         // Calculate percentage
