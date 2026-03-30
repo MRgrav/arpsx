@@ -305,6 +305,82 @@ class OnlineRegistrationController extends Controller
     }
 
     /**
+     * Download all registrations as CSV.
+     */
+    public function downloadCsv()
+    {
+        $registrations = Registration::latest()->get();
+        $filename = "registrations-" . date('Y-m-d') . ".csv";
+
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        $columns = [
+            'ID',
+            'Admission For',
+            'Applicant Name',
+            'DOB',
+            'Gender',
+            'Blood Group',
+            'Only Child',
+            'Social Category',
+            'Nationality',
+            'BPL',
+            'CWSN',
+            'Aadhaar No',
+            'Email',
+            'Present Class',
+            'Present School',
+            'Admission Class',
+            'Father Name',
+            'Mother Name',
+            'Phone',
+            'Annual Income',
+            'Created At'
+        ];
+
+        $callback = function () use ($registrations, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($registrations as $registration) {
+                fputcsv($file, [
+                    $registration->id,
+                    $registration->admission_for,
+                    $registration->applicant_name,
+                    $registration->dob,
+                    $registration->gender,
+                    $registration->blood_group,
+                    $registration->only_child,
+                    $registration->social_category,
+                    $registration->nationality,
+                    $registration->bpl,
+                    $registration->cwsn,
+                    $registration->aadhaar_no,
+                    $registration->email,
+                    $registration->present_class,
+                    $registration->present_school_name,
+                    $registration->admission_sought_for_class,
+                    $registration->father_name,
+                    $registration->mother_name,
+                    $registration->father_phone,
+                    $registration->annual_income,
+                    $registration->created_at,
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
      * Download or preview registration PDF using Browsershot.
      * 
      * @param string $id

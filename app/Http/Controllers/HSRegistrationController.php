@@ -66,6 +66,70 @@ class HSRegistrationController extends Controller
         ]);
     }
 
+    /**
+     * Download all HS registrations as CSV.
+     */
+    public function downloadCsv()
+    {
+        $registrations = HSRegistration::latest()->get();
+        $filename = "hs-registrations-" . date('Y-m-d') . ".csv";
+
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        $columns = [
+            'ID',
+            'Name',
+            'DOB',
+            'Gender',
+            'Phone',
+            'Email',
+            'Last School',
+            'Percentage',
+            'Stream',
+            'Father Name',
+            'Mother Name',
+            'Parents Phone',
+            'WhatsApp',
+            'Address',
+            'Created At'
+        ];
+
+        $callback = function () use ($registrations, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($registrations as $registration) {
+                fputcsv($file, [
+                    $registration->id,
+                    $registration->name,
+                    $registration->dob,
+                    $registration->gender,
+                    $registration->contact_number,
+                    $registration->email,
+                    $registration->last_school,
+                    $registration->pre_borad_percentage,
+                    $registration->stream,
+                    $registration->father_name,
+                    $registration->mother_name,
+                    $registration->parents_contact_number,
+                    $registration->whatsapp,
+                    $registration->address,
+                    $registration->created_at,
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
     public function schoolAdminShow(string $id)
     {
         $hsRegistration = HSRegistration::findOrFail($id);

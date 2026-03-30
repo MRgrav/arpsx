@@ -398,6 +398,9 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
         Route::get('/registrations', [OnlineRegistrationController::class, 'schoolAdminIndex'])
             ->name('school-admin.registration');
 
+        Route::get('/registrations/csv', [OnlineRegistrationController::class, 'downloadCsv'])
+            ->name('school-admin.registration.csv');
+
         // Show a single registration detail page
         Route::get('/registrations/{id}', [OnlineRegistrationController::class, 'show'])
             ->name('school-admin.registration.detail')
@@ -417,6 +420,9 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
         Route::get('/hs-registrations', [HSRegistrationController::class, 'schoolAdminIndex'])
             ->name('school-admin.hs-registration');
+
+        Route::get('/hs-registrations/csv', [HSRegistrationController::class, 'downloadCsv'])
+            ->name('school-admin.hs-registration.csv');
 
         Route::get('/hs-registrations/{id}', [HSRegistrationController::class, 'schoolAdminShow'])
             ->name('school-admin.hs-registration.show')

@@ -29,7 +29,12 @@ const props = defineProps<Props>();
 
     <SchoolAdminLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
-
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-2xl font-bold">HS Registrations</h1>
+                <a :href="route('school-admin.hs-registration.csv')" target="_blank">
+                    <Button variant="outline">Download CSV</Button>
+                </a>
+            </div>
                     <Table>
                         <TableCaption>A list of your recent Registrations for HS Admission.</TableCaption>
                         <TableHeader>
