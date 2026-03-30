@@ -156,7 +156,7 @@ const toggleSameAddress = () => {
 <template>
   <Loader :open="submitting" />
   <!-- Show Success messsage after form submit with PDF download link -->
-  <FormSuccess :show="success" @close="success = false" :id="submittedId ?? undefined" />
+  <FormSuccess :show="success" @close="success = false" :id="submittedId ?? undefined" type="online" />
 
   <form @submit.prevent="submitForm" class="space-y-8 p-8">
     <h1 class="font-bold text-gray-800">STUDENT REGISTRATION FORM</h1>
@@ -713,7 +713,7 @@ const toggleSameAddress = () => {
   </form>
 
   <!-- Show Success messsage after form submit with PDF download link -->
-  <FormSuccess :show="success" @close="success = false" :id="submittedId ?? undefined" />
+  <FormSuccess :show="success" @close="success = false" :id="submittedId ?? undefined" type="online" />
 
   <!-- Error Modal -->
   <div v-if="Object.keys(errorModel).length" class="fixed inset-0 flex items-center justify-center z-50">

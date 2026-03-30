@@ -4,6 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property string $admission_for
+ * @property string $applicant_name
+ * @property string $dob
+ * @property string $gender
+ * @property string $social_category
+ * @property string $aadhaar_no
+ * @property string $email
+ * @property string $present_class
+ * @property string $present_school_name
+ * @property string $admission_sought_for_class
+ * @property string $father_name
+ * @property string $father_phone
+ * @property string $mother_name
+ * @property string $address
+ * @property string $reference_number
+ * @property string $payment_screenshot
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ */
 class Registration extends Model
 {
     // app/Models/Registration.php

@@ -14,6 +14,12 @@ defineProps({
   id: {
     type: Number,
     default: 0
+  },
+
+  // Type of registration (online or hs)
+  type: {
+    type: String,
+    default: 'online'
   }
 })
 </script>
@@ -41,7 +47,7 @@ defineProps({
 
     <!-- PDF download link -->
     <a 
-      :href="`/hs-registration/${id}/pdf`" 
+      :href="type === 'hs' ? `/hs-registration/${id}/pdf` : `/online-registration/${id}/pdf`" 
       target="_blank" 
       rel="noopener noreferrer" 
       class="text-blue-500 hover:underline block mt-2"
