@@ -31,38 +31,38 @@ const props = defineProps<{
     <SchoolAdminLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
             <h1>Admin Dashboard</h1>
-            <div class="grid auto-rows-min gap-4 md:grid-cols-2">
+            <div class="grid auto-rows-min gap-4 md:grid-cols-2 xl:grid-cols-3">
                 <Card
-                    class="bg-gradient-to-br from-blue-50 to-white aspect-video border border-sidebar-border/70 dark:border-sidebar-border hover:shadow">
+                    class="bg-gradient-to-br from-blue-300 to-blue-200 aspect-video border border-sidebar-border/70 dark:border-sidebar-border hover:shadow">
                     <CardContent class="relative overflow-hidden">
                         <!-- <PlaceholderPattern /> -->
                     <Link :href="'/school-admin/registrations'" class="block">
-                    <h3 class="text-left">Registrations</h3>
+                    <h4 class="text-left">Registrations</h4>
                     <br>
-                    <div class="flex items-center justify-start gap-10">
+                    <div class="flex items-center justify-start gap-10 mb-6">
                         <GraduationCapIcon class="size-13" />
                         <span class="font-bold text-5xl">{{ props.total_registrations || 0 }}</span>
                     </div>
-                    <div class="text-green-600 text-md">
-                        <span><b>{{ props.total_registrations_this_month }}</b> this month</span>
+                    <div class="text-end text-green-700 text-lg mt-auto min-mt-4 mb-2">
+                        <span><b>{{ props.total_registrations_this_month || 0 }}</b> this month</span>
                     </div>
                     </Link>
                     </CardContent>
                 </Card>
 
                 <Card
-                    class="bg-gradient-to-br from-blue-50 to-white aspect-video border border-sidebar-border/70 dark:border-sidebar-border hover:shadow">
+                    class="bg-gradient-to-br from-blue-300 to-blue-200 aspect-video border border-sidebar-border/70 dark:border-sidebar-border hover:shadow">
                     <CardContent class="relative overflow-hidden">
                         <!-- <PlaceholderPattern /> -->
                         <Link :href="'/school-admin/registrations'" class="block">
-                        <h3 class="text-left">HS Registrations</h3>
+                        <h4 class="text-left truncate">HS Registrations</h4>
                         <br>
-                        <div class="flex items-center justify-start gap-10">
+                        <div class="flex items-center justify-start gap-10 mb-6">
                             <GraduationCapIcon class="size-13" />
                             <span class="font-bold text-5xl">{{ props.total_hs_registrations || 0 }}</span>
                         </div>
-                        <div class="text-green-600 text-md">
-                            <span><b>{{ props.total_hs_registrations_this_month }}</b> this month</span>
+                        <div class=" text-end text-green-700 text-lg mt-auto min-mt-4 mb-2">
+                            <span><b>{{ props.total_hs_registrations_this_month || 0 }}</b> this month</span>
                         </div>
                         </Link>
                     </CardContent>
@@ -70,29 +70,29 @@ const props = defineProps<{
 
             </div>
             
-            <div class="flex gap-2">
-                <Card class="bg-yellow-300/80">
+            <div class="flex flex-wrap gap-2 py-6">
+                <Card class="bg-blue-200/60 min-w-[200px] py-4">
                     <CardContent>
-                        <Link :href="'/school-admin/profiles'" class="flex gap-2">
-                            <div class="bg-white/30 flex justify-center items-center aspect-square rounded p-1.5">
+                        <Link :href="'/school-admin/profiles'" class="flex gap-6">
+                            <div class="bg-black/20 flex justify-center items-center aspect-square rounded p-3">
                                 <User class="size-8" />
                             </div>
                             <div class="flex flex-col justify-start items-start">
-                                <p class="text-lg font-semibold">Staffs</p>
-                                <p>{{ props.total_staffs || 0 }}</p>
+                                <p>Staffs</p>
+                                <p class="text-xl font-semibold">{{ props.total_staffs || 0 }}</p>
                             </div>
                         </Link>
                     </CardContent>
                 </Card>
-                <Card class="bg-yellow-300/80">
+                <Card class="bg-blue-200/60 min-w-[200px] py-4">
                     <CardContent>
-                        <Link :href="'/school-admin/departments'" class="flex gap-2">
-                            <div class="bg-white/30 flex justify-center items-center aspect-square rounded p-1.5">
+                        <Link :href="'/school-admin/departments'" class="flex gap-6">
+                            <div class="bg-black/20 flex justify-center items-center aspect-square rounded p-3">
                                 <University class="size-8" />
                             </div>
                             <div class="flex flex-col justify-start items-start">
-                                <p class="text-lg font-semibold">Departments</p>
-                                <p>{{ props.total_departments || 0 }}</p>
+                                <p>Departments</p>
+                                <p class="text-xl font-semibold">{{ props.total_departments || 0 }}</p>
                             </div>
                         </Link>
                     </CardContent>
