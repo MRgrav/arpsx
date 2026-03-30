@@ -3,6 +3,7 @@
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\HSRegistrationController;
 use App\Models\Department;
+use App\Models\HSRegistration;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -385,14 +386,13 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
             $total_departments = Department::count();
             return Inertia::render('school-admin/Dashboard', [
                 "total_registrations" => $total_registrations,
+                "total_hs_registrations" => HSRegistration::count(),
                 "total_staffs" => $total_staffs,
-                "total_departments" => $total_departments
+                "total_departments" => $total_departments,
+                "total_registrations_this_month" => Registration::whereMonth('created_at', date('m'))->count(),
+                "total_hs_registrations_this_month" => HSRegistration::whereMonth('created_at', date('m'))->count(),
             ]);
         })->name('dashboard');
-
-        Route::delete('/registrations/{id}', [OnlineRegistrationController::class, 'destroy'])
-            ->name('school-admin.registration.destroy')
-            ->whereNumber('id');
 
         // List all registrations
         Route::get('/registrations', [OnlineRegistrationController::class, 'schoolAdminIndex'])
