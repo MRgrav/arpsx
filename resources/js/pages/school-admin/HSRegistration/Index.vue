@@ -7,24 +7,25 @@ import { BreadcrumbItem, HSRegistration } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 
 const breadcrumbs: BreadcrumbItem[] = [
-  {
-    title: 'Dashboard',
-    href: '/school-admin/dashboard',
-  },
-  {
-    title: 'HS Registration',
-    href: '/school-admin/hs-registration',
-  },
+    {
+        title: 'Dashboard',
+        href: '/school-admin/dashboard',
+    },
+    {
+        title: 'HS Registration',
+        href: '/school-admin/hs-registration',
+    },
 ];
 
 interface Props {
-  hsRegistrations: HSRegistration[];
+    hsRegistrations: HSRegistration[];
 }
 const props = defineProps<Props>();
 
 </script>
 
 <template>
+
     <Head title="HS Registration" />
 
     <SchoolAdminLayout :breadcrumbs="breadcrumbs">
@@ -35,34 +36,45 @@ const props = defineProps<Props>();
                     <Button variant="outline">Download CSV</Button>
                 </a>
             </div>
-                    <Table>
-                        <TableCaption>A list of your recent Registrations for HS Admission.</TableCaption>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Name</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead>Phone</TableHead>
-                                <TableHead>Percentage</TableHead>
-                                <TableHead>Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow v-for="hsRegistration in props.hsRegistrations" :key="hsRegistration.id">
-                                <TableCell class="capitalize">{{ hsRegistration.name }}</TableCell>
-                                <TableCell>{{ hsRegistration.email }}</TableCell>
-                                <TableCell>{{ hsRegistration.contact_number }}</TableCell>
-                                <TableCell class="font-bold">{{ hsRegistration.pre_borad_percentage ?? 0 }}%</TableCell>
-                                <TableCell class="text-right space-x-2">
-                                    <Link :href="`/school-admin/hs-registrations/${hsRegistration.id}`">
-                                        <Button>View</Button>
-                                    </Link>
-                                    <Link :href="`/school-admin/hs-registrations/${hsRegistration.id}/edit`">
-                                        <Button>Edit</Button>
-                                    </Link>
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-        </div>  
+            <Table>
+                <TableCaption>A list of your recent Registrations for HS Admission.</TableCaption>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Phone</TableHead>
+                        <TableHead>Percentage</TableHead>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Actions</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    <TableRow v-for="hsRegistration in props.hsRegistrations" :key="hsRegistration.id">
+                        <TableCell class="capitalize">{{ hsRegistration.name }}</TableCell>
+                        <TableCell>{{ hsRegistration.email }}</TableCell>
+                        <TableCell>{{ hsRegistration.contact_number }}</TableCell>
+                        <TableCell class="font-bold">{{ hsRegistration.pre_borad_percentage ?? 0 }}%</TableCell>
+                        <TableCell>
+                            {{
+                                new Date(hsRegistration.created_at).toLocaleString('en-CA', {
+                                    year: 'numeric',
+                                    month: '2-digit',
+                                    day: '2-digit',
+                                    hour: '2-digit',
+                            minute: '2-digit',
+                            })
+                            }}</TableCell>
+                        <TableCell class="text-right space-x-2">
+                            <Link :href="`/school-admin/hs-registrations/${hsRegistration.id}`">
+                                <Button>View</Button>
+                            </Link>
+                            <Link :href="`/school-admin/hs-registrations/${hsRegistration.id}/edit`">
+                                <Button>Edit</Button>
+                            </Link>
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </div>
     </SchoolAdminLayout>
 </template>

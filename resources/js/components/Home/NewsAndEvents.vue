@@ -62,6 +62,9 @@ const props = defineProps<Props>() // Make props reactive and type-safe.
         </div>
         </Link>
       </div>
+      <div class="flex justify-center">
+        <Link :href="'/news-events'" class="text-blue-700 bg-white shadow px-4 py-2 rounded-md">View All</Link>
+      </div>
     </div>
   </div>
 </template>
