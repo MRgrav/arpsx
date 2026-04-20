@@ -143,8 +143,8 @@ const AddressItems: NavItem[] = [
                 class="footer-bottom grid grid-cols-1 md:grid-cols-2 text-white small gap-y-8 max-w-7xl mx-auto">
                 <div class="flex flex-col items-center text-center md:items-start">
                     <span class="text-gray-300">©2025 ARPS, Jorhat, All Rights Reserved.</span>
-                    <a href="https://www.deolang.com/" target="_blank" class="text-sky-100 hover:text-white font-semibold">Powered by
-                        DeoLang</a>
+                    <a href="#" target="_blank" class="text-sky-100 hover:text-white font-semibold">Powered by
+                        BlueTech Labs</a>
                 </div>
                 <div class="flex flex-col items-center md:items-end">
                     <!-- <span class="text-right text-gray-500">Today's visitors: 17</span> -->
