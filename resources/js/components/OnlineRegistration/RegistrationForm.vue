@@ -362,19 +362,19 @@ const toggleSameAddress = () => {
               <SelectGroup>
                 <SelectItem value="Nursery">Nursery</SelectItem>
                 <SelectItem value="LKG">LKG</SelectItem>
-                <SelectItem value="UKG">UKG</SelectItem>
+                <!-- <SelectItem value="UKG">UKG</SelectItem> -->
                 <SelectItem value="CLASS I">CLASS I</SelectItem>
-                <SelectItem value="CLASS II">CLASS II</SelectItem>
+                <!-- <SelectItem value="CLASS II">CLASS II</SelectItem> -->
                 <SelectItem value="CLASS III">CLASS III</SelectItem>
-                <SelectItem value="CLASS IV">CLASS IV</SelectItem>
-                <SelectItem value="CLASS V">CLASS V</SelectItem>
+                <!-- <SelectItem value="CLASS IV">CLASS IV</SelectItem> -->
+                <!-- <SelectItem value="CLASS V">CLASS V</SelectItem> -->
                 <SelectItem value="CLASS VI">CLASS VI</SelectItem>
                 <SelectItem value="CLASS VII">CLASS VII</SelectItem>
                 <SelectItem value="CLASS VIII">CLASS VIII</SelectItem>
                 <SelectItem value="CLASS IX">CLASS IX</SelectItem>
-                <SelectItem value="CLASS X">CLASS X</SelectItem>
+                <!-- <SelectItem value="CLASS X">CLASS X</SelectItem> -->
                 <SelectItem value="CLASS XI">CLASS XI</SelectItem>
-                <SelectItem value="CLASS XII">CLASS XII</SelectItem>
+                <!-- <SelectItem value="CLASS XII">CLASS XII</SelectItem> -->
               </SelectGroup>
             </SelectContent>
           </Select>
