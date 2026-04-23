@@ -177,8 +177,8 @@ const clearErrors = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="Arts">Arts</SelectItem>
-                <SelectItem value="Commerce">Commerce</SelectItem>
+                <!-- <SelectItem value="Arts">Arts</SelectItem>
+                <SelectItem value="Commerce">Commerce</SelectItem> -->
                 <SelectItem value="Science">Science</SelectItem>
               </SelectGroup>
             </SelectContent>
