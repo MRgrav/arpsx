@@ -158,6 +158,12 @@ const toggleSameAddress = () => {
   <!-- Show Success messsage after form submit with PDF download link -->
   <FormSuccess :show="success" @close="success = false" :id="submittedId ?? undefined" type="online" />
 
+<div class="w-full h-full py-12">
+<div class="mx-auto space-y-4">
+<h1>Application Closed!</h1>
+<p>The application for the current has been closed.</p>
+</div>
+
   <form @submit.prevent="submitForm" class="space-y-8 p-8">
     <h1 class="font-bold text-gray-800">STUDENT REGISTRATION FORM</h1>
     <p class="text-red-600 font-semibold">Note: At the time of admission, please bring the following:</p>
