@@ -96,7 +96,14 @@ const clearErrors = () => {
   <!-- Show Success messsage after form submit with PDF download link -->
   <FormSuccess :show="success" @close="success = false" :id="submittedId ?? undefined" type="hs" />
 
-  <form @submit.prevent="submitForm" class="space-y-8 p-8">
+<div class="w-full h-full">
+<div class="mx-auto w-fit p-6">
+<h1>Form Closed</h1>
+<p class="mt-2">The application has been stopped for the current session!</p>
+</div>
+</div>
+
+  <form @submit.prevent="submitForm" class="hidden space-y-8 p-8">
     <h1 class="font-bold text-gray-800 uppercase">REGISTRATION FOR ADmission</h1>
     <p class="text-gray-600 text-lg font-semibold">Class - XI</p>
     <p class="text-red-600 font-semibold">Note: Document required at the time of admission, please bring the following:</p>
