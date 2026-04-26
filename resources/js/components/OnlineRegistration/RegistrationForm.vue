@@ -163,8 +163,9 @@ const toggleSameAddress = () => {
 <h1>Application Closed!</h1>
 <p>The application for the current has been closed.</p>
 </div>
+</div>
 
-  <form @submit.prevent="submitForm" class="space-y-8 p-8">
+  <form @submit.prevent="submitForm" class="hidden space-y-8 p-8">
     <h1 class="font-bold text-gray-800">STUDENT REGISTRATION FORM</h1>
     <p class="text-red-600 font-semibold">Note: At the time of admission, please bring the following:</p>
     <ul class="list-disc list-inside text-red-600">
