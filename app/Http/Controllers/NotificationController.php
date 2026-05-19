@@ -46,8 +46,10 @@ class NotificationController extends Controller
         $links = [];
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
-                $upload = $this->storageService->upload($file, config('services.appwrite.bucket_id'));
-                $fileType = $file->getMimeType() === 'application/pdf' ? 'pdf' : 'image';
+                // Convert image files to optimized WebP format
+                $convertedFile = \App\Services\ImageConverter::convertToWebP($file);
+                $upload = $this->storageService->upload($convertedFile, config('services.appwrite.bucket_id'));
+                $fileType = $convertedFile->getMimeType() === 'application/pdf' ? 'pdf' : 'image';
                 $links[] = ['url' => $upload['url'], 'type' => $fileType];
             }
         }
@@ -103,8 +105,10 @@ class NotificationController extends Controller
         $newUploads = [];
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
-                $upload = $this->storageService->upload($file, config('services.appwrite.bucket_id'));
-                $fileType = $file->getMimeType() === 'application/pdf' ? 'pdf' : 'image';
+                // Convert image files to optimized WebP format
+                $convertedFile = \App\Services\ImageConverter::convertToWebP($file);
+                $upload = $this->storageService->upload($convertedFile, config('services.appwrite.bucket_id'));
+                $fileType = $convertedFile->getMimeType() === 'application/pdf' ? 'pdf' : 'image';
                 $newUploads[] = ['url' => $upload['url'], 'type' => $fileType];
             }
         }
