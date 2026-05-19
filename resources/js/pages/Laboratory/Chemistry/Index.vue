@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import coverImage from '@/pages/Laboratory/Chemistry/chemistry.jpeg';
+import coverImage from '@/pages/Laboratory/Chemistry/chemistry.avif';
 
 </script>
 

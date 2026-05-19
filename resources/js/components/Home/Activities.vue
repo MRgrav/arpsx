@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import nccImage from '@/../../resources/images/ncc.jpeg';
-import cultureImage from '@/../../resources/images/culture.jpeg';
-import sportImage from '@/../../resources/images/sport.jpeg';
+import nccImage from '@/../../resources/images/ncc.avif';
+import nccImage_1200 from '@/../../resources/images/ncc-1200.avif';
+import cultureImage from '@/../../resources/images/culture.avif';
+import cultureImage_720 from '@/../../resources/images/culture-720.avif';
+import sportImage from '@/../../resources/images/sport.avif';
 import { Link } from '@inertiajs/vue3';
 
 
@@ -25,10 +27,11 @@ import { Link } from '@inertiajs/vue3';
                     </p>
                 </div>
                 <Link :href="'/ncc'" class="flex flex-col" data-aos="fade-left" data-aos-duration="400">
-                <!-- <div > -->
                 <img class="h-80 border border-blue-200 bg-cover object-cover bg-center bg-no-repeat border-r-4 border-b-4 transform transition duration-300 hover:scale-101 relative"
-                    :src="nccImage" alt="">
-                <!-- </div> -->
+                    :src="nccImage"
+                    :srcset="`${nccImage_1200} 1200w, ${nccImage} 1920w`"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    alt="NCC activity">
                 </Link>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 py-10">
@@ -44,10 +47,9 @@ import { Link } from '@inertiajs/vue3';
                     </p>
                 </div>
                 <Link :href="'/sports'" class="flex flex-col" data-aos="fade-right" data-aos-duration="400">
-                <!-- <div > -->
                 <img class="h-80 border border-blue-200 bg-cover object-cover bg-center bg-no-repeat border-r-4 border-b-4 transform transition duration-300 hover:scale-101 relative"
-                    :src="sportImage" alt="">
-                <!-- </div> -->
+                    :src="sportImage" 
+                    alt="Sports activity">
                 </Link>
                 <div class="hidden lg:flex flex-col justify-center" data-aos="fade-left" data-aos-duration="400">
                     <h3 class="border-blue-200 p-3 mb-2 border-b-1 border-l-5">
@@ -74,10 +76,11 @@ import { Link } from '@inertiajs/vue3';
                     </p>
                 </div>
                 <Link :href="'creative-performing-arts'" class="flex flex-col" data-aos="fade-left" data-aos-duration="400">
-                <!-- <div > -->
                 <img class="h-80 border border-blue-200 bg-cover object-cover bg-center bg-no-repeat border-r-4 border-b-4 transform transition duration-300 hover:scale-101 relative"
-                    :src="cultureImage" alt="">
-                <!-- </div> -->
+                    :src="cultureImage"
+                    :srcset="`${cultureImage_720} 720w, ${cultureImage} 1600w`"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    alt="Cultural activity">
                 </Link>
             </div>
         </div>

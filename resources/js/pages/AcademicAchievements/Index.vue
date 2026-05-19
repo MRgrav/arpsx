@@ -1,17 +1,25 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import abhigya from '@/pages/AcademicAchievements/abhigya.png';
-import img1 from '@/pages/AcademicAchievements/img1.jpeg';
-import img2 from '@/pages/AcademicAchievements/img2.jpeg';
-import tahmina from '@/pages/AcademicAchievements/tahmina.png';
-import img3 from '@/pages/AcademicAchievements/img3.jpeg';
-import img4 from '@/pages/AcademicAchievements/img4.jpeg';
+import abhigya from '@/pages/AcademicAchievements/abhigya.avif';
+import img1 from '@/pages/AcademicAchievements/img1.avif';
+import img2 from '@/pages/AcademicAchievements/img2.avif';
+import tahmina from '@/pages/AcademicAchievements/tahmina.avif';
+import img3 from '@/pages/AcademicAchievements/img3.avif';
+import img4 from '@/pages/AcademicAchievements/img4.avif';
 import topperPdf from '@/pages/AcademicAchievements/toppers.pdf';
 
 import { VuePDF, usePDF } from '@tato30/vue-pdf'
 
 const { pdf } = usePDF(topperPdf);
-const images = [abhigya, img1, img2, tahmina, img3, img4];
+
+const images = [
+  { src: abhigya, type: 'contain' },
+  { src: img1, type: 'cover' },
+  { src: img2, type: 'cover' },
+  { src: tahmina, type: 'contain' },
+  { src: img3, type: 'cover' },
+  { src: img4, type: 'cover' },
+];
 
 </script>
 
@@ -41,11 +49,16 @@ const images = [abhigya, img1, img2, tahmina, img3, img4];
                 </p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-10 mb-20">
-                    <div v-for="image in images" class="aspect-4/3" :key="image">
-                        <img :src="image" alt="" class="h-full w-full"
-                            :class="image.includes('.png') ? 'object-contain' : 'object-cover'">
+                    <div v-for="(image, index) in images" class="aspect-4/3" :key="index">
+                        <img 
+                            :src="image.src" 
+                            alt="Academic achiever" 
+                            class="h-full w-full rounded-xs"
+                            :class="image.type === 'contain' ? 'object-contain bg-gray-50' : 'object-cover'"
+                        >
                     </div>
                 </div>
+
 
                 <VuePDF v-for="pageNo in 1" :pdf="pdf" fit-parent :page="pageNo" :key="pageNo" />
             </div>

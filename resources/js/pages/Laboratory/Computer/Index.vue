@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import coverImage from '@/pages/Laboratory/Computer/computer.jpeg';
+import coverImage from '@/pages/Laboratory/Computer/computer.avif';
 </script>
 
 

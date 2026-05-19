@@ -1,25 +1,29 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import facultyImage from '@/../../resources/images/faculty.jpeg';
-import studentsImage from '@/../../resources/images/students.jpeg';
-import staffsImage from '@/../../resources/images/staffs.jpeg';
+import facultyImage from '@/../../resources/images/faculty.avif';
+import facultyImage_720 from '@/../../resources/images/faculty-720.avif';
+import studentsImage from '@/../../resources/images/students.avif';
+import staffsImage from '@/../../resources/images/staffs.avif';
 
 
 const data = [
     {
         link: "/faculty",
         title: "Our Faculties",
-        image: facultyImage
+        image: facultyImage,
+        srcset: `${facultyImage_720} 720w, ${facultyImage} 1600w`
     },
     {
         link: "/",
         title: "Our Students",
-        image: studentsImage
+        image: studentsImage,
+        srcset: ''
     },
     {
         link: "/",
         title: "Our Staffs",
-        image: staffsImage
+        image: staffsImage,
+        srcset: ''
     },
 ]
 
@@ -33,7 +37,13 @@ const data = [
             <Link :href="row.link" v-for="row in data" :key="row.title" class="block">
                 <h3 class="text-center my-3 text-[#f7dc11]">{{row.title}}</h3>
                 <div class="relative bg-blue-500 h-64">
-                    <img :src="row.image" alt="" class="h-full w-full object-cover">
+                    <img 
+                        :src="row.image" 
+                        :srcset="row.srcset || undefined"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        alt="" 
+                        class="h-full w-full object-cover"
+                    >
                     <div class="h-full w-full hover:bg-black/50 top-0 left-0 absolute">
                         <div class="text-center text-white text-sm opacity-0 hover:opacity-100 top-0 w-full h-full grid place-content-center -translate-x-4 hover:translate-x-4 duration-300">
                             Learn More →

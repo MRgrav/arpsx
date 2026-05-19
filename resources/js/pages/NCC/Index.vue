@@ -1,14 +1,23 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import ncc1 from '@/pages/NCC/ncc1.jpeg';
-import ncc2 from '@/pages/NCC/ncc2.jpeg';
-import ncc3 from '@/pages/NCC/ncc3.jpeg';
-import ncc4 from '@/pages/NCC/ncc4.jpeg';
-import ncc5 from '@/pages/NCC/ncc5.jpeg';
-import ncc6 from '@/pages/NCC/ncc6.jpeg';
+import ncc1 from '@/pages/NCC/ncc1.avif';
+import ncc2 from '@/pages/NCC/ncc2.avif';
+import ncc3 from '@/pages/NCC/ncc3.avif';
+import ncc3_1200 from '@/pages/NCC/ncc3-1200.avif';
+import ncc4 from '@/pages/NCC/ncc4.avif';
+import ncc5 from '@/pages/NCC/ncc5.avif';
+import ncc5_1200 from '@/pages/NCC/ncc5-1200.avif';
+import ncc6 from '@/pages/NCC/ncc6.avif';
+import ncc6_1200 from '@/pages/NCC/ncc6-1200.avif';
 
-const images = [ ncc1, ncc2, ncc3, ncc4, ncc5, ncc6];
-
+const images = [
+  { src: ncc1, srcset: '' },
+  { src: ncc2, srcset: '' },
+  { src: ncc3, srcset: `${ncc3_1200} 1200w, ${ncc3} 1920w` },
+  { src: ncc4, srcset: '' },
+  { src: ncc5, srcset: `${ncc5_1200} 1200w, ${ncc5} 1920w` },
+  { src: ncc6, srcset: `${ncc6_1200} 1200w, ${ncc6} 1920w` },
+];
 </script>
 
 
@@ -30,8 +39,14 @@ const images = [ ncc1, ncc2, ncc3, ncc4, ncc5, ncc6];
             </p>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-10">
-                <div v-for="image in images" class="aspect-4/3" :key="image">
-                    <img :src="image" alt="" class="h-full w-full object-cover">
+                <div v-for="(image, index) in images" class="aspect-4/3" :key="index">
+                    <img 
+                        :src="image.src" 
+                        :srcset="image.srcset || undefined"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        alt="NCC cadet activity" 
+                        class="h-full w-full object-cover rounded-xs"
+                    >
                 </div>
             </div>
         </div>
