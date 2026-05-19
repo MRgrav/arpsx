@@ -9,6 +9,14 @@ const carouselConfig = {
   wrapAround: true,
   autoplay: 3000,
 }
+
+// Map actual existing resolutions to prevent 404s and optimize page performance
+const heroSrcsets: Record<number, string> = {
+  1: '/storage/uploads/hero-1-720.jpeg 720w, /storage/uploads/hero-1.jpeg 1600w',
+  2: '/storage/uploads/hero-2-720.jpeg 720w, /storage/uploads/hero-2.jpeg 1600w',
+  3: '/storage/uploads/hero-3-720.jpeg 720w, /storage/uploads/hero-3-1600.jpeg 1600w, /storage/uploads/hero-3.jpeg 1920w',
+  4: '/storage/uploads/hero-4-720.jpeg 720w, /storage/uploads/hero-4-1600.jpeg 1600w, /storage/uploads/hero-4.jpeg 1920w',
+}
 </script>
 
 <template>
@@ -18,12 +26,15 @@ const carouselConfig = {
         <div class="w-full h-[70vh]">
           <img
             :src="`/storage/uploads/hero-${index}.jpeg`"
+            :srcset="heroSrcsets[index]"
+            sizes="100vw"
             alt="Hero Slide"
             class="w-full h-full object-cover object-center"
           />
         </div>
       </Slide>
     </Carousel>
+
 
     <!-- ✅ Centered Overlay Content -->
     <div class="absolute inset-0 flex justify-center items-end p-8 lg:pb-16">

@@ -1,2 +1,14 @@
+# Ignore everything
 *
+
+# Do not ignore directories so Git traverses them
+!*/
+
+# Do not ignore .gitignore
 !.gitignore
+
+# Allow all .webp files anywhere in subfolders
+!**/*.webp
+
+# Ignore macOS system attributes
+._*
