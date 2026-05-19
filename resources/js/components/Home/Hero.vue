@@ -12,10 +12,10 @@ const carouselConfig = {
 
 // Map actual existing resolutions to prevent 404s and optimize page performance
 const heroSrcsets: Record<number, string> = {
-  1: '/storage/uploads/hero-1-720.jpeg 720w, /storage/uploads/hero-1.jpeg 1600w',
-  2: '/storage/uploads/hero-2-720.jpeg 720w, /storage/uploads/hero-2.jpeg 1600w',
-  3: '/storage/uploads/hero-3-720.jpeg 720w, /storage/uploads/hero-3-1600.jpeg 1600w, /storage/uploads/hero-3.jpeg 1920w',
-  4: '/storage/uploads/hero-4-720.jpeg 720w, /storage/uploads/hero-4-1600.jpeg 1600w, /storage/uploads/hero-4.jpeg 1920w',
+  1: '/storage/uploads/hero-1-720.webp 720w, /storage/uploads/hero-1.webp 1600w',
+  2: '/storage/uploads/hero-2-720.webp 720w, /storage/uploads/hero-2.webp 1600w',
+  3: '/storage/uploads/hero-3-720.webp 720w, /storage/uploads/hero-3-1600.webp 1600w, /storage/uploads/hero-3.webp 1920w',
+  4: '/storage/uploads/hero-4-1600.webp 1600w, /storage/uploads/hero-4.webp 1920w',
 }
 </script>
 
@@ -25,7 +25,7 @@ const heroSrcsets: Record<number, string> = {
       <Slide v-for="index in 4" :key="index">
         <div class="w-full h-[70vh]">
           <img
-            :src="`/storage/uploads/hero-${index}.jpeg`"
+            :src="`/storage/uploads/hero-${index}.webp`"
             :srcset="heroSrcsets[index]"
             sizes="100vw"
             alt="Hero Slide"
@@ -34,6 +34,7 @@ const heroSrcsets: Record<number, string> = {
         </div>
       </Slide>
     </Carousel>
+
 
 
     <!-- ✅ Centered Overlay Content -->

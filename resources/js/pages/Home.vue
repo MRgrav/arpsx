@@ -7,9 +7,10 @@ import MessageCard from '@/components/Home/MessageCard.vue';
 import NewsAndEvents from '@/components/Home/NewsAndEvents.vue';
 import Stats from '@/components/Home/Stats.vue';
 import Activities from '@/components/Home/Activities.vue';
-import { Post, Profile } from '@/types';
+import { Post, Profile, Notification } from '@/types';
 import OurSchoolFamily from '@/components/Home/OurSchoolFamily.vue';
 import FlashUpdates from '@/components/FlashUpdates.vue';
+
 
 /**
  * Props definition

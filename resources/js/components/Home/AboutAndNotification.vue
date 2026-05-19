@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 import { CalendarDays, ArrowBigRight } from 'lucide-vue-next';
+import type { Notification } from '@/types';
+
 /**
  * Props definition
  * The component expects an array of registrations.
@@ -9,6 +11,7 @@ interface Props {
     notifications: Notification[]
 }
 const props = defineProps<Props>() // Make props reactive and type-safe.
+
 
 
 </script>
@@ -28,7 +31,7 @@ const props = defineProps<Props>() // Make props reactive and type-safe.
                     development. — helping our students build a strong foundation for the future.
                 </p>
             </div>
-            <div class="bg-[url('/storage/uploads/hero-1.jpeg')] bg-cover bg-center" data-aos="fade-left">
+            <div class="bg-[url('/storage/uploads/hero-1.webp')] bg-cover bg-center" data-aos="fade-left">
                 <div class="bg-blue-950/97 py-8 backdrop-blur-xs px-10">
                     <div class="flex justify-center">
                         <h2 class="border-l-6 mb-8 border-white ps-6 ">Notifications</h2>

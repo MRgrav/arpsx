@@ -15,19 +15,19 @@ const members = {
     faculties: {
         name: 'Dr. A. Sharma',
         role: 'Principal',
-        img: 'hero-1.jpeg',
+        img: 'hero-1.webp',
         message: 'Our experienced educators across diverse departments are committed to nurturing curiosity, critical thinking, and academic excellence. Each member brings unique skills and passion to create a supportive learning environment.'
     },
     students: {
         name: 'Rahul Singh',
         role: 'Class 10',
-        img: 'hero-3.jpeg',
+        img: 'hero-3.webp',
         message: 'At our school, students find not just education but a second home. With guidance, care, and opportunities to grow, we carry forward values, friendships, and memories that last a lifetime.',
     },
     staffs: {
         name: 'Sanjay Kumar',
         role: 'Admin Staff',
-        img: 'hero-4.jpeg',
+        img: 'hero-4.webp',
         message: 'Alongside our teachers, our non-teaching staff play an important role in keeping the school running smoothly. With their constant support, care, and dedication, they help create a safe and welcoming environment for every student.',
     }
 }
