@@ -70,4 +70,4 @@ EXPOSE 9000
 ENV OCTANE_SERVER=frankenphp
 
 # Run Laravel Octane with FrankenPHP
-CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--host=0.0.0.0", "--port=9000"]
+CMD ["php", "artisan", "octane:frankenphp", "--host=0.0.0.0", "--port=9000"]
