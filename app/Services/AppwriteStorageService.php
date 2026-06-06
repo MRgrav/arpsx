@@ -8,7 +8,7 @@ use Appwrite\InputFile;
 use Appwrite\ID;
 use Illuminate\Http\UploadedFile;
 
-class AppwriteStorageService
+class AppwriteStorageService implements StorageServiceInterface
 {
     protected $storage;
     protected $projectId;
@@ -89,5 +89,25 @@ class AppwriteStorageService
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    /**
+     * Delete an image from Appwrite storage by its URL.
+     */
+    public function deleteByUrl(string $url, string $bucketId = null): bool
+    {
+        if (empty($url)) {
+            return false;
+        }
+
+        $bucketId = $bucketId ?? config('services.appwrite.bucket_id');
+        
+        // Find /files/{fileId}/view
+        if (preg_match('/\/files\/([^\/]+)\/view/', $url, $matches)) {
+            $fileId = $matches[1];
+            return $this->delete($bucketId, $fileId);
+        }
+        
+        return false;
     }
 }

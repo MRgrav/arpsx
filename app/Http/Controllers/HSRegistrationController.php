@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\HSRegistration;
-use App\Services\AppwriteStorageService;
+use App\Services\StorageServiceInterface;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -12,11 +12,18 @@ class HSRegistrationController extends Controller
 {
     public function index()
     {
-        return inertia::render('HSRegistration/index');
+        $enabled = \App\Models\Setting::get('hs_registration_enabled', '1') === '1';
+        return inertia::render('HSRegistration/index', [
+            'enabled' => $enabled
+        ]);
     }
 
     public function store(Request $request)
     {
+        if (\App\Models\Setting::get('hs_registration_enabled', '1') !== '1') {
+            return redirect()->back()->withErrors(['error' => 'High School registration is currently closed.']);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'dob' => 'required|date',
@@ -40,8 +47,8 @@ class HSRegistrationController extends Controller
         ]);
 
         $field = 'payment_screenshot';
-        $storageService = app(AppwriteStorageService::class);
-        $upload = $storageService->upload($request->file($field), env('APPWRITE_BUCKET_ID'));
+        $storageService = app(StorageServiceInterface::class);
+        $upload = $storageService->upload($request->file($field));
         // change: file -> file path
         $validated[$field] = $upload['url'];
 
@@ -69,9 +76,11 @@ class HSRegistrationController extends Controller
     public function schoolAdminIndex()
     {
         $hsRegistrations = HSRegistration::orderBy('id', 'desc')->get();
+        $enabled = \App\Models\Setting::get('hs_registration_enabled', '1') === '1';
 
         return inertia::render('school-admin/HSRegistration/Index', [
             'hsRegistrations' => $hsRegistrations,
+            'enabled' => $enabled
         ]);
     }
 

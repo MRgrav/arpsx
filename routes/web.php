@@ -11,10 +11,12 @@ use App\Http\Controllers\OnlineRegistrationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingController;
 use App\Models\Notification;
 use App\Models\Post;
 use App\Models\Profile;
 use App\Models\Registration;
+use App\Models\Setting;
 
 use function Pest\Laravel\get;
 
@@ -55,7 +57,12 @@ Route::get('/', function () {
     return Inertia::render('Home', [
         'notifications' => $notifications,
         'profiles' => $profiles,
-        'posts' => $posts
+        'posts' => $posts,
+        'flash_update' => [
+            'enabled' => \App\Models\Setting::get('flash_update_enabled', '1') === '1',
+            'image' => \App\Models\Setting::get('flash_update_image', ''),
+            'image_mobile' => \App\Models\Setting::get('flash_update_image_mobile', ''),
+        ]
     ]);
 })->name('home');
 
@@ -384,6 +391,37 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
             $total_registrations = Registration::count();
             $total_staffs = Profile::count();
             $total_departments = Department::count();
+
+            $startDate = now()->subDays(30)->startOfDay();
+
+            // Get registrations count grouped by date for the last 30 days
+            $registrations_by_day = Registration::where('created_at', '>=', $startDate)
+                ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+                ->groupBy('date')
+                ->get()
+                ->pluck('count', 'date')
+                ->toArray();
+
+            $hs_registrations_by_day = HSRegistration::where('created_at', '>=', $startDate)
+                ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+                ->groupBy('date')
+                ->get()
+                ->pluck('count', 'date')
+                ->toArray();
+
+            // Generate list of last 30 days to ensure we have all dates filled (even with 0)
+            $daily_stats = [];
+            for ($i = 29; $i >= 0; $i--) {
+                $dateStr = now()->subDays($i)->format('Y-m-d');
+                $labelStr = now()->subDays($i)->format('d M');
+                $daily_stats[] = [
+                    'date' => $dateStr,
+                    'label' => $labelStr,
+                    'standard' => $registrations_by_day[$dateStr] ?? 0,
+                    'hs' => $hs_registrations_by_day[$dateStr] ?? 0,
+                ];
+            }
+
             return Inertia::render('school-admin/Dashboard', [
                 "total_registrations" => $total_registrations,
                 "total_hs_registrations" => HSRegistration::count(),
@@ -391,6 +429,9 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
                 "total_departments" => $total_departments,
                 "total_registrations_this_month" => Registration::whereMonth('created_at', date('m'))->count(),
                 "total_hs_registrations_this_month" => HSRegistration::whereMonth('created_at', date('m'))->count(),
+                "registration_enabled" => Setting::get('registration_enabled', '1') === '1',
+                "hs_registration_enabled" => Setting::get('hs_registration_enabled', '1') === '1',
+                "daily_stats" => $daily_stats,
             ]);
         })->name('dashboard');
 
@@ -524,6 +565,14 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
         Route::get('/posts/{id}', [PostController::class, 'show'])
             ->name('school-admin.posts.show');
+
+        // Settings
+        Route::get('/settings', [SettingController::class, 'index'])
+            ->name('school-admin.settings.index');
+        Route::post('/settings', [SettingController::class, 'update'])
+            ->name('school-admin.settings.update');
+        Route::post('/settings/toggle', [SettingController::class, 'toggle'])
+            ->name('school-admin.settings.toggle');
     });
 });
 

@@ -20,6 +20,11 @@ interface Props {
   notifications: Notification[]
   profiles: Profile[]
   posts: Post[]
+  flash_update?: {
+    enabled: boolean;
+    image: string;
+    image_mobile?: string;
+  }
 }
 const props = defineProps<Props>() // Make props reactive and type-safe.
 
@@ -33,7 +38,7 @@ const props = defineProps<Props>() // Make props reactive and type-safe.
         <meta property="og:description" content="Assam Rifles Public School, Jorhat, Jorhat. KNOWLEDGE IS WORSHIP">
     </Head>
     <AppLayout class="overflow-hidden">
-        <FlashUpdates />
+        <FlashUpdates :flash-update="props.flash_update" />
         <Hero />
         <AboutAndNotification :notifications="props.notifications"/>
         <MessageCard :profiles="props.profiles"/>

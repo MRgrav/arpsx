@@ -6,13 +6,13 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
-use App\Services\AppwriteStorageService;
+use App\Services\StorageServiceInterface;
 
 class PostController extends Controller
 {
-    protected $storageService;
-    // Inject the service via Constructor for cleaner access
-    public function __construct(AppwriteStorageService $storageService)
+    protected StorageServiceInterface $storageService;
+
+    public function __construct(StorageServiceInterface $storageService)
     {
         $this->storageService = $storageService;
     }
@@ -73,8 +73,8 @@ class PostController extends Controller
         if ($request->hasFile('image')) {
             // Convert main thumbnail image to optimized WebP format
             $convertedImage = \App\Services\ImageConverter::convertToWebP($request->file('image'));
-            $upload = $this->storageService->upload($convertedImage, config('services.appwrite.bucket_id'));
-            $data['image'] = $upload['url']; // Store the Appwrite URL in DB
+            $upload = $this->storageService->upload($convertedImage);
+            $data['image'] = $upload['url']; // Store the URL in DB
         }
 
         // 2. Handle Gallery Images Upload
@@ -83,7 +83,7 @@ class PostController extends Controller
             foreach ($request->file('images') as $file) {
                 // Convert gallery image to optimized WebP format
                 $convertedFile = \App\Services\ImageConverter::convertToWebP($file);
-                $upload = $this->storageService->upload($convertedFile, config('services.appwrite.bucket_id'));
+                $upload = $this->storageService->upload($convertedFile);
                 $storedImages[] = $upload['url'];
             }
         }
@@ -140,10 +140,14 @@ class PostController extends Controller
         // }
 
         if ($request->hasFile('image')) {
+            $oldImage = $post->image;
             // Convert main thumbnail image to optimized WebP format
             $convertedImage = \App\Services\ImageConverter::convertToWebP($request->file('image'));
-            $upload = $this->storageService->upload($convertedImage, config('services.appwrite.bucket_id'));
+            $upload = $this->storageService->upload($convertedImage);
             $validated['image'] = $upload['url'];
+            if (!empty($oldImage)) {
+                $this->storageService->deleteByUrl($oldImage);
+            }
         } else {
             // Keep existing URL if no new file is uploaded
             unset($validated['image']);
@@ -162,23 +166,20 @@ class PostController extends Controller
             return is_string($value) && !empty($value);
         });
 
-        // New uploaded images (Files)
-        // $newUploads = [];
-        // if ($request->hasFile('images')) {
-        //     foreach ($request->file('images') as $file) {
-        //         if ($file) {
-        //             $fname = Str::uuid() . '.' . $file->getClientOriginalExtension();
-        //             $file->storeAs('uploads', $fname, 'public');
-        //             $newUploads[] = $fname;
-        //         }
-        //     }
-        // }
+        // Delete removed gallery images
+        $deletedImages = array_diff($existingImages, $keptImages);
+        foreach ($deletedImages as $deletedImage) {
+            if (!empty($deletedImage)) {
+                $this->storageService->deleteByUrl($deletedImage);
+            }
+        }
+
         $newUploads = [];
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
                 // Convert gallery image to optimized WebP format
                 $convertedFile = \App\Services\ImageConverter::convertToWebP($file);
-                $upload = $this->storageService->upload($convertedFile, config('services.appwrite.bucket_id'));
+                $upload = $this->storageService->upload($convertedFile);
                 $newUploads[] = $upload['url'];
             }
         }
@@ -206,6 +207,21 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         $post = Post::findOrFail($id);
+
+        // Delete main thumbnail
+        if (!empty($post->image)) {
+            $this->storageService->deleteByUrl($post->image);
+        }
+
+        // Delete gallery images
+        if (is_array($post->images)) {
+            foreach ($post->images as $img) {
+                if (!empty($img)) {
+                    $this->storageService->deleteByUrl($img);
+                }
+            }
+        }
+
         $post->delete();
         return redirect()->route('school-admin.posts.index')->with('success', 'Post deleted.');
     }

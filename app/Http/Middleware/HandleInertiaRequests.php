@@ -58,7 +58,9 @@ class HandleInertiaRequests extends Middleware
              * DOC is Inertia-js flash
              */
             'flash' => [
-                'data' => fn () => $request->session()->get('data')
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
+                'data' => fn () => $request->session()->get('data'),
             ],
         ];
     }

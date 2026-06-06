@@ -46,4 +46,9 @@ return [
         'bucket_id'  => env('APPWRITE_BUCKET_ID'),
     ],
 
+    'pocketbase' => [
+        'url'        => env('POCKETBASE_URL', 'http://127.0.0.1:8090'),
+        'collection' => env('POCKETBASE_COLLECTION', 'files'),
+    ],
+
 ];

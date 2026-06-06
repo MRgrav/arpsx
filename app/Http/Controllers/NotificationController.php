@@ -3,25 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
-use App\Services\AppwriteStorageService;
+use App\Services\StorageServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class NotificationController extends Controller
 {
-    protected $storageService;
+    protected StorageServiceInterface $storageService;
+
     // Inject the service via Constructor for cleaner access
-    public function __construct(AppwriteStorageService $storageService)
+    public function __construct(StorageServiceInterface $storageService)
     {
         $this->storageService = $storageService;
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-
+        //
     }
 
     /**
@@ -48,7 +50,7 @@ class NotificationController extends Controller
             foreach ($request->file('files') as $file) {
                 // Convert image files to optimized WebP format
                 $convertedFile = \App\Services\ImageConverter::convertToWebP($file);
-                $upload = $this->storageService->upload($convertedFile, config('services.appwrite.bucket_id'));
+                $upload = $this->storageService->upload($convertedFile);
                 $fileType = $convertedFile->getMimeType() === 'application/pdf' ? 'pdf' : 'image';
                 $links[] = ['url' => $upload['url'], 'type' => $fileType];
             }
@@ -107,7 +109,7 @@ class NotificationController extends Controller
             foreach ($request->file('files') as $file) {
                 // Convert image files to optimized WebP format
                 $convertedFile = \App\Services\ImageConverter::convertToWebP($file);
-                $upload = $this->storageService->upload($convertedFile, config('services.appwrite.bucket_id'));
+                $upload = $this->storageService->upload($convertedFile);
                 $fileType = $convertedFile->getMimeType() === 'application/pdf' ? 'pdf' : 'image';
                 $newUploads[] = ['url' => $upload['url'], 'type' => $fileType];
             }
@@ -136,7 +138,6 @@ class NotificationController extends Controller
     public function destroy(string $id)
     {
         $notification = Notification::findOrFail($id);
-
         $notification->delete();
 
         return redirect()
@@ -144,13 +145,11 @@ class NotificationController extends Controller
             ->with('success', 'Notification deleted successfully.');
     }
 
-
     /**
-     * Remove the specified resource from storage.
+     * Display admin notification listing.
      */
     public function schoolAdminIndex()
     {
-
         $notifications = Notification::latest('created_at')->get();
 
         return Inertia::render('school-admin/Notifications/Index', [

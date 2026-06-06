@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import SchoolAdminLayout from '@/layouts/SchoolAdminLayout.vue';
 import { BreadcrumbItem, HSRegistration } from '@/types';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -19,8 +19,19 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface Props {
     hsRegistrations: HSRegistration[];
+    enabled: boolean;
 }
 const props = defineProps<Props>();
+
+const toggleStatus = () => {
+    const newValue = !props.enabled;
+    router.post(route('school-admin.settings.toggle'), {
+        key: 'hs_registration_enabled',
+        value: newValue,
+    }, {
+        preserveScroll: true,
+    });
+};
 
 </script>
 
@@ -32,9 +43,19 @@ const props = defineProps<Props>();
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
             <div class="flex justify-between items-center mb-4">
                 <h1 class="text-2xl font-bold">HS Registrations</h1>
-                <a :href="route('school-admin.hs-registration.csv')" target="_blank">
-                    <Button variant="outline">Download CSV</Button>
-                </a>
+                <div class="flex items-center gap-3">
+                    <Button 
+                        type="button"
+                        @click="toggleStatus"
+                        :variant="props.enabled ? 'default' : 'destructive'"
+                        class="shadow-sm font-semibold transition-all duration-200"
+                    >
+                        {{ props.enabled ? 'Portal: Enabled' : 'Portal: Disabled' }}
+                    </Button>
+                    <a :href="route('school-admin.hs-registration.csv')" target="_blank">
+                        <Button variant="outline">Download CSV</Button>
+                    </a>
+                </div>
             </div>
             <Table>
                 <TableCaption>A list of your recent Registrations for HS Admission.</TableCaption>

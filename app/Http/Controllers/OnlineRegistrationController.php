@@ -12,13 +12,13 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 use Spatie\Browsershot\Browsershot;
-use App\Services\AppwriteStorageService;
+use App\Services\StorageServiceInterface;
 
 class OnlineRegistrationController extends Controller
 {
-    private AppwriteStorageService $storageService;
+    private StorageServiceInterface $storageService;
 
-    public function __construct(AppwriteStorageService $storageService)
+    public function __construct(StorageServiceInterface $storageService)
     {
         $this->storageService = $storageService;
     }
@@ -36,14 +36,21 @@ class OnlineRegistrationController extends Controller
      */
     public function create()
     {
-        return Inertia::render('OnlineRegistration');
+        $enabled = \App\Models\Setting::get('registration_enabled', '1') === '1';
+        return Inertia::render('OnlineRegistration', [
+            'enabled' => $enabled
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, AppwriteStorageService $storageService)
+    public function store(Request $request)
     {
+        if (\App\Models\Setting::get('registration_enabled', '1') !== '1') {
+            return redirect()->back()->withErrors(['error' => 'Online registration is currently closed.']);
+        }
+
         $validated = $request->validate([
 
             // Student’s Info
@@ -146,8 +153,7 @@ class OnlineRegistrationController extends Controller
             //     // Save only the filename in DB
             //     $uuidFilenames[$field] = $filename;
             // }
-            $storageService = app(AppwriteStorageService::class);
-            $upload = $storageService->upload($request->file($field), env('APPWRITE_BUCKET_ID'));
+            $upload = $this->storageService->upload($request->file($field));
             $uuidFilenames[$field] = $upload['url'];
         }
 
@@ -301,7 +307,11 @@ class OnlineRegistrationController extends Controller
     public function schoolAdminIndex(Request $request)
     {
         $registrations = Registration::latest()->get();
-        return Inertia::render('school-admin/Registrations', compact('registrations'));
+        $enabled = \App\Models\Setting::get('registration_enabled', '1') === '1';
+        return Inertia::render('school-admin/Registrations', [
+            'registrations' => $registrations,
+            'enabled' => $enabled
+        ]);
     }
 
     /**
@@ -416,7 +426,6 @@ class OnlineRegistrationController extends Controller
     /**
      * Summary of sendRegistrationMail
      * @param mixed $registration
-     * @param mixed $pdf
      * @return void
      */
     public function sendRegistrationMail($registration)
