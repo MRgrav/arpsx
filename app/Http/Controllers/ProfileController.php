@@ -47,7 +47,14 @@ class ProfileController extends Controller
             'department_id' => 'nullable|exists:departments,id',
             'detail' => 'nullable|string',
             'message' => 'nullable|string',
+            'is_hod' => 'nullable|boolean',
         ]);
+
+        $data['is_hod'] = $request->boolean('is_hod');
+
+        if ($data['is_hod'] && !empty($data['department_id'])) {
+            Profile::where('department_id', $data['department_id'])->update(['is_hod' => false]);
+        }
 
         if ($request->hasFile('image')) {
             // Generate UUID and keep original extension
@@ -107,7 +114,14 @@ class ProfileController extends Controller
             'detail' => 'nullable|string',
             'message' => 'nullable|string',
             'image' => "nullable|file|mimes:pdf,jpg,jpeg,png|max:2048",
+            'is_hod' => 'nullable|boolean',
         ]);
+
+        $validated['is_hod'] = $request->boolean('is_hod');
+
+        if ($validated['is_hod'] && !empty($validated['department_id'])) {
+            Profile::where('department_id', $validated['department_id'])->update(['is_hod' => false]);
+        }
 
         // Only update if a new image is uploaded
         if ($request->hasFile('image')) {

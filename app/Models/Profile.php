@@ -16,6 +16,11 @@ class Profile extends Model
         'department_id',
         'detail',
         'message',
+        'is_hod',
+    ];
+
+    protected $casts = [
+        'is_hod' => 'boolean',
     ];
 
     /**

@@ -22,6 +22,10 @@ const handleImageError = (event: Event) => {
                 class="w-full h-full object-cover" @error="handleImageError" alt="Profile Image" />
             <img v-else :src="defaultProfileIcon" alt="">
         </div>
+        <!-- HOD Badge Overlay -->
+        <div v-if="props.profile.is_hod" class="-mt-8 min-w-[100px] w-fit ms-2 bg-zinc-950/30 backdrop-blur-sm text-white text-sm uppercase font-bold tracking-wider px-2 py-0.5 rounded shadow-sm z-10 ">
+            HOD
+        </div>
         <div class="p-4 bg-[#ff7c7c] text-white text-center h-full">
             <h4>
                 {{ props.profile.name || "Please enter name" }}

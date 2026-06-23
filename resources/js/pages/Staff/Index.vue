@@ -9,6 +9,16 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+const sortedProfilesForRole = (roleId: number) => {
+    return props.profiles
+        .filter(p => p.role_id === roleId)
+        .sort((a, b) => {
+            const aHod = a.is_hod ? 1 : 0;
+            const bHod = b.is_hod ? 1 : 0;
+            return bHod - aHod; // HOD (1) floats to top before non-HOD (0)
+        });
+};
 </script>
 
 <template>
@@ -27,7 +37,7 @@ const props = defineProps<Props>();
                                 {{ role.display_name }}
                             </h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 rounded py-5">
-                                <FacultyCard  v-for="profile in props.profiles.filter(p => p.role_id === role.id)" :key="profile.id" :profile="profile" />
+                                <FacultyCard  v-for="profile in sortedProfilesForRole(role.id)" :key="profile.id" :profile="profile" />
                             </div>
                         </div>
                     </div>

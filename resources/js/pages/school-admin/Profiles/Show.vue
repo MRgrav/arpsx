@@ -67,7 +67,12 @@ const handleImageError = (event: Event) => {
         <!-- Right Column: Details -->
         <div class="md:col-span-2 space-y-4">
           <div>
-            <h2 class="text-xl font-bold">{{ props.profile.name }}</h2>
+            <h2 class="text-xl font-bold flex items-center gap-2">
+              <span>{{ props.profile.name }}</span>
+              <span v-if="props.profile.is_hod" class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300">
+                Head of Department (HOD)
+              </span>
+            </h2>
           </div>
           <div v-if="props.profile.position">
             <h3 class="font-semibold">Position</h3>

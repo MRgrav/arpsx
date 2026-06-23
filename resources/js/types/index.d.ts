@@ -70,6 +70,7 @@ export interface Role {
   name: string;
   display_name?: string | null;
   description?: string | null;
+  profiles_count?: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -85,6 +86,7 @@ export interface Profile {
   department?: Department | null;
   detail?: string | null;
   message?: string | null;
+  is_hod?: boolean;
   created_at?: string;
   updated_at?: string;
 }

@@ -26,6 +26,7 @@ const form = useForm({
   detail: '',
   message: '',
   image: null,
+  is_hod: false,
 });
 
 const submit = () => {
@@ -97,6 +98,12 @@ const submit = () => {
           <div v-if="form.errors.department_id" class="text-red-500 text-sm">
             {{ form.errors.department_id }}
           </div>
+        </div>
+
+        <!-- Is HOD Checkbox -->
+        <div class="flex items-center gap-2 py-1">
+          <input id="is_hod" type="checkbox" v-model="form.is_hod" class="h-4 w-4 rounded border-gray-305 text-blue-600 focus:ring-blue-500" />
+          <label for="is_hod" class="font-medium text-gray-700 select-none">Make this staff member Head of Department (HOD)</label>
         </div>
 
         <!-- Detail -->

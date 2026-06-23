@@ -39,7 +39,14 @@ const props = defineProps<Props>() // Make props reactive and type-safe.
       <TableRow v-for="profile in props.profiles" :key="profile.id">
 
         <!-- Name -->
-        <TableCell class="w-[100px]">{{ profile.name }}</TableCell>
+        <TableCell class="w-[150px] font-medium">
+          <div class="flex items-center gap-1.5">
+            <span>{{ profile.name }}</span>
+            <span v-if="profile.is_hod" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-350">
+              HOD
+            </span>
+          </div>
+        </TableCell>
 
         <!-- Role -->
         <TableCell>{{ profile.role?.display_name }}</TableCell>
