@@ -6,6 +6,7 @@ import { Head, useForm, Link } from '@inertiajs/vue3';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectItem } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+const defaultProfileIcon = '/images/defaults/profile.png';
 
 const props = defineProps<{
   profile: Profile,
@@ -33,6 +34,17 @@ const form = useForm({
 
 const submit = () => {
   form.post(`/school-admin/profiles/${props.profile.id}/update`);
+};
+
+const getProfileImageUrl = () => {
+  const img = props.profile.image;
+  if (!img || img === 'null' || img === 'undefined' || img.trim() === '') {
+    return defaultProfileIcon;
+  }
+  if (img.startsWith('http://') || img.startsWith('https://')) {
+    return img;
+  }
+  return `/storage/uploads/${img}`;
 };
 </script>
 
@@ -119,7 +131,7 @@ const submit = () => {
           <div v-if="form.errors.image" class="text-red-500 text-sm">{{ form.errors.image }}</div>
 
           <div class="mt-2">
-            <img :src="`/storage/uploads/${props.profile.image}`" alt="Current Profile" class="w-20 h-20 rounded-full object-cover" />
+            <img :src="getProfileImageUrl()" alt="Current Profile" class="w-20 h-20 rounded-full object-cover" />
           </div>
         </div>
 

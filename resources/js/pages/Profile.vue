@@ -2,12 +2,23 @@
 import AppLayout from '@/layouts/AppLayout.vue'
 import { type Profile } from '@/types'
 import { Head } from '@inertiajs/vue3'
-import defaultProfileIcon from '@/../../resources/images/defaults/profile.png';
+const defaultProfileIcon = '/images/defaults/profile.png';
 
 const props = defineProps<{ profile: Profile }>()
 
 const handleImageError = (event: Event) => {
     (event.target as HTMLImageElement).src = defaultProfileIcon;
+};
+
+const getProfileImageUrl = () => {
+    const img = props.profile.image;
+    if (!img || img === 'null' || img === 'undefined' || img.trim() === '') {
+        return defaultProfileIcon;
+    }
+    if (img.startsWith('http://') || img.startsWith('https://')) {
+        return img;
+    }
+    return `/storage/uploads/${img}`;
 };
 </script>
 
@@ -28,7 +39,7 @@ const handleImageError = (event: Event) => {
                 <div class="gap-8 flex flex-col md:flex-row py-8">
                     <!-- Left Column: Profile Image -->
                     <div class="flex flex-col items-center p-8">
-                        <img :src="`/storage/uploads/${props.profile.image}`" alt="Profile Image"
+                        <img :src="getProfileImageUrl()" alt="Profile Image"
                             @error="handleImageError($event)"
                             class="aspect-1/1 max-w-[350px] rounded-lg object-cover" />
                     </div>

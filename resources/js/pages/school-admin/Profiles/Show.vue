@@ -4,7 +4,7 @@ import { Profile, type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/vue3';
 import Button from '@/components/ui/button/Button.vue';
 import { ArrowLeftIcon } from 'lucide-vue-next';
-import defaultProfileIcon from '@/../../resources/images/defaults/profile.png';
+const defaultProfileIcon = '/images/defaults/profile.png';
 
 interface Props {
   profile: Profile;
@@ -25,6 +25,17 @@ function deleteProfile() {
 
 const handleImageError = (event: Event) => {
   (event.target as HTMLImageElement).src = defaultProfileIcon;
+};
+
+const getProfileImageUrl = () => {
+  const img = props.profile.image;
+  if (!img || img === 'null' || img === 'undefined' || img.trim() === '') {
+    return defaultProfileIcon;
+  }
+  if (img.startsWith('http://') || img.startsWith('https://')) {
+    return img;
+  }
+  return `/storage/uploads/${img}`;
 };
 </script>
 
@@ -56,7 +67,7 @@ const handleImageError = (event: Event) => {
 
         <!-- Left Column: Image & Role -->
         <div class="flex flex-col items-center">
-          <img :src="`/storage/uploads/${props.profile.image}`" alt="Profile Image"
+          <img :src="getProfileImageUrl()" alt="Profile Image"
             class="w-40 h-40 rounded-full object-cover border mb-4" @error="handleImageError($event)" />
           <div class="text-center">
             <h2 class="text-lg font-semibold">Role</h2>

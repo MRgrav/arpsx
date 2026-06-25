@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { Profile } from '@/types';
-import defaultProfileIcon from '@/../../resources/images/defaults/profile.png';
 import { Link } from '@inertiajs/vue3';
 // import { BookOpenCheck } from 'lucide-vue-next';
+
+const defaultProfileIcon = '/images/defaults/profile.png';
 
 interface Props {
     profile: Profile;
@@ -12,15 +13,25 @@ const props = defineProps<Props>();
 const handleImageError = (event: Event) => {
     (event.target as HTMLImageElement).src = defaultProfileIcon;
 };
+
+const getProfileImageUrl = () => {
+    const img = props.profile.image;
+    if (!img || img === 'null' || img === 'undefined' || img.trim() === '') {
+        return defaultProfileIcon;
+    }
+    if (img.startsWith('http://') || img.startsWith('https://')) {
+        return img;
+    }
+    return `/storage/uploads/${img}`;
+};
 </script>
 
 
 <template>
     <Link :href="`/profiles/${props.profile.id}`" class="block rounded-tl-4xl rounded-tr-lg rounded-br-4xl rounded-bl-lg hover:rounded-tl-lg hover:rounded-tr-4xl hover:rounded-br-lg hover:rounded-bl-4xl duration-200 ease-in-out overflow-hidden relative">
-        <div class="aspect-[1/1] object-center object-cover">
-            <img v-if="props.profile.image" :src="`/storage/uploads/${props.profile.image}`"
+        <div class="aspect-[1/1] overflow-hidden">
+            <img :src="getProfileImageUrl()"
                 class="w-full h-full object-cover" @error="handleImageError" alt="Profile Image" />
-            <img v-else :src="defaultProfileIcon" alt="">
         </div>
         <!-- HOD Badge Overlay -->
         <div v-if="props.profile.is_hod" class="-mt-8 min-w-[100px] w-fit ms-2 bg-zinc-950/30 backdrop-blur-sm text-white text-sm uppercase font-bold tracking-wider px-2 py-0.5 rounded shadow-sm z-10 ">
