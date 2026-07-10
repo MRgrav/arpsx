@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import flash26 from '@/../../resources/images/flash26.avif'
 import flash26_720 from '@/../../resources/images/flash26-720.avif'
 
@@ -15,6 +15,7 @@ const props = defineProps<{
 
 const isVisible = ref<boolean>(true)
 const isLoaded = ref<boolean>(false)
+const delayPassed = ref<boolean>(false)
 
 // Determine if we should show the popup
 const shouldShow = computed(() => {
@@ -25,6 +26,13 @@ const shouldShow = computed(() => {
     return props.flashUpdate.enabled && (!!props.flashUpdate.image || !!flash26);
   }
   return true; // default enabled
+});
+
+onMounted(() => {
+  // Smoothly trigger the show phase after a 2.5 second delay
+  setTimeout(() => {
+    delayPassed.value = true;
+  }, 8000);
 });
 
 // Compute the active images
@@ -42,14 +50,17 @@ const imageSrcset = computed(() => {
 <template>
   <div 
     v-if="shouldShow" 
-    class="fixed inset-0 z-50 backdrop-blur-xs backdrop-grayscale-75 w-full h-full transition-all duration-300 flex justify-center items-center p-10 min-h-screen"
-    :class="isLoaded ? 'opacity-100 pointer-events-auto bg-black/40' : 'opacity-0 pointer-events-none bg-black/0'"
+    class="fixed inset-0 z-50 backdrop-blur-xs w-full h-full transition-all duration-500 ease-out flex justify-center items-center p-10 min-h-screen"
+    :class="(isLoaded && delayPassed) ? 'opacity-100 pointer-events-auto bg-black/50' : 'opacity-0 pointer-events-none bg-black/0'"
     @click.self="isVisible = false"
   >
-    <div class="relative max-w-[700px] w-[90%] mx-auto">
+    <div 
+      class="relative max-w-[700px] w-[90%] mx-auto transition-all duration-500 ease-out transform"
+      :class="(isLoaded && delayPassed) ? 'scale-100 translate-y-0 opacity-100' : 'scale-95 translate-y-32 opacity-0'"
+    >
       <!-- Close button -->
       <button
-        class="absolute -top-12 -right-4 w-12 h-12 bg-zinc-800/70 hover:bg-zinc-900/90 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg hover:scale-110 transition-all duration-200 z-10"
+        class="absolute -top-12 -right-4 w-10 h-10 bg-black/60 hover:bg-black/90 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg hover:scale-110 transition-all duration-200 z-10"
         @click="isVisible = false"
         aria-label="Close modal"
       >
@@ -61,14 +72,10 @@ const imageSrcset = computed(() => {
         :src="imageSrc" 
         :srcset="imageSrcset"
         sizes="(max-width: 768px) 90vw, 700px"
-        class="w-full h-auto rounded-lg shadow-2xl transition-transform duration-500 ease-out"
-        :class="isLoaded ? 'scale-100' : 'scale-95'"
+        class="w-full h-auto rounded-2xl shadow-2xl border border-white/10"
         alt="Admission flash banner"
         @load="isLoaded = true"
       />
     </div>
   </div>
 </template>
-
-
-    
