@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AppHeaderLayout from './app/AppHeaderLayout.vue';
 import type { BreadcrumbItemType } from '@/types';
+import AppHeaderLayout from './app/AppHeaderLayout.vue';
 
 interface Props {
     breadcrumbs?: BreadcrumbItemType[];

@@ -1,50 +1,50 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
-import { Head } from '@inertiajs/vue3';
-import Hero from '@/components/Home/Hero.vue';
-import AboutAndNotification from '@/components/Home/AboutAndNotification.vue';
-import MessageCard from '@/components/Home/MessageCard.vue';
-import NewsAndEvents from '@/components/Home/NewsAndEvents.vue';
-import Stats from '@/components/Home/Stats.vue';
-import Activities from '@/components/Home/Activities.vue';
-import { Post, Profile, Notification } from '@/types';
-import OurSchoolFamily from '@/components/Home/OurSchoolFamily.vue';
 import FlashUpdates from '@/components/FlashUpdates.vue';
-
+import AboutAndNotification from '@/components/Home/AboutAndNotification.vue';
+import Activities from '@/components/Home/Activities.vue';
+import Hero from '@/components/Home/Hero.vue';
+import MessageCard from '@/components/Home/MessageCard.vue';
+import NotificationMarquee from '@/components/Home/NotificationMarquee.vue';
+import NewsAndEvents from '@/components/Home/NewsAndEvents.vue';
+import OurSchoolFamily from '@/components/Home/OurSchoolFamily.vue';
+import Stats from '@/components/Home/Stats.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { Notification, Post, Profile } from '@/types';
+import { Head } from '@inertiajs/vue3';
 
 /**
  * Props definition
  * The component expects an array of registrations.
  */
 interface Props {
-  notifications: Notification[]
-  profiles: Profile[]
-  posts: Post[]
-  flash_update?: {
-    enabled: boolean;
-    image: string;
-    image_mobile?: string;
-  }
+    notifications: Notification[];
+    profiles: Profile[];
+    posts: Post[];
+    flash_update?: {
+        enabled: boolean;
+        image: string;
+        image_mobile?: string;
+    };
 }
-const props = defineProps<Props>() // Make props reactive and type-safe.
-
+const props = defineProps<Props>(); // Make props reactive and type-safe.
 </script>
 
 <template>
     <Head title="Home">
         <link rel="preconnect" href="https://rsms.me/" />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-        <meta property="og:title" content="Assam Rifles Public School, Jorhat | Jorhat ">
-        <meta property="og:description" content="Assam Rifles Public School, Jorhat, Jorhat. KNOWLEDGE IS WORSHIP">
+        <meta property="og:title" content="Assam Rifles Public School, Jorhat | Jorhat " />
+        <meta property="og:description" content="Assam Rifles Public School, Jorhat, Jorhat. KNOWLEDGE IS WORSHIP" />
     </Head>
-    <AppLayout class="overflow-hidden">
+    <AppLayout class="">
         <FlashUpdates :flash-update="props.flash_update" />
         <Hero />
-        <AboutAndNotification :notifications="props.notifications"/>
-        <MessageCard :profiles="props.profiles"/>
-        <NewsAndEvents :posts="props.posts"/>
-        <Stats/>
-        <Activities/>
-        <OurSchoolFamily/>
+        <NotificationMarquee :notifications="props.notifications" />
+        <AboutAndNotification :notifications="props.notifications" />
+        <MessageCard :profiles="props.profiles" />
+        <NewsAndEvents :posts="props.posts" />
+        <Stats />
+        <Activities />
+        <OurSchoolFamily />
     </AppLayout>
 </template>

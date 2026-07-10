@@ -1,0 +1,28 @@
+# Assam Rifles Public School, Jorhat (ARPS Jorhat)
+
+> Official portal for ARPS Jorhat, providing academic, administrative, and admission information.
+
+## Primary Links
+
+- [Academic Calendar](/academic-calendar): Schedule of academic activities, exams, holidays, and school events for the academic year 2025-26.
+- [Holiday List](/holiday-list): Official vacation schedule and list of holidays for the year.
+- [Admission Procedure](/admission-procedure): Process, requirements, guidelines, and fees structure for new student admissions.
+- [Fees Structure](/fees-structure): Stream-wise and class-wise fee schedules.
+- [Online Registration](/online-registration): Portal for online admission registration and candidate applications.
+- [Transfer Certificate](/transfer-certificate): Guidelines and application requests for student school leaving/transfer certificates.
+
+## Departments & Infrastructure
+
+- [Faculty](/faculty): Directory of teaching faculty across different departments (Humanities, Science, Commerce).
+- [Staff](/staff): Non-teaching staff directory including administrative, library, accounting, and auxiliary teams.
+- [Laboratory](/laboratory/computer): Science and technology labs including Physics, Chemistry, Biology, and Computer Labs.
+- [Classrooms](/classrooms): Visuals and details of smart-enabled digital classrooms.
+- [NCC](/ncc): Details of the school's affiliation with the 9 Assam Battalion National Cadet Corps.
+- [Academic Achievements](/academic-achievements): Board toppers, ceremony highlights, and felicitations by honorable dignitaries.
+
+## Houses
+
+- [Gandhi House](/gandhi-house)
+- [Nehru House](/nehru-house)
+- [Subhash House](/subhash-house)
+- [Tagore House](/tagore-house)

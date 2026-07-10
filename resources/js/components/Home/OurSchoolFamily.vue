@@ -60,24 +60,25 @@ const members = {
             </div>
 
             <div v-for="(member, index) in members" :key="index">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-5 bg-white/50 my-10" v-if="activeTab.key === index">
-                    <div class="col-span-1 overflow-hidden w-full h-90" data-aos="fade-right" data-aos-duration="500"
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white/70 backdrop-blur-md border border-slate-200/60 my-10 rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition duration-500" v-if="activeTab.key === index">
+                    <div class="col-span-1 p-6 lg:p-8 overflow-hidden w-full h-[400px]" data-aos="fade-right" data-aos-duration="500"
                         data-aos-easing="ease-in-out">
                         <img :src="`/storage/uploads/${member.img}`" :alt="member.name"
-                            class="h-full w-full object-cover">
+                            class="h-full w-full object-cover rounded-2xl shadow-md transition-transform duration-500 hover:scale-102">
                     </div>
-                    <div class="col-span-1 flex flex-col justify-center gap-5 p-6" data-aos="fade-left"
+                    <div class="col-span-1 flex flex-col justify-center gap-5 p-8 lg:p-12" data-aos="fade-left"
                         data-aos-duration="500" data-aos-easing="ease-in-out">
-                        <h3>{{ activeTab.name }}</h3>
-                        <p class="text-gray-500">
+                        <span class="text-blue-600 text-xs font-bold uppercase tracking-widest bg-blue-100 px-3 py-1 rounded-full border border-blue-200 w-fit">School Community</span>
+                        <h3 class="text-3xl font-extrabold text-slate-800 tracking-tight">{{ activeTab.name }}</h3>
+                        <p class="text-slate-600 leading-relaxed font-medium">
                             {{ member.message }}
                         </p>
-                        <Link :href="activeTab.link" class="w-fit">
-                        <button class="learn-more">
-                            <span class="circle" aria-hidden="true">
+                        <Link :href="activeTab.link" class="w-fit mt-4">
+                        <button class="flex gap-4 learn-more space-x-4">
+                            <span class="circle me-4" aria-hidden="true">
                                 <span class="icon arrow"></span>
                             </span>
-                            <span class="button-text">Learn More</span>
+                            <span class="button-text">Explore Directory</span>
                         </button>
                         </Link>
                     </div>

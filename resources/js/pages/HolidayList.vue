@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
+import PageHeadIndi from '@/components/PageHeadIndi.vue';
 </script>
 
 <template>
     <AppLayout>
+        <PageHeadIndi heading="Holiday List" />
 
         <div class="p-8 lg:p-16 w-full" data-ast-blocks-layout="true" itemprop="text">
-
-            <h1 class="mb-16">Holiday List</h1>
 
             <div class="entry-content clear w-full" data-ast-blocks-layout="true" itemprop="text">
 
@@ -140,21 +140,38 @@ import AppLayout from '@/layouts/AppLayout.vue';
     </AppLayout>
 </template>
 
-<style>
+<style scoped>
+table {
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 2rem;
+}
+
 td,
 th {
-    padding: .5rem 1rem;
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.9rem;
 }
 
 tr:nth-child(even) {
-    background-color: #f0f0f0;
-    /* Light gray */
+    background-color: #f8fafc;
+}
+
+tr:hover {
+    background-color: #f1f5f9;
+    transition: background-color 0.2s ease;
 }
 
 .row-1 {
-    background-color: rgb(67, 180, 225);
-    color: white;
-    font-weight: bold;
+    background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
+    color: white !important;
+    font-weight: 750;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.95rem;
 }
-
 </style>

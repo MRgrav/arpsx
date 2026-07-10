@@ -60,20 +60,20 @@
     --animate-accordion-up: accordion-up 0.2s ease-out;
 
     --primary-color: red;
-  @keyframes accordion-down {
-  from {
-    height: 0;
+    @keyframes accordion-down {
+        from {
+            height: 0;
         }
-  to {
-    height: var(--reka-accordion-content-height);
+        to {
+            height: var(--reka-accordion-content-height);
         }
     }
-  @keyframes accordion-up {
-  from {
-    height: var(--reka-accordion-content-height);
+    @keyframes accordion-up {
+        from {
+            height: var(--reka-accordion-content-height);
         }
-  to {
-    height: 0;
+        to {
+            height: 0;
         }
     }
 }
@@ -99,8 +99,7 @@
 @layer utilities {
     body,
     html {
-        --font-sans:
-            'Roboto', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     }
 }
 
@@ -180,7 +179,6 @@
 }
 
 @layer base {
-
     * {
         @apply border-border outline-ring/50;
     }
@@ -192,37 +190,38 @@
     html {
         font-family: 'Roboto', sans-serif;
         font-size: 16px;
+        scroll-behavior: smooth;
     }
 
     @media (max-width: 768px) {
         html {
-        font-size: 14px;
+            font-size: 14px;
         }
     }
 
     /* Heading defaults */
     h1 {
-        @apply text-[2.986rem] leading-[1.1] font-bold tracking-[-0.022em] font-[Poppins,sans-serif];
+        @apply font-[Poppins,sans-serif] text-[2.986rem] leading-[1.1] font-bold tracking-[-0.022em];
     }
 
     h2 {
-        @apply text-[2.488rem] leading-[1.15] font-bold tracking-[-0.022em] font-[Poppins,sans-serif];
+        @apply font-[Poppins,sans-serif] text-[2.488rem] leading-[1.15] font-bold tracking-[-0.022em];
     }
 
     h3 {
-        @apply text-[2.074rem] leading-[1.2] font-semibold tracking-[-0.022em] font-[Poppins,sans-serif];
+        @apply font-[Poppins,sans-serif] text-[2.074rem] leading-[1.2] font-semibold tracking-[-0.022em];
     }
 
     h4 {
-        @apply text-[1.728rem] leading-[1.25] font-semibold tracking-[-0.022em] font-[Poppins,sans-serif];
+        @apply font-[Poppins,sans-serif] text-[1.728rem] leading-[1.25] font-semibold tracking-[-0.022em];
     }
 
     h5 {
-        @apply text-[1.44rem] leading-[1.35] font-medium tracking-[-0.022em] font-[Poppins,sans-serif];
+        @apply font-[Poppins,sans-serif] text-[1.44rem] leading-[1.35] font-medium tracking-[-0.022em];
     }
 
     h6 {
-        @apply text-[1.2rem] leading-[1.5] font-normal tracking-[-0.022em] font-[Poppins,sans-serif];
+        @apply font-[Poppins,sans-serif] text-[1.2rem] leading-[1.5] font-normal tracking-[-0.022em];
     }
 
     p {

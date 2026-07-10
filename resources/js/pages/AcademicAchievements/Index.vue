@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
+import PageHeadIndi from '@/components/PageHeadIndi.vue';
 import abhigya from '@/pages/AcademicAchievements/abhigya.avif';
 import img1 from '@/pages/AcademicAchievements/img1.avif';
 import img2 from '@/pages/AcademicAchievements/img2.avif';
@@ -25,9 +26,9 @@ const images = [
 
 <template>
     <AppLayout>
+        <PageHeadIndi heading="Academic Achievements" />
         <div class="p-8">
             <div class="max-w-7xl mx-auto">
-                <h1 class="font-bold mb-4">Academic Achievements</h1>
                 <p class=" mx-auto text-gray-500 leading-relaxed">
                     Celebrating Academic Excellence at ARPS Jorhat
 

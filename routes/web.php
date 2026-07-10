@@ -196,7 +196,12 @@ Route::get('/age-limits', function () {
  */
 
 Route::prefix('/laboratory')->group(function () {
-    Route::get('/computer', function () {
+    Route::get('{slug}', function ($slug) {
+        return Inertia::render('Laboratory/Index', [
+            'slug' => $slug,
+        ]);
+    });
+    /** Route::get('/computer', function () {
         return Inertia::render('Laboratory/Computer/Index');
     });
     Route::get('/physics', function () {
@@ -207,7 +212,7 @@ Route::prefix('/laboratory')->group(function () {
     });
     Route::get('/biology', function () {
         return Inertia::render('Laboratory/Biology/Index');
-    });
+    });  */
 });
 
 Route::get('/classrooms', function () {
@@ -280,7 +285,7 @@ Route::get('/academic-achievements', function () {
 });
 
 
-/** 
+/**
  * Notifications page
  */
 Route::get('/notifications', function () {
@@ -299,7 +304,7 @@ Route::get('/notifications/{notification}', function (Notification $notification
 })->name('notifications.show');
 
 
-/** 
+/**
  * More Public Pages Not Under Navlinks
  */
 

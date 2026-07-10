@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
+import PageHeadIndi from '@/components/PageHeadIndi.vue';
 import { type Notification } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { Bell, Calendar, ArrowLeft, Paperclip, FileText, Download } from 'lucide-vue-next';
 
 const props = defineProps<{ notification: Notification }>();
 
@@ -22,12 +24,6 @@ const closeLightbox = () => {
 };
 
 /**
- * Returns true if the URL points to a PDF.
- */
-const isPdf = (url: string): boolean =>
-  url.toLowerCase().split('?')[0].endsWith('.pdf');
-
-/**
  * Resolve a link to a usable URL.
  */
 const resolveUrl = (link: string): string => {
@@ -43,75 +39,80 @@ const resolveUrl = (link: string): string => {
 <template>
   <AppLayout>
     <Head :title="`Notification - ${props.notification.title}`" />
-    <div class="p-8 lg:p-16">
-      <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-        {{ props.notification.title }}
-      </h1>
-      <p class="text-gray-700 dark:text-gray-300 mb-6">
-        {{ props.notification.message || 'No message provided.' }}
-      </p>
-      <!-- Attachments / Links -->
-      <div v-if="props.notification.links && props.notification.links.length" class="space-y-3">
-        <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-          Attachments
-        </h2>
+    <PageHeadIndi heading="Notification Details" />
+    
+    <div class="max-w-4xl mx-auto py-12 px-6">
+      <div class="bg-white/70 backdrop-blur-md rounded-2xl border border-blue-100 p-8 shadow-sm relative overflow-hidden">
+        <!-- Accent Colored Bar -->
+        <div class="absolute left-0 top-0 bottom-0 w-[4px] bg-gradient-to-b from-blue-500 to-indigo-600"></div>
 
-        <div class="flex flex-wrap gap-4">
-          <template v-for="(link, index) in props.notification.links" :key="index">
-
-            <!-- PDF -->
-            <!-- <template v-if="isPdf(link)"> -->
-              <div class="flex flex-col gap-1">
-                <button
-                  type="button"
-                  @click="openLightbox(resolveUrl(link.url), link.type)"
-                  class="flex capitalize items-center gap-2 px-3 py-2 rounded-lg border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 transition text-sm font-medium"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="9" y1="13" x2="15" y2="13"/>
-                    <line x1="9" y1="17" x2="15" y2="17"/>
-                  </svg>
-                  View {{ link.type }}
-                </button>
-                <a :href="resolveUrl(link.url)" target="_blank" class="text-[10px] text-gray-500 hover:underline px-1">
-                    Download / Open in new tab
-                </a>
-              </div>
-            <!-- </template> -->
-
-            <!-- Image -->
-            <!-- <template v-else>
-              <img
-                :src="resolveUrl(link)"
-                :alt="`Attachment ${index + 1}`"
-                class="h-28 w-auto rounded-lg border border-gray-200 shadow-sm cursor-pointer hover:opacity-80 transition object-cover"
-                @click="openLightbox(resolveUrl(link), 'image')"
-              />
-            </template> -->
-
-          </template>
+        <!-- Date & Badge header -->
+        <div class="flex items-center justify-between border-b border-blue-100/60 pb-4 mb-6">
+          <div class="flex items-center gap-2 text-xs text-blue-600 font-semibold bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100">
+            <Calendar class="size-3.5" />
+            <span>
+              {{
+                new Date(props.notification.created_at).toLocaleString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })
+              }}
+            </span>
+          </div>
+          
+          <span class="inline-flex items-center gap-1.5 text-xs text-indigo-700 font-bold bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
+            <Bell class="size-3.5" />
+            Official Notice
+          </span>
         </div>
-      </div>
-      
-      <p class="text-sm text-gray-500">
-        Posted on:
-        {{
-          new Date(props.notification.created_at).toLocaleString('en-CA', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-          })
-        }}
-      </p>
 
-      <div class="mt-6">
-        <Link href="/notifications">
-          <Button>← Back to notifications</Button>
-        </Link>
+        <!-- Title -->
+        <h1 class="text-2xl md:text-3xl font-extrabold text-blue-900 mb-6 leading-tight">
+          {{ props.notification.title }}
+        </h1>
+
+        <!-- Content Message -->
+        <div class="text-gray-700 leading-relaxed font-serif text-justify mb-8 whitespace-pre-line">
+          {{ props.notification.message || 'No message content provided.' }}
+        </div>
+
+        <!-- Attachments / Links Section -->
+        <div v-if="props.notification.links && props.notification.links.length" class="border-t border-blue-100/60 pt-6 mt-6 space-y-4">
+          <h3 class="text-xs font-bold text-blue-900 uppercase tracking-widest flex items-center gap-2">
+            <Paperclip class="size-4 text-blue-600" />
+            Attachments & Downloads
+          </h3>
+
+          <div class="flex flex-wrap gap-4">
+            <div v-for="(link, index) in props.notification.links" :key="index" class="flex flex-col gap-1.5 bg-blue-50/50 border border-blue-100/50 p-3 rounded-xl min-w-[200px]">
+              <button
+                type="button"
+                @click="openLightbox(resolveUrl(link.url), link.type)"
+                class="flex capitalize items-center gap-2 px-4 py-2 rounded-lg border border-blue-200 bg-white text-blue-700 hover:bg-blue-50 transition text-sm font-semibold shadow-xs"
+              >
+                <FileText class="size-4 shrink-0 text-blue-500" />
+                View Attachment
+              </button>
+              
+              <a :href="resolveUrl(link.url)" target="_blank" download class="text-[11px] text-blue-600 hover:underline px-1 font-medium text-center">
+                Download Direct
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Back Navigation Button -->
+        <div class="border-t border-blue-100/60 pt-6 mt-8">
+          <Link href="/notifications">
+            <Button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold flex items-center gap-2 px-5 py-2.5 rounded-xl transition active:scale-95 shadow-sm">
+              <ArrowLeft class="size-4" />
+              Back to Notifications
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
 
@@ -138,9 +139,9 @@ const resolveUrl = (link: string): string => {
 
           <template v-else-if="lightboxType === 'pdf'">
             <iframe
-                :src="lightboxSrc"
-                class="w-full h-full rounded-lg bg-white shadow-2xl"
-                frameborder="0"
+              :src="lightboxSrc"
+              class="w-full h-full rounded-lg bg-white shadow-2xl"
+              frameborder="0"
             ></iframe>
           </template>
         </div>
