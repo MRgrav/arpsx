@@ -23,7 +23,7 @@ class ImageConverter
         }
 
         // Avoid converting already optimized formats (webp, gif, svg)
-        if (in_array($extension, ['webp', 'gif', 'svg'])) {
+        if (in_array($extension, ['webp', 'gif', 'svg', 'avif'])) {
             return $file;
         }
 

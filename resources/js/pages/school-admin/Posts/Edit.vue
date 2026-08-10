@@ -20,8 +20,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 const form = useForm({
   title: props.post.title,
   content: props.post.content || '',
-  image: null, // new banner file
-  images: props.post.images ? [...props.post.images] : [null], // keep existing order
+  image: null as File | null, // new banner file
+  images: (props.post.images ? [...props.post.images] : [null]) as (string | File | null)[], // keep existing order
+  video: props.post.video || '',
+  videos: (props.post.videos || []) as string[],
 });
 
 // Add new input slot at bottom
@@ -39,7 +41,7 @@ const removeImage = (index: number) => {
 };
 
 function loadImg(img: any) {
-  if (!img) return null;
+  if (!img) return undefined;
   if (typeof img === 'string') return getImageUrl(img); // existing
   return URL.createObjectURL(img); // new uploaded preview
 }
@@ -79,6 +81,13 @@ const submit = () => {
           <label class="block font-medium">Title</label>
           <Input v-model="form.title" type="text" class="w-full rounded border px-3 py-2" />
           <div v-if="form.errors.title" class="text-sm text-red-500">{{ form.errors.title }}</div>
+        </div>
+
+        <!-- Video URL -->
+        <div>
+          <label class="block font-medium">Video URL (YouTube/Vimeo)</label>
+          <Input v-model="form.video" type="url" placeholder="https://www.youtube.com/watch?v=..." class="w-full rounded border px-3 py-2" />
+          <div v-if="form.errors.video" class="text-sm text-red-500">{{ form.errors.video }}</div>
         </div>
 
         <!-- Dynamic Image Inputs -->

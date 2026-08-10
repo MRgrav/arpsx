@@ -139,16 +139,17 @@ const AddressItems: NavItem[] = [
 
         <!-- <div class="bg-[#021526] p-8"> -->
         <div class="bg-[#3d5cd8] p-8">
-        <div
-                class="footer-bottom grid grid-cols-1 md:grid-cols-2 text-white small gap-y-8 max-w-7xl mx-auto">
-                <div class="flex flex-col items-center text-center md:items-start">
+        <div class="footer-bottom flex flex-col lg:flex-row-reverse gap-4 justify-end text-white small max-w-5xl">
+                <div class="flex flex-col items-center text-center lg:items-start">
                     <span class="text-gray-300">©2025 ARPS, Jorhat, All Rights Reserved.</span>
                     <a href="https://www.deolang.com" target="_blank" class="text-sky-100 hover:text-white font-semibold">Powered by
                         DeoLang</a>
                 </div>
-                <div class="flex flex-col items-center md:items-end">
-                    <!-- <span class="text-right text-gray-500">Today's visitors: 17</span> -->
-                    <!-- <span class="text-right text-gray-500">Total visitors : 1,188</span> -->
+                <div class="h-10 w-[2px] bg-white/40 rounded hidden lg:block" />
+                <div class="flex flex-col items-center md:items-end mt-4 md:mt-0">
+                    <!-- <span class="text-right text-sky-200 text-xs mb-1">Total Visitors</span> -->
+                    <a href="https://visitorbadge.io/status?path=arpsjorhat.in%2F"><img src="https://api.visitorbadge.io/api/combined?path=arpsjorhat.in%2F&label=Visitors&labelColor=%23d9e3f0&countColor=%23f47373&style=flat&labelStyle=none" /></a>
+                    <!-- <img src="https://api.visitorbadge.io/api/visitors?path=arpsjorhat.in&labelColor=%231e293b&countColor=%232563eb&style=flat&labelStyle=none" alt="Visitor Badge" class="opacity-90 hover:opacity-100 transition-opacity" /> -->
                 </div>
             </div>
         </div>

@@ -46,6 +46,9 @@ class PostController extends Controller
             'images' => 'nullable|array',
             'images.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,webp,avif|max:2048',
             'content' => 'nullable|string',
+            'video' => 'nullable|url',
+            'videos' => 'nullable|array',
+            'videos.*' => 'nullable|url',
         ]);
 
         // if ($request->hasFile('image')) {
@@ -119,25 +122,25 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        $validated = $request->validate([
+        $rules = [
             'title' => 'required|string',
-            'image' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'images' => 'nullable|array',
             'images.*' => 'nullable',
             'content' => 'nullable|string',
-        ]);
+            'video' => 'nullable|url',
+            'videos' => 'nullable|array',
+            'videos.*' => 'nullable|url',
+        ];
+
+        if ($request->hasFile('image')) {
+            $rules['image'] = 'nullable|file|mimes:jpg,jpeg,png,pdf,webp,avif|max:2048';
+        }
+
+        $validated = $request->validate($rules);
 
         /**
          * Update main thumbnail image
          */
-        // if ($request->hasFile('image')) {
-        //     $extension = $request->file('image')->getClientOriginalExtension();
-        //     $filename = Str::uuid() . '.' . $extension;
-        //     $request->file('image')->storeAs('uploads', $filename, 'public');
-        //     $validated['image'] = $filename;
-        // } else {
-        //     unset($validated['image']);
-        // }
 
         if ($request->hasFile('image')) {
             $oldImage = $post->image;

@@ -6,12 +6,20 @@ use App\Models\Department;
 use App\Models\Profile;
 use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use App\Services\StorageServiceInterface;
+use App\Services\ImageConverter;
 
 class ProfileController extends Controller
 {
+    protected StorageServiceInterface $storageService;
+
+    public function __construct(StorageServiceInterface $storageService)
+    {
+        $this->storageService = $storageService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -40,8 +48,8 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required',
-            'image' => "nullable|file|mimes:pdf,jpg,jpeg,png|max:2048",
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp,avif|max:2048',
             'role_id' => 'nullable|exists:roles,id',
             'position' => 'nullable|string',
             'department_id' => 'nullable|exists:departments,id',
@@ -57,14 +65,9 @@ class ProfileController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            // Generate UUID and keep original extension
-            $extension = $request->file('image')->getClientOriginalExtension();
-            $filename = Str::uuid()->toString() . '.' . $extension;
-
-            // Store in public/uploads
-            $request->file('image')->storeAs('uploads', $filename, 'public');
-
-            $data['image'] = $filename;
+            $convertedImage = ImageConverter::convertToWebPWithSize($request->file('image'), 450);
+            $upload = $this->storageService->upload($convertedImage, 'profiles');
+            $data['image'] = $upload['url'];
         }
 
         Profile::create($data);
@@ -106,16 +109,21 @@ class ProfileController extends Controller
     {
         $profile = Profile::findOrFail($id);
 
-        $validated = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'role_id' => 'required|exists:roles,id',
             'position' => 'nullable|string|max:255',
             'department_id' => 'nullable|exists:departments,id',
             'detail' => 'nullable|string',
             'message' => 'nullable|string',
-            'image' => "nullable|file|mimes:pdf,jpg,jpeg,png|max:2048",
             'is_hod' => 'nullable|boolean',
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $rules['image'] = 'nullable|file|mimes:pdf,jpg,jpeg,png,webp,avif|max:2048';
+        }
+
+        $validated = $request->validate($rules);
 
         $validated['is_hod'] = $request->boolean('is_hod');
 
@@ -123,24 +131,20 @@ class ProfileController extends Controller
             Profile::where('department_id', $validated['department_id'])->update(['is_hod' => false]);
         }
 
-        // Only update if a new image is uploaded
         if ($request->hasFile('image')) {
-            // Generate UUID and keep original extension
-            $extension = $request->file('image')->getClientOriginalExtension();
-            $filename = Str::uuid()->toString() . '.' . $extension;
-
-            // Store in public/uploads
-            $request->file('image')->storeAs('uploads', $filename, 'public');
-
-            $validated['image'] = $filename;
-        }else {
-            unset($validated['image']); // remove from update array
+            $oldImage = $profile->image;
+            $convertedImage = ImageConverter::convertToWebPWithSize($request->file('image'), 450);
+            $upload = $this->storageService->upload($convertedImage, 'profiles');
+            $validated['image'] = $upload['url'];
+            
+            if (!empty($oldImage)) {
+                $this->storageService->deleteByUrl($oldImage);
+            }
         }
 
         $profile->update($validated);
 
         return redirect('/school-admin/profiles')->with('success', 'Profile updated successfully.');
-
     }
 
     /**
@@ -149,6 +153,11 @@ class ProfileController extends Controller
     public function destroy(String $id)
     {
         $profile = Profile::findOrFail($id);
+        
+        if (!empty($profile->image)) {
+            $this->storageService->deleteByUrl($profile->image);
+        }
+        
         $profile->delete();
         return redirect()->route('school-admin.profiles.index')->with('success', 'Profile deleted.');
     }

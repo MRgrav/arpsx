@@ -47,9 +47,9 @@ class AppwriteStorageService implements StorageServiceInterface
     //         'url' => $this->getRawUrl($bucketId, $result['$id'])
     //     ];
     // }
-    public function upload(UploadedFile $file, string $bucketId = null): array
+    public function upload(UploadedFile $file, string $target = null): array
     {
-        $bucketId = $bucketId ?? config('services.appwrite.bucket_id');
+        $bucketId = config('services.appwrite.bucket_id');
 
         // The correct PHP SDK helper for files from a path
         $inputFile = InputFile::withPath(
@@ -60,7 +60,7 @@ class AppwriteStorageService implements StorageServiceInterface
 
         $result = $this->storage->createFile(
             $bucketId,
-            \Appwrite\ID::unique(),
+            ID::unique(),
             $inputFile
         );
 

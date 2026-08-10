@@ -24,11 +24,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(StorageServiceInterface::class, function ($app) {
-            $driver = env('FILESYSTEM_DRIVER', 'appwrite');
-            if ($driver === 'pocketbase') {
-                return $app->make(PocketBaseStorageService::class);
-            }
-            return $app->make(AppwriteStorageService::class);
+            return $app->make(\App\Services\ParallelStorageService::class);
         });
     }
 

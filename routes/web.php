@@ -11,6 +11,7 @@ use App\Http\Controllers\OnlineRegistrationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SiteModuleController;
 use App\Http\Controllers\SettingController;
 use App\Models\Notification;
 use App\Models\Post;
@@ -59,9 +60,9 @@ Route::get('/', function () {
         'profiles' => $profiles,
         'posts' => $posts,
         'flash_update' => [
-            'enabled' => \App\Models\Setting::get('flash_update_enabled', '1') === '1',
-            'image' => \App\Models\Setting::get('flash_update_image', ''),
-            'image_mobile' => \App\Models\Setting::get('flash_update_image_mobile', ''),
+            'enabled' => Setting::get('flash_update_enabled', '1') === '1',
+            'image' => Setting::get('flash_update_image', ''),
+            'image_mobile' => Setting::get('flash_update_image_mobile', ''),
         ]
     ]);
 })->name('home');
@@ -307,6 +308,13 @@ Route::get('/notifications/{notification}', function (Notification $notification
 /**
  * More Public Pages Not Under Navlinks
  */
+ 
+// Public API Endpoint for Site Modules
+Route::get('/api/modules/{name}', function ($name) {
+    $module = \App\Models\SiteModule::where('name', $name)->first();
+    if (!$module) return response()->json(['files' => []]);
+    return response()->json(['files' => $module->files]);
+});
 
 // Faculty page
 Route::get('/faculty', function () {
@@ -578,6 +586,19 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
             ->name('school-admin.settings.update');
         Route::post('/settings/toggle', [SettingController::class, 'toggle'])
             ->name('school-admin.settings.toggle');
+            
+        // Site Modules Admin page
+        Route::get('/site-modules', [SiteModuleController::class, 'index'])
+            ->name('school-admin.site-modules.index');
+            
+        Route::post('/site-modules', [SiteModuleController::class, 'store'])
+            ->name('school-admin.site-modules.store');
+            
+        Route::post('/site-modules/{siteModule}', [SiteModuleController::class, 'update'])
+            ->name('school-admin.site-modules.update');
+            
+        Route::delete('/site-modules/{siteModule}', [SiteModuleController::class, 'destroy'])
+            ->name('school-admin.site-modules.delete');
     });
 });
 

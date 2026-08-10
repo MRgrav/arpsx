@@ -19,18 +19,20 @@ class PocketBaseStorageService implements StorageServiceInterface
     /**
      * Upload a file to PocketBase and return file info with URL.
      */
-    public function upload(UploadedFile $file, string $collectionName = null): array
+    public function upload(UploadedFile $file, string $target = null): array
     {
-        $collection = $collectionName ?: $this->defaultCollection;
+        $collection = $this->defaultCollection;
         $endpoint = "{$this->url}/api/collections/{$collection}/records";
 
         // PocketBase expects a multipart POST request with the file field
         $response = Http::attach(
-            'file',
+            'field',
             file_get_contents($file->getRealPath()),
             $file->getClientOriginalName(),
             ['Content-Type' => $file->getClientMimeType()]
-        )->post($endpoint);
+        )->post($endpoint, [
+            'media_for' => $target ?: 'unknown'
+        ]);
 
         if ($response->failed()) {
             throw new \Exception("PocketBase upload failed: " . $response->body());
@@ -40,7 +42,7 @@ class PocketBaseStorageService implements StorageServiceInterface
         $recordId = $data['id'];
         
         // PocketBase returns the actual stored filename inside the file field
-        $fileName = $data['file'] ?? '';
+        $fileName = $data['field'] ?? '';
 
         // pocketbase file URL format: http://127.0.0.1:8090/api/files/{collectionId_or_name}/{recordId}/{fileName}
         $fileUrl = "{$this->url}/api/files/{$collection}/{$recordId}/{$fileName}";

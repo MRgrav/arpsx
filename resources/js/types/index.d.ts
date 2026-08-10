@@ -104,7 +104,9 @@ export interface Post {
   id: number;
   title: string;
   image: string;
-  images: [];
+  images: string[] | null;
+  video?: string | null;
+  videos?: string[] | null;
   content?: string | null;
   created_at?: string;
   updated_at?: string;

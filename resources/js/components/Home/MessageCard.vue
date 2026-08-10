@@ -31,7 +31,7 @@ const handleImageError = (event: Event) => {
                     class="group w-full max-w-[360px] mx-auto block rounded-3xl overflow-hidden bg-white border border-slate-100 shadow-[0_15px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_35px_60px_rgba(59,130,246,0.12)] hover:-translate-y-2 transition-all duration-500 h-full flex flex-col justify-between">
                 
                     <div class="aspect-[1.05/1] overflow-hidden relative bg-slate-100">
-                        <img v-if="profile.image" :src="`/storage/uploads/${profile.image}`"
+                        <img v-if="profile.image" :src="`${profile.image}`"
                             class="w-full h-full object-cover transition-transform duration-750 group-hover:scale-105" @error="handleImageError" alt="Profile Image" />
                         <img v-else :src="defaultProfileIcon" class="w-full h-full object-cover opacity-80" alt="Profile Image">
                         

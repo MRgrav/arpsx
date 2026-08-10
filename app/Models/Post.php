@@ -11,10 +11,13 @@ class Post extends Model
         'image',
         'images',
         'content',
+        'video',
+        'videos',
     ];
 
     protected $casts = [
         'images' => 'array',
+        'videos' => 'array',
     ];
 
 }

@@ -14,9 +14,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const form = useForm({
   title: '',
-  image: null,
-  images: [], // array of File objects
+  image: null as File | null,
+  images: [] as (File | null)[], // array of File objects
   content: '',
+  video: '',
+  videos: [] as string[],
 });
 
 const addNewInput = () => {
@@ -35,7 +37,7 @@ const removeImage = (index: number) => {
 // generate src url of selected file for preview before uploading
 function loadImg(img: any) {
   if (!img) {
-    return null
+    return undefined
   }
   return URL.createObjectURL(img);
 }
@@ -62,6 +64,15 @@ const submit = () => {
           <Input v-model="form.title" type="text" class="w-full rounded border px-3 py-2" required />
           <div v-if="form.errors.title" class="text-sm text-red-500">
             {{ form.errors.title }}
+          </div>
+        </div>
+
+        <!-- Video URL -->
+        <div>
+          <label class="block font-medium">Video URL (YouTube/Vimeo)</label>
+          <Input v-model="form.video" type="url" placeholder="https://www.youtube.com/watch?v=..." class="w-full rounded border px-3 py-2" />
+          <div v-if="form.errors.video" class="text-sm text-red-500">
+            {{ form.errors.video }}
           </div>
         </div>
 
