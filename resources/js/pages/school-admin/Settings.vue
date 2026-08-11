@@ -10,6 +10,11 @@ import Label from '@/components/ui/label/Label.vue';
 interface SettingsData {
   registration_enabled: boolean;
   hs_registration_enabled: boolean;
+  registration_message: string;
+  hs_registration_message: string;
+  registration_classes: string[];
+  registration_categories: string[];
+  registration_defence_categories: string[];
   flash_update_enabled: boolean;
   flash_update_image: string;
   flash_update_image_mobile: string;
@@ -37,6 +42,18 @@ const form = useForm({
   flash_update_enabled: props.settings.flash_update_enabled,
   flash_update_image_file: null as File | null,
 });
+
+const configForm = useForm({
+  registration_message: props.settings.registration_message || '',
+  hs_registration_message: props.settings.hs_registration_message || '',
+  registration_classes: props.settings.registration_classes || [],
+  registration_categories: props.settings.registration_categories || [],
+  registration_defence_categories: props.settings.registration_defence_categories || [],
+});
+
+const allClasses = ["Nursery", "LKG", "UKG", "CLASS I", "CLASS II", "CLASS III", "CLASS IV", "CLASS V", "CLASS VI", "CLASS VII", "CLASS VIII", "CLASS IX", "CLASS X", "CLASS XI", "CLASS XII"];
+const allCategories = ["GENERAL", "SC", "ST", "OBC-A", "OBC-B"];
+const allDefenceCategories = ["CIVILIAN", "DEFENCE AR", "DEFENCE CRPS", "DEFENCE AFS", "DEFENCE ARMY", "DEFENCE OTHERS", "RETIRED DEFENCE"];
 
 const handleFileSelect = (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -80,6 +97,12 @@ const saveSettings = () => {
     preserveScroll: true,
   });
 };
+
+const saveConfigs = () => {
+  configForm.post(route('school-admin.settings.update'), {
+    preserveScroll: true,
+  });
+};
 </script>
 
 <template>
@@ -109,18 +132,6 @@ const saveSettings = () => {
         <span>{{ flashError }}</span>
       </div>
 
-      <div v-if="Object.keys(form.errors).length > 0" class="p-4 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-sm flex items-start gap-3 shadow-xs">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-        </svg>
-        <div class="space-y-1">
-          <p class="font-semibold">Please correct the following errors:</p>
-          <ul class="list-disc pl-5 space-y-0.5">
-            <li v-for="(error, key) in form.errors" :key="key">{{ error }}</li>
-          </ul>
-        </div>
-      </div>
-
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         
         <!-- Registration Control Card -->
@@ -137,7 +148,7 @@ const saveSettings = () => {
             <div class="flex items-center justify-between pb-4 border-b border-gray-50 dark:border-gray-900">
               <div class="space-y-0.5">
                 <Label class="text-sm font-semibold text-gray-800 dark:text-gray-200">Online Registration</Label>
-                <p class="text-xs text-gray-400 dark:text-gray-500">Enable standard application form</p>
+                <p class="text-xs text-gray-400 dark:text-gray-500">Enable standard form</p>
               </div>
               <button
                 type="button"
@@ -156,7 +167,7 @@ const saveSettings = () => {
             <div class="flex items-center justify-between">
               <div class="space-y-0.5">
                 <Label class="text-sm font-semibold text-gray-800 dark:text-gray-200">HS Registration</Label>
-                <p class="text-xs text-gray-400 dark:text-gray-500">Enable High School application form</p>
+                <p class="text-xs text-gray-400 dark:text-gray-500">Enable High School form</p>
               </div>
               <button
                 type="button"
@@ -248,6 +259,98 @@ const saveSettings = () => {
           </div>
         </div>
 
+      </div>
+
+      <!-- Registration Form Configurations Card -->
+      <div class="bg-white dark:bg-gray-950 p-6 rounded-2xl border border-gray-100 dark:border-gray-800/80 shadow-sm space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-50 dark:border-gray-900 pb-4">
+          <h2 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+            </svg>
+            Registration Dynamic Configurations
+          </h2>
+        </div>
+
+        <form @submit.prevent="saveConfigs" class="space-y-8">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Notices -->
+            <div class="space-y-2">
+              <Label for="reg_msg">Standard Registration Notice Message</Label>
+              <Input id="reg_msg" v-model="configForm.registration_message" placeholder="e.g. Admission Closed for 2026 session." />
+              <p class="text-xs text-gray-500">Displayed when form is disabled.</p>
+            </div>
+            
+            <div class="space-y-2">
+              <Label for="hs_msg">HS Registration Notice Message</Label>
+              <Input id="hs_msg" v-model="configForm.hs_registration_message" placeholder="e.g. Admission Closed for 2026 session." />
+              <p class="text-xs text-gray-500">Displayed when HS form is disabled.</p>
+            </div>
+          </div>
+
+          <!-- Classes Checkboxes -->
+          <div class="space-y-3">
+            <Label class="text-base font-semibold">Available Classes for Admission</Label>
+            <p class="text-sm text-gray-500">Select which classes will appear in the registration form dropdown.</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100">
+              <div v-for="cls in allClasses" :key="cls" class="flex items-center space-x-2">
+                <input 
+                  type="checkbox" 
+                  :id="cls" 
+                  :value="cls" 
+                  v-model="configForm.registration_classes"
+                  class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                >
+                <label :for="cls" class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ cls }}</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Categories Checkboxes -->
+          <div class="space-y-3">
+            <Label class="text-base font-semibold">Available Social Categories</Label>
+            <div class="flex flex-wrap gap-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100">
+              <div v-for="cat in allCategories" :key="cat" class="flex items-center space-x-2">
+                <input 
+                  type="checkbox" 
+                  :id="cat" 
+                  :value="cat" 
+                  v-model="configForm.registration_categories"
+                  class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                >
+                <label :for="cat" class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ cat }}</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Defence Categories Checkboxes -->
+          <div class="space-y-3">
+            <Label class="text-base font-semibold">Available Parent Categories</Label>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100">
+              <div v-for="def in allDefenceCategories" :key="def" class="flex items-center space-x-2">
+                <input 
+                  type="checkbox" 
+                  :id="def" 
+                  :value="def" 
+                  v-model="configForm.registration_defence_categories"
+                  class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                >
+                <label :for="def" class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ def }}</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-4 border-t border-gray-100 dark:border-gray-900">
+            <Button 
+              type="submit" 
+              class="bg-indigo-600 hover:bg-indigo-700 text-white min-w-[200px]"
+              :disabled="configForm.processing"
+            >
+              {{ configForm.processing ? 'Saving...' : 'Save Configurations' }}
+            </Button>
+          </div>
+        </form>
       </div>
 
     </div>

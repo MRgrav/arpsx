@@ -14,6 +14,12 @@ import {
 } from '../ui/select';
 import Loader from './Loader.vue';
 
+const props = defineProps<{
+    availableClasses?: string[];
+    availableCategories?: string[];
+    availableDefenceCategories?: string[];
+}>();
+
 // Online Registration Form Object
 const form = useForm({
   //student information
@@ -158,14 +164,7 @@ const toggleSameAddress = () => {
   <!-- Show Success messsage after form submit with PDF download link -->
   <FormSuccess :show="success" @close="success = false" :id="submittedId ?? undefined" type="online" />
 
-<div class="w-full h-full py-12">
-<div class="mx-auto space-y-4">
-<h1>Application Closed!</h1>
-<p>The application for the current has been closed.</p>
-</div>
-</div>
-
-  <form @submit.prevent="submitForm" class="hidden space-y-8 p-8">
+  <form @submit.prevent="submitForm" class="space-y-8 p-8 max-w-7xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-md border border-gray-100 dark:border-gray-800">
     <h1 class="font-bold text-gray-800">STUDENT REGISTRATION FORM</h1>
     <p class="text-red-600 font-semibold">Note: At the time of admission, please bring the following:</p>
     <ul class="list-disc list-inside text-red-600">
@@ -265,11 +264,18 @@ const toggleSameAddress = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="GENERAL">GENERAL</SelectItem>
-                <SelectItem value="SC">SC</SelectItem>
-                <SelectItem value="ST">ST</SelectItem>
-                <SelectItem value="OBC-A">OBC-A</SelectItem>
-                <SelectItem value="OBC-B">OBC-B</SelectItem>
+                <template v-if="props.availableCategories && props.availableCategories.length">
+                  <SelectItem v-for="cat in props.availableCategories" :key="cat" :value="cat">
+                    {{ cat }}
+                  </SelectItem>
+                </template>
+                <template v-else>
+                  <SelectItem value="GENERAL">GENERAL</SelectItem>
+                  <SelectItem value="SC">SC</SelectItem>
+                  <SelectItem value="ST">ST</SelectItem>
+                  <SelectItem value="OBC-A">OBC-A</SelectItem>
+                  <SelectItem value="OBC-B">OBC-B</SelectItem>
+                </template>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -367,21 +373,17 @@ const toggleSameAddress = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="Nursery">Nursery</SelectItem>
-                <SelectItem value="LKG">LKG</SelectItem>
-                <!-- <SelectItem value="UKG">UKG</SelectItem> -->
-                <SelectItem value="CLASS I">CLASS I</SelectItem>
-                <!-- <SelectItem value="CLASS II">CLASS II</SelectItem> -->
-                <SelectItem value="CLASS III">CLASS III</SelectItem>
-                <!-- <SelectItem value="CLASS IV">CLASS IV</SelectItem> -->
-                <!-- <SelectItem value="CLASS V">CLASS V</SelectItem> -->
-                <SelectItem value="CLASS VI">CLASS VI</SelectItem>
-                <SelectItem value="CLASS VII">CLASS VII</SelectItem>
-                <SelectItem value="CLASS VIII">CLASS VIII</SelectItem>
-                <SelectItem value="CLASS IX">CLASS IX</SelectItem>
-                <!-- <SelectItem value="CLASS X">CLASS X</SelectItem> -->
-                <!-- <SelectItem value="CLASS XI">CLASS XI</SelectItem> -->
-                <!-- <SelectItem value="CLASS XII">CLASS XII</SelectItem> -->
+                <template v-if="props.availableClasses && props.availableClasses.length">
+                  <SelectItem v-for="cls in props.availableClasses" :key="cls" :value="cls">
+                    {{ cls }}
+                  </SelectItem>
+                </template>
+                <template v-else>
+                  <SelectItem value="Nursery">Nursery</SelectItem>
+                  <SelectItem value="LKG">LKG</SelectItem>
+                  <SelectItem value="CLASS I">CLASS I</SelectItem>
+                  <SelectItem value="CLASS VI">CLASS VI</SelectItem>
+                </template>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -521,14 +523,20 @@ const toggleSameAddress = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="CIVILIAN">Civilian</SelectItem>
-                <!-- <SelectItem value="DEFENCE">Defence</SelectItem> -->
-                <SelectItem value="DEFENCE AR">Defence - AR</SelectItem>
-                <SelectItem value="DEFENCE CRPS">Defence - CRPS</SelectItem>
-                <SelectItem value="DEFENCE AFS">Defence - AFS</SelectItem>
-                <SelectItem value="DEFENCE ARMY">Defence - ARMY</SelectItem>
-                <SelectItem value="DEFENCE OTHERS">Defence - Others</SelectItem>
-                <SelectItem value="RETIRED DEFENCE">Retired Defence</SelectItem>
+                <template v-if="props.availableDefenceCategories && props.availableDefenceCategories.length">
+                  <SelectItem v-for="def in props.availableDefenceCategories" :key="def" :value="def">
+                    {{ def }}
+                  </SelectItem>
+                </template>
+                <template v-else>
+                  <SelectItem value="CIVILIAN">Civilian</SelectItem>
+                  <SelectItem value="DEFENCE AR">Defence - AR</SelectItem>
+                  <SelectItem value="DEFENCE CRPS">Defence - CRPS</SelectItem>
+                  <SelectItem value="DEFENCE AFS">Defence - AFS</SelectItem>
+                  <SelectItem value="DEFENCE ARMY">Defence - ARMY</SelectItem>
+                  <SelectItem value="DEFENCE OTHERS">Defence - Others</SelectItem>
+                  <SelectItem value="RETIRED DEFENCE">Retired Defence</SelectItem>
+                </template>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -711,16 +719,10 @@ const toggleSameAddress = () => {
     </div>
 
     <!-- SUBMIT BUTTON -->
-    <!-- <div class="flex justify-end mt-6">
+    <div class="flex justify-end mt-6">
       <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         :disabled="form.processing">
-        Submit
-      </button>
-    </div> -->
-    <div class="flex justify-end mt-6">
-      <button type="reset" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        :disabled="true">
-        Application Full
+        {{ form.processing ? 'Submitting...' : 'Submit' }}
       </button>
     </div>
   </form>

@@ -5,6 +5,10 @@ import RegistrationForm from '@/components/OnlineRegistration/RegistrationForm.v
 
 defineProps<{
     enabled?: boolean;
+    registrationMessage?: string;
+    availableClasses?: string[];
+    availableCategories?: string[];
+    availableDefenceCategories?: string[];
 }>();
 </script>
 
@@ -21,8 +25,13 @@ defineProps<{
                 </svg>
             </div>
             <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">Registrations Closed</h2>
-            <p class="text-gray-600 dark:text-gray-400">Online registration is currently closed. Please contact the school office for more details.</p>
+            <p class="text-gray-600 dark:text-gray-400">{{ registrationMessage || 'Online registration is currently closed. Please contact the school office for more details.' }}</p>
         </div>
-        <RegistrationForm v-else />
+        <RegistrationForm 
+            v-else 
+            :availableClasses="availableClasses" 
+            :availableCategories="availableCategories" 
+            :availableDefenceCategories="availableDefenceCategories" 
+        />
     </AppLayout>
 </template>

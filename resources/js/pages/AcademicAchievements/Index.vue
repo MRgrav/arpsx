@@ -7,11 +7,22 @@ import img2 from '@/pages/AcademicAchievements/img2.avif';
 import tahmina from '@/pages/AcademicAchievements/tahmina.avif';
 import img3 from '@/pages/AcademicAchievements/img3.avif';
 import img4 from '@/pages/AcademicAchievements/img4.avif';
-import topperPdf from '@/pages/AcademicAchievements/toppers.pdf';
+import { ref, onMounted } from 'vue';
 
-import { VuePDF, usePDF } from '@tato30/vue-pdf'
+const moduleData = ref<any>(null);
+const isLoading = ref(true);
 
-const { pdf } = usePDF(topperPdf);
+onMounted(async () => {
+    try {
+        const response = await fetch('/api/modules/academic_achievements');
+        const data = await response.json();
+        moduleData.value = data;
+    } catch (e) {
+        console.error(e);
+    } finally {
+        isLoading.value = false;
+    }
+});
 
 const images = [
   { src: abhigya, type: 'contain' },
@@ -61,7 +72,27 @@ const images = [
                 </div>
 
 
-                <VuePDF v-for="pageNo in 1" :pdf="pdf" fit-parent :page="pageNo" :key="pageNo" />
+                <div v-if="isLoading" class="text-center py-10 text-gray-500 animate-pulse mt-10">Loading documents...</div>
+                <div v-else-if="moduleData && moduleData.files && moduleData.files.length > 0" class="mt-10 space-y-12">
+                    <div v-for="(file, index) in moduleData.files" :key="index">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4" v-if="moduleData.files.length > 1">{{ file.name }}</h3>
+                        
+                        <!-- PDF -->
+                        <div v-if="file.type === 'pdf'" class="w-full h-[calc(100vh-200px)] rounded-xl overflow-hidden border shadow-sm bg-white">
+                            <iframe :src="file.url" class="w-full h-full border-0"></iframe>
+                        </div>
+                        
+                        <!-- Image -->
+                        <div v-else-if="file.type === 'image'" class="w-full rounded-xl overflow-hidden border shadow-sm bg-white">
+                            <img :src="file.url" class="w-full h-auto object-contain" />
+                        </div>
+                        
+                        <!-- Video -->
+                        <div v-else-if="file.type === 'video'" class="w-full rounded-xl overflow-hidden border shadow-sm bg-black flex justify-center items-center">
+                            <video :src="file.url" controls class="w-full h-auto max-h-[85vh]"></video>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </AppLayout>

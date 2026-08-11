@@ -26,6 +26,11 @@ class SettingController extends Controller
             'settings' => [
                 'registration_enabled' => Setting::get('registration_enabled', '1') === '1',
                 'hs_registration_enabled' => Setting::get('hs_registration_enabled', '1') === '1',
+                'registration_message' => Setting::get('registration_message', ''),
+                'hs_registration_message' => Setting::get('hs_registration_message', ''),
+                'registration_classes' => json_decode(Setting::get('registration_classes', '[]'), true) ?: [],
+                'registration_categories' => json_decode(Setting::get('registration_categories', '[]'), true) ?: [],
+                'registration_defence_categories' => json_decode(Setting::get('registration_defence_categories', '[]'), true) ?: [],
                 'flash_update_enabled' => Setting::get('flash_update_enabled', '1') === '1',
                 'flash_update_image' => Setting::get('flash_update_image', ''),
                 'flash_update_image_mobile' => Setting::get('flash_update_image_mobile', ''),
@@ -41,6 +46,14 @@ class SettingController extends Controller
         $validated = $request->validate([
             'registration_enabled' => 'nullable|boolean',
             'hs_registration_enabled' => 'nullable|boolean',
+            'registration_message' => 'nullable|string',
+            'hs_registration_message' => 'nullable|string',
+            'registration_classes' => 'nullable|array',
+            'registration_classes.*' => 'string',
+            'registration_categories' => 'nullable|array',
+            'registration_categories.*' => 'string',
+            'registration_defence_categories' => 'nullable|array',
+            'registration_defence_categories.*' => 'string',
             'flash_update_enabled' => 'nullable|boolean',
             'flash_update_image_file' => 'nullable|image|max:4096',
         ]);
@@ -51,6 +64,26 @@ class SettingController extends Controller
 
         if (isset($validated['hs_registration_enabled'])) {
             Setting::set('hs_registration_enabled', $validated['hs_registration_enabled'] ? '1' : '0');
+        }
+        
+        if (isset($validated['registration_message'])) {
+            Setting::set('registration_message', $validated['registration_message']);
+        }
+        
+        if (isset($validated['hs_registration_message'])) {
+            Setting::set('hs_registration_message', $validated['hs_registration_message']);
+        }
+        
+        if (isset($validated['registration_classes'])) {
+            Setting::set('registration_classes', json_encode($validated['registration_classes']));
+        }
+        
+        if (isset($validated['registration_categories'])) {
+            Setting::set('registration_categories', json_encode($validated['registration_categories']));
+        }
+        
+        if (isset($validated['registration_defence_categories'])) {
+            Setting::set('registration_defence_categories', json_encode($validated['registration_defence_categories']));
         }
 
         if (isset($validated['flash_update_enabled'])) {

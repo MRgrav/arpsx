@@ -13,8 +13,10 @@ class HSRegistrationController extends Controller
     public function index()
     {
         $enabled = \App\Models\Setting::get('hs_registration_enabled', '1') === '1';
+        $message = \App\Models\Setting::get('hs_registration_message', 'The application has been stopped for the current session!');
         return inertia::render('HSRegistration/index', [
-            'enabled' => $enabled
+            'enabled' => $enabled,
+            'registrationMessage' => $message
         ]);
     }
 

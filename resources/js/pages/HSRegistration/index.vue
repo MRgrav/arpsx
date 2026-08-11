@@ -5,6 +5,7 @@ import HSRegistration from '@/components/OnlineRegistration/HSRegistration.vue';
 
 defineProps<{
     enabled?: boolean;
+    registrationMessage?: string;
 }>();
 </script>
 
@@ -21,7 +22,7 @@ defineProps<{
                 </svg>
             </div>
             <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">HS Registrations Closed</h2>
-            <p class="text-gray-600 dark:text-gray-400">High School online registration is currently closed. Please contact the school office for more details.</p>
+            <p class="text-gray-600 dark:text-gray-400">{{ registrationMessage || 'High School online registration is currently closed. Please contact the school office for more details.' }}</p>
         </div>
         <HSRegistration v-else />
     </AppLayout>

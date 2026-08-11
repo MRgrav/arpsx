@@ -37,8 +37,17 @@ class OnlineRegistrationController extends Controller
     public function create()
     {
         $enabled = \App\Models\Setting::get('registration_enabled', '1') === '1';
+        $message = \App\Models\Setting::get('registration_message', 'The application has been stopped for the current session!');
+        $classes = json_decode(\App\Models\Setting::get('registration_classes', '[]'), true) ?: [];
+        $categories = json_decode(\App\Models\Setting::get('registration_categories', '[]'), true) ?: [];
+        $defenceCategories = json_decode(\App\Models\Setting::get('registration_defence_categories', '[]'), true) ?: [];
+        
         return Inertia::render('OnlineRegistration', [
-            'enabled' => $enabled
+            'enabled' => $enabled,
+            'registrationMessage' => $message,
+            'availableClasses' => $classes,
+            'availableCategories' => $categories,
+            'availableDefenceCategories' => $defenceCategories,
         ]);
     }
 
