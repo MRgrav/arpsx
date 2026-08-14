@@ -7,6 +7,7 @@ import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
 import Label from '@/components/ui/label/Label.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
+import RichTextEditor from '@/components/RichTextEditor.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
   { title: 'Dashboard', href: '/school-admin/dashboard' },
@@ -72,7 +73,7 @@ const submit = () => {
   <Head title="Create Notification" />
 
   <SchoolAdminLayout :breadcrumbs="breadcrumbs">
-    <div class="max-w-4xl mx-auto bg-white dark:bg-gray-900 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+    <div class="container mx-auto bg-white dark:bg-gray-900 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
       <div class="mb-8">
         <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Create Notification</h1>
         <p class="text-gray-500 dark:text-gray-400 mt-1">Send a new notification with optional file attachments.</p>
@@ -87,7 +88,7 @@ const submit = () => {
 
         <div class="space-y-2">
           <Label for="message">Message</Label>
-          <Textarea id="message" v-model="form.message" placeholder="Enter notification message" rows="6" />
+          <RichTextEditor v-model="form.message" placeholder="Enter notification message" />
           <div v-if="form.errors.message" class="text-red-500 text-sm mt-1">{{ form.errors.message }}</div>
         </div>
 

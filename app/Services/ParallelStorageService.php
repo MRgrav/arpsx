@@ -27,7 +27,7 @@ class ParallelStorageService implements StorageServiceInterface
             $pocketbaseResult = $this->pocketbase->upload($file, $collectionName);
             $url = $pocketbaseResult['url'];
         } catch (\Exception $e) {
-            // Log or ignore if we want to fallback
+            \Log::error("PocketBase upload failed: " . $e->getMessage());
         }
 
         try {

@@ -2,6 +2,7 @@
 import Button from '@/components/ui/button/Button.vue';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import RichTextEditor from '@/components/RichTextEditor.vue';
 import SchoolAdminLayout from '@/layouts/SchoolAdminLayout.vue';
 import { type BreadcrumbItem, Post } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/vue3';
@@ -204,8 +205,8 @@ const submit = () => {
 
         <!-- Content -->
         <div>
-          <label class="block font-medium">Content</label>
-          <Textarea v-model="form.content" rows="10" class="w-full border rounded px-3 py-2"></Textarea>
+          <label class="block font-medium mb-1">Content</label>
+          <RichTextEditor v-model="form.content" placeholder="Write post content..." />
         </div>
 
         <!-- Submit -->

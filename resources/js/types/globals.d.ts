@@ -24,3 +24,8 @@ declare module 'vue' {
         $headManager: ReturnType<typeof createHeadManager>;
     }
 }
+
+declare module '@tiptap/vue-3';
+declare module '@tiptap/starter-kit';
+declare module '@tiptap/extension-link';
+

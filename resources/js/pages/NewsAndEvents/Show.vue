@@ -78,11 +78,10 @@ console.log(props.post);
                 }}
             </div>
 
-            <div class="text-gray-700 dark:text-gray-300 whitespace-pre-line pb-20">
-                {{ props.post.content || 'No message provided.' }}
+            <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 whitespace-pre-line pb-20" v-html="props.post.content || 'No message provided.'">
             </div>
 
-            <ImageGallery :images="props.post.images" />
+            <ImageGallery :images="props.post.images || []" />
 
         </div>
     </AppLayout>

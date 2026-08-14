@@ -7,6 +7,7 @@ import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
 import Label from '@/components/ui/label/Label.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
+import RichTextEditor from '@/components/RichTextEditor.vue';
 
 const props = defineProps<{ notification: Notification }>();
 
@@ -115,7 +116,7 @@ const submit = () => {
 
         <div class="space-y-2">
           <Label for="message">Message</Label>
-          <Textarea id="message" v-model="form.message" placeholder="Enter notification message" rows="6" />
+          <RichTextEditor v-model="form.message" placeholder="Enter notification message" />
           <div v-if="form.errors.message" class="text-red-500 text-sm mt-1">{{ form.errors.message }}</div>
         </div>
 
