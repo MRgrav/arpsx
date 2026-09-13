@@ -13,6 +13,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SiteModuleController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\UserController;
 use App\Models\Notification;
 use App\Models\Post;
 use App\Models\Profile;
@@ -396,7 +397,7 @@ Route::get('/career', function () {
 |
 */
 
-Route::middleware(['auth', 'verified', 'admin'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('school-admin')->group(function () {
 
         // Dashboard page
@@ -448,156 +449,207 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
             ]);
         })->name('dashboard');
 
+        // User Permissions Management (Super Admin only)
+        Route::middleware(['admin'])->group(function () {
+            Route::get('/users', [UserController::class, 'index'])->name('school-admin.users.index');
+            Route::get('/users/{user}/permissions', [UserController::class, 'editPermissions'])->name('school-admin.users.permissions.edit');
+            Route::post('/users/{user}/permissions', [UserController::class, 'updatePermissions'])->name('school-admin.users.permissions.update');
+        });
+
         // List all registrations
-        Route::get('/registrations', [OnlineRegistrationController::class, 'schoolAdminIndex'])
-            ->name('school-admin.registration');
+        Route::middleware(['permission:registrations.view'])->group(function () {
+            Route::get('/registrations', [OnlineRegistrationController::class, 'schoolAdminIndex'])
+                ->name('school-admin.registration');
+
+            Route::get('/registrations/{id}', [OnlineRegistrationController::class, 'show'])
+                ->name('school-admin.registration.detail')
+                ->whereNumber('id');
+        });
 
         Route::get('/registrations/csv', [OnlineRegistrationController::class, 'downloadCsv'])
+            ->middleware('permission:registrations.export')
             ->name('school-admin.registration.csv');
 
-        // Show a single registration detail page
-        Route::get('/registrations/{id}', [OnlineRegistrationController::class, 'show'])
-            ->name('school-admin.registration.detail')
-            ->whereNumber('id'); // Only allow numeric IDs
+        Route::middleware(['permission:registrations.edit'])->group(function () {
+            Route::get('/registrations/{id}/edit', [OnlineRegistrationController::class, 'edit'])
+                ->name('school-admin.registration.edit')
+                ->whereNumber('id');
 
-        Route::get('/registrations/{id}/edit', [OnlineRegistrationController::class, 'edit'])
-            ->name('school-admin.registration.edit')
-            ->whereNumber('id');
-
-        Route::put('/registrations/{id}', [OnlineRegistrationController::class, 'update'])
-            ->name('school-admin.registration.update')
-            ->whereNumber('id');
+            Route::put('/registrations/{id}', [OnlineRegistrationController::class, 'update'])
+                ->name('school-admin.registration.update')
+                ->whereNumber('id');
+        });
 
         Route::delete('/registrations/{id}', [OnlineRegistrationController::class, 'destroy'])
+            ->middleware('permission:registrations.delete')
             ->name('school-admin.registration.delete')
             ->whereNumber('id');
 
-        Route::get('/hs-registrations', [HSRegistrationController::class, 'schoolAdminIndex'])
-            ->name('school-admin.hs-registration');
+        Route::middleware(['permission:hs_registrations.view'])->group(function () {
+            Route::get('/hs-registrations', [HSRegistrationController::class, 'schoolAdminIndex'])
+                ->name('school-admin.hs-registration');
+
+            Route::get('/hs-registrations/{id}', [HSRegistrationController::class, 'schoolAdminShow'])
+                ->name('school-admin.hs-registration.show')
+                ->whereNumber('id');
+        });
 
         Route::get('/hs-registrations/csv', [HSRegistrationController::class, 'downloadCsv'])
+            ->middleware('permission:hs_registrations.export')
             ->name('school-admin.hs-registration.csv');
 
-        Route::get('/hs-registrations/{id}', [HSRegistrationController::class, 'schoolAdminShow'])
-            ->name('school-admin.hs-registration.show')
-            ->whereNumber('id'); // Only allow numeric IDs
+        Route::middleware(['permission:hs_registrations.edit'])->group(function () {
+            Route::get('/hs-registrations/{id}/edit', [HSRegistrationController::class, 'edit'])
+                ->name('school-admin.hs-registration.edit')
+                ->whereNumber('id');
 
-        Route::get('/hs-registrations/{id}/edit', [HSRegistrationController::class, 'edit'])
-            ->name('school-admin.hs-registration.edit')
-            ->whereNumber('id');
+            Route::put('/hs-registrations/{id}', [HSRegistrationController::class, 'update'])
+                ->name('school-admin.hs-registration.update')
+                ->whereNumber('id');
+        });
 
-        Route::put('/hs-registrations/{id}', [HSRegistrationController::class, 'update'])
-            ->name('school-admin.hs-registration.update')
-            ->whereNumber('id');
-
-        // // Notifications page
+        // Notifications page
         Route::get('/notifications', [NotificationController::class, 'schoolAdminIndex'])
+            ->middleware('permission:notifications.view')
             ->name('school-admin.notifications.schoolAdminIndex');
 
         Route::get('/notifications/create', [NotificationController::class, 'create'])
+            ->middleware('permission:notifications.create')
             ->name('school-admin.notifications.create');
 
         Route::post('/notifications', [NotificationController::class, 'store'])
+            ->middleware('permission:notifications.create')
             ->name('school-admin.notifications.store');
 
         Route::get('/notifications/{notification}/edit', [NotificationController::class, 'edit'])
+            ->middleware('permission:notifications.edit')
             ->name('school-admin.notifications.edit');
 
         Route::put('/notifications/{id}', [NotificationController::class, 'update'])
+            ->middleware('permission:notifications.edit')
             ->name('school-admin.notifications.update');
 
         Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])
+            ->middleware('permission:notifications.delete')
             ->name('school-admin.notifications.delete');
-        Route::get('/notifications/{id}', [NotificationController::class, 'show'])
-            ->name('school-admin.notifications.show');
 
+        Route::get('/notifications/{id}', [NotificationController::class, 'show'])
+            ->middleware('permission:notifications.view')
+            ->name('school-admin.notifications.show');
 
         // Profiles Admin page
         Route::get('/profiles', [ProfileController::class, 'index'])
+            ->middleware('permission:profiles.view')
             ->name('school-admin.profiles.index');
 
         Route::get('/profiles/create', [ProfileController::class, 'create'])
+            ->middleware('permission:profiles.create')
             ->name('school-admin.profiles.create');
 
         Route::post('/profiles', [ProfileController::class, 'store'])
+            ->middleware('permission:profiles.create')
             ->name('school-admin.profiles.store');
 
         Route::get('/profiles/{id}/edit', [ProfileController::class, 'edit'])
+            ->middleware('permission:profiles.edit')
             ->name('school-admin.profiles.edit');
 
         Route::post('/profiles/{id}/update', [ProfileController::class, 'update'])
+            ->middleware('permission:profiles.edit')
             ->name('school-admin.profiles.update');
 
         Route::delete('/profiles/{id}', [ProfileController::class, 'destroy'])
+            ->middleware('permission:profiles.delete')
             ->name('school-admin.profiles.delete');
 
         Route::get('/profiles/{id}', [ProfileController::class, 'show'])
+            ->middleware('permission:profiles.view')
             ->name('school-admin.profiles.show');
 
         // Departments Admin page
         Route::get('/departments', [DepartmentController::class, 'index'])
+            ->middleware('permission:departments.view')
             ->name('school-admin.departments.index');
 
         Route::get('/departments/create', [DepartmentController::class, 'create'])
+            ->middleware('permission:departments.create')
             ->name('school-admin.departments.create');
 
         Route::post('/departments', [DepartmentController::class, 'store'])
+            ->middleware('permission:departments.create')
             ->name('school-admin.departments.store');
 
         Route::get('/departments/{id}/edit', [DepartmentController::class, 'edit'])
+            ->middleware('permission:departments.edit')
             ->name('school-admin.departments.edit');
 
         Route::post('/departments/{id}/update', [DepartmentController::class, 'update'])
+            ->middleware('permission:departments.edit')
             ->name('school-admin.departments.update');
 
         Route::delete('/departments/{id}', [DepartmentController::class, 'destroy'])
+            ->middleware('permission:departments.delete')
             ->name('school-admin.departments.delete');
 
         Route::get('/departments/{id}', [DepartmentController::class, 'show'])
+            ->middleware('permission:departments.view')
             ->name('school-admin.departments.show');
-
 
         // Posts Admin page
         Route::get('/posts', [PostController::class, 'index'])
+            ->middleware('permission:posts.view')
             ->name('school-admin.posts.index');
 
         Route::get('/posts/create', [PostController::class, 'create'])
+            ->middleware('permission:posts.create')
             ->name('school-admin.posts.create');
 
         Route::post('/posts', [PostController::class, 'store'])
+            ->middleware('permission:posts.create')
             ->name('school-admin.posts.store');
 
         Route::get('/posts/{id}/edit', [PostController::class, 'edit'])
+            ->middleware('permission:posts.edit')
             ->name('school-admin.posts.edit');
 
         Route::post('/posts/{id}/update', [PostController::class, 'update'])
+            ->middleware('permission:posts.edit')
             ->name('school-admin.posts.update');
 
         Route::delete('/posts/{id}', [PostController::class, 'destroy'])
+            ->middleware('permission:posts.delete')
             ->name('school-admin.posts.delete');
 
         Route::get('/posts/{id}', [PostController::class, 'show'])
+            ->middleware('permission:posts.view')
             ->name('school-admin.posts.show');
 
         // Settings
         Route::get('/settings', [SettingController::class, 'index'])
+            ->middleware('permission:settings.manage')
             ->name('school-admin.settings.index');
         Route::post('/settings', [SettingController::class, 'update'])
+            ->middleware('permission:settings.manage')
             ->name('school-admin.settings.update');
         Route::post('/settings/toggle', [SettingController::class, 'toggle'])
+            ->middleware('permission:settings.manage')
             ->name('school-admin.settings.toggle');
             
         // Site Modules Admin page
         Route::get('/site-modules', [SiteModuleController::class, 'index'])
+            ->middleware('permission:site_modules.manage')
             ->name('school-admin.site-modules.index');
             
         Route::post('/site-modules', [SiteModuleController::class, 'store'])
+            ->middleware('permission:site_modules.manage')
             ->name('school-admin.site-modules.store');
             
         Route::post('/site-modules/{siteModule}', [SiteModuleController::class, 'update'])
+            ->middleware('permission:site_modules.manage')
             ->name('school-admin.site-modules.update');
             
         Route::delete('/site-modules/{siteModule}', [SiteModuleController::class, 'destroy'])
+            ->middleware('permission:site_modules.manage')
             ->name('school-admin.site-modules.delete');
     });
 });

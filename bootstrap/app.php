@@ -26,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Custom middleware 
         $middleware->alias([
             'admin' => AdminMiddleware::class,
+            'permission' => \App\Http\Middleware\PermissionMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

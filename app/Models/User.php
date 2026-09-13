@@ -57,4 +57,24 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class);
     }
 
+    /**
+     * Permissions assigned to the user.
+     */
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class);
+    }
+
+    /**
+     * Check if user has a specific permission.
+     * Admins automatically have all permissions.
+     */
+    public function hasPermission(string $permission): bool
+    {
+        if ($this->is_admin) {
+            return true;
+        }
+
+        return $this->permissions->contains('name', $permission);
+    }
 }
