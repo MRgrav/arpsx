@@ -449,9 +449,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ]);
         })->name('dashboard');
 
-        // User Permissions Management (Super Admin only)
+        // User Management (Super Admin only)
         Route::middleware(['admin'])->group(function () {
             Route::get('/users', [UserController::class, 'index'])->name('school-admin.users.index');
+            Route::get('/users/create', [UserController::class, 'create'])->name('school-admin.users.create');
+            Route::post('/users', [UserController::class, 'store'])->name('school-admin.users.store');
+            Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('school-admin.users.edit');
+            Route::put('/users/{user}', [UserController::class, 'update'])->name('school-admin.users.update');
+            Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('school-admin.users.delete');
+            
             Route::get('/users/{user}/permissions', [UserController::class, 'editPermissions'])->name('school-admin.users.permissions.edit');
             Route::post('/users/{user}/permissions', [UserController::class, 'updatePermissions'])->name('school-admin.users.permissions.update');
         });

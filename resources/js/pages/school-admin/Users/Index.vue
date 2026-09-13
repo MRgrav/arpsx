@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SchoolAdminLayout from '@/layouts/SchoolAdminLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import Table from '@/components/ui/table/Table.vue';
 import TableBody from '@/components/ui/table/TableBody.vue';
 import TableCaption from '@/components/ui/table/TableCaption.vue';
@@ -17,7 +17,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     href: '/school-admin/dashboard',
   },
   {
-    title: 'User Permissions',
+    title: 'User Management',
     href: '/school-admin/users',
   },
 ];
@@ -39,17 +39,29 @@ interface User {
 
 interface Props {
   users: User[];
+  auth: any; // Add auth to know logged-in user
 }
 
 const props = defineProps<Props>();
+
+const deleteUser = (id: number) => {
+  if (confirm('Are you sure you want to delete this user?')) {
+    router.delete(`/school-admin/users/${id}`);
+  }
+};
 </script>
 
 <template>
-  <Head title="User Permissions"></Head>
+  <Head title="User Management"></Head>
 
   <SchoolAdminLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
-      <h1 class="text-xl font-bold text-gray-800 dark:text-gray-100">User Permissions Management</h1>
+      <div class="flex justify-between items-center">
+        <h1 class="text-xl font-bold text-gray-800 dark:text-gray-100">User Management</h1>
+        <Link href="/school-admin/users/create">
+          <Button>Add New User</Button>
+        </Link>
+      </div>
 
       <Table>
         <TableCaption>List of registered users and their assigned permissions.</TableCaption>
@@ -78,11 +90,21 @@ const props = defineProps<Props>();
               <span v-if="user.is_admin" class="text-gray-500 italic">All (Super Admin)</span>
               <span v-else>{{ user.permissions?.length || 0 }} permission(s)</span>
             </TableCell>
-            <TableCell class="text-right">
+            <TableCell class="text-right space-x-2">
               <Link v-if="!user.is_admin" :href="`/school-admin/users/${user.id}/permissions`">
-                <Button variant="outline" size="sm">Manage Permissions</Button>
+                <Button variant="outline" size="sm">Permissions</Button>
               </Link>
-              <span v-else class="text-xs text-gray-400">Full Access</span>
+              <Link :href="`/school-admin/users/${user.id}/edit`">
+                <Button variant="outline" size="sm">Edit</Button>
+              </Link>
+              <Button 
+                v-if="$page.props.auth?.user?.id !== user.id" 
+                @click="deleteUser(user.id)" 
+                class="bg-red-500 hover:bg-red-600" 
+                size="sm"
+              >
+                Delete
+              </Button>
             </TableCell>
           </TableRow>
         </TableBody>
