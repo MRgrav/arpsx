@@ -102,6 +102,10 @@ class UserController extends Controller
             return redirect()->route('school-admin.users.index')->with('error', 'You cannot delete your own account.');
         }
 
+        if (str_ends_with($user->email, '@deolang.com')) {
+            return redirect()->route('school-admin.users.index')->with('error', 'Accounts with the @deolang.com domain cannot be deleted.');
+        }
+
         $user->delete();
 
         return redirect()->route('school-admin.users.index')->with('success', 'User deleted successfully.');

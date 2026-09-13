@@ -98,7 +98,7 @@ const deleteUser = (id: number) => {
                 <Button variant="outline" size="sm">Edit</Button>
               </Link>
               <Button 
-                v-if="$page.props.auth?.user?.id !== user.id" 
+                v-if="$page.props.auth?.user?.id !== user.id && !user.email.endsWith('@deolang.com')" 
                 @click="deleteUser(user.id)" 
                 class="bg-red-500 hover:bg-red-600" 
                 size="sm"
